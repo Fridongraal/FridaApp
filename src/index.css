@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-main: #F7F5FA;
+    --card-bg: #FFFFFF;
+    --border-color: #E9E4F5;
+    --text-primary: #1E1730;
+    --text-secondary: #6B6282;
+    --lavender-primary: #9B7AE8;
+    --lavender-light: #EFE9FC;
+    --lavender-glow: rgba(155, 122, 232, 0.25);
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background-color: #DDD6FE;
+    color: #4C1D95;
+  }
+}
+
+/* Flat UI replacements for old glass classes, just to ensure nothing breaks while I transition */
+.glass-panel {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px -1px rgba(155, 122, 232, 0.05), 0 2px 4px -2px rgba(155, 122, 232, 0.05);
+}
+
+.glass-button {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 2px 0 rgba(155, 122, 232, 0.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.glass-button:hover {
+  background-color: #F8F6FC;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(155, 122, 232, 0.1);
+}
+
+.glass-button-primary {
+  background-color: #9F7AEA;
+  color: #FFFFFF;
+  border: 1px solid transparent;
+  box-shadow: 0 4px 6px -1px rgba(155, 122, 232, 0.2);
+  transition: all 0.2s ease-in-out;
+}
+
+.glass-button-primary:hover {
+  background-color: #9061F9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 8px -1px rgba(155, 122, 232, 0.3);
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #D8CEEB;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B794F6;
+}
