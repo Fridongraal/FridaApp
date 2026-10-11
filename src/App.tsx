@@ -29,6 +29,7 @@ export function App() {
   const [isCardModalOpen, setIsCardModalOpen] = useState(false); 
   const [editingCard, setEditingCard] = useState<Flashcard | null>(null); 
   const [cardDefaultUnitId, setCardDefaultUnitId] = useState<string | undefined>(undefined); 
+  const [isCardUnitLocked, setIsCardUnitLocked] = useState(false);
   const [isTutorialOpen, setIsTutorialOpen] = useState(false); 
   
   // Study Session state 
@@ -275,8 +276,18 @@ export function App() {
             onOpenNewUnit={() => { setEditingUnit(null); setIsUnitModalOpen(true);}} 
             onEditUnit={(unit) => { setEditingUnit(unit); setIsUnitModalOpen(true);}} 
             onDeleteUnit={handleDeleteUnit} 
-            onOpenNewCard={(unitId) => { setEditingCard(null); setCardDefaultUnitId(unitId); setIsCardModalOpen(true);}} 
-            onEditCard={(card) => { setEditingCard(card); setCardDefaultUnitId(card.unitId); setIsCardModalOpen(true);}} 
+            onOpenNewCard={(unitId) => { 
+              setEditingCard(null); 
+              setCardDefaultUnitId(unitId); 
+              setIsCardUnitLocked(!!unitId); 
+              setIsCardModalOpen(true);
+            }} 
+            onEditCard={(card) => { 
+              setEditingCard(card); 
+              setCardDefaultUnitId(card.unitId); 
+              setIsCardUnitLocked(false); 
+              setIsCardModalOpen(true);
+            }} 
             onDeleteCard={handleDeleteCard} 
             onImportCards={handleImportCards}
           /> 
@@ -309,7 +320,15 @@ export function App() {
       {/* Unit Modal */} 
       <UnitModal isOpen={isUnitModalOpen} onClose={() => setIsUnitModalOpen(false)} onSave={handleSaveUnit} initialData={editingUnit} subjectName={selectedSubject?.name} /> 
       {/* Flashcard Modal */} 
-      <CardModal isOpen={isCardModalOpen} onClose={() => setIsCardModalOpen(false)} onSave={handleSaveCard} initialData={editingCard} units={selectedSubjectId ? unitsInSelectedSubject : units} defaultUnitId={cardDefaultUnitId} /> 
+      <CardModal 
+        isOpen={isCardModalOpen} 
+        onClose={() => setIsCardModalOpen(false)} 
+        onSave={handleSaveCard} 
+        initialData={editingCard} 
+        units={selectedSubjectId ? unitsInSelectedSubject : units} 
+        defaultUnitId={cardDefaultUnitId} 
+        isUnitLocked={isCardUnitLocked}
+      /> 
       {/* Tutorial Modal */} 
       <TutorialModal isOpen={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} /> 
     </div> 
