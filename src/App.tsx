@@ -212,10 +212,43 @@ export function App() {
   
   const handleFinishStudySession = async ( reviewedLogs: { card: Flashcard; rating: ReviewRating}[] ) => { 
     await db.transaction('rw', db.cards, db.reviewLogs, async () => { 
+      const updatedCardsMap = new Map<string, Flashcard>(); 
+
       for (const item of reviewedLogs) { 
-        const sm2 = calculateSM2(item.card, item.rating); 
-        await db.cards.update(item.card.id, { interval: sm2.interval, repetition: sm2.repetition, easeFactor: sm2.easeFactor, dueDate: sm2.dueDate, state: sm2.state, lastReviewed: Date.now(),}); 
-        await db.reviewLogs.add({ id: `log-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`, cardId: item.card.id, rating: item.rating, timestamp: Date.now(), interval: sm2.interval, easeFactor: sm2.easeFactor,});
+        const currentCardState = updatedCardsMap.get(item.card.id) || item.card; 
+        const sm2 = calculateSM2(currentCardState, item.rating); 
+        
+        const nextCardState: Flashcard = { 
+          ...currentCardState, 
+          interval: sm2.interval, 
+          repetition: sm2.repetition, 
+          easeFactor: sm2.easeFactor, 
+          dueDate: sm2.dueDate, 
+          state: sm2.state, 
+          lastReviewed: Date.now(),
+        }; 
+
+        updatedCardsMap.set(item.card.id, nextCardState); 
+
+        await db.reviewLogs.add({ 
+          id: `log-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`, 
+          cardId: item.card.id, 
+          rating: item.rating, 
+          timestamp: Date.now(), 
+          interval: sm2.interval, 
+          easeFactor: sm2.easeFactor,
+        });
+      } 
+
+      for (const [cardId, updatedCard] of updatedCardsMap.entries()) { 
+        await db.cards.update(cardId, { 
+          interval: updatedCard.interval, 
+          repetition: updatedCard.repetition, 
+          easeFactor: updatedCard.easeFactor, 
+          dueDate: updatedCard.dueDate, 
+          state: updatedCard.state, 
+          lastReviewed: updatedCard.lastReviewed,
+        });
       }
     }); 
     setActiveStudy(null); 

@@ -35,7 +35,7 @@ export interface Flashcard {
   state: CardState;
 }
 
-export type ReviewRating = 1 | 2 | 3;
+export type ReviewRating = 1 | 2 | 3 | 4;
 
 export interface ReviewLog {
   id: string;

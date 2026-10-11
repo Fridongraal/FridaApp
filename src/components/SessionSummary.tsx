@@ -40,6 +40,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
     1: reviewedLogs.filter((l) => l.rating === 1).length,
     2: reviewedLogs.filter((l) => l.rating === 2).length,
     3: reviewedLogs.filter((l) => l.rating === 3).length,
+    4: reviewedLogs.filter((l) => l.rating === 4).length,
   };
 
   const isGoalReached = reviewedTodayCount >= dailyGoal;
@@ -85,24 +86,27 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
             </span>
           </div>
         </div>
-        {/* 3 Rating Breakdown */}
+        {/* Anki 4 Rating Breakdown */}
         <div className="p-4 rounded-2xl bg-white shadow-sm border border-slate-100 text-left">
           <span className="text-xs font-bold opacity-75 block mb-2.5">
-            {" "}
-            Tus respuestas:{" "}
+            Tus respuestas:
           </span>
-          <div className="grid grid-cols-3 gap-2.5 text-center text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
             <div className="p-2.5 rounded-xl bg-rose-50/80 text-rose-800 font-medium border border-rose-200/60">
-              <span className="block text-[11px] text-rose-600">Repetir</span>
+              <span className="block text-[11px] text-rose-600 font-semibold">Otra vez</span>
               <span className="text-base font-black">{countByRating[1]}</span>
             </div>
             <div className="p-2.5 rounded-xl bg-amber-50/80 text-amber-800 font-medium border border-amber-200/60">
-              <span className="block text-[11px] text-amber-600">Me costó</span>
+              <span className="block text-[11px] text-amber-600 font-semibold">Difícil</span>
               <span className="text-base font-black">{countByRating[2]}</span>
             </div>
-            <div className="p-2.5 rounded-xl bg-purple-100/80 text-purple-900 font-medium border border-purple-200/60">
-              <span className="block text-[11px] text-purple-700">Lo sé</span>
+            <div className="p-2.5 rounded-xl bg-emerald-50/80 text-emerald-900 font-medium border border-emerald-200/60">
+              <span className="block text-[11px] text-emerald-700 font-semibold">Bien</span>
               <span className="text-base font-black">{countByRating[3]}</span>
+            </div>
+            <div className="p-2.5 rounded-xl bg-sky-50/80 text-sky-900 font-medium border border-sky-200/60">
+              <span className="block text-[11px] text-sky-700 font-semibold">Fácil</span>
+              <span className="text-base font-black">{countByRating[4]}</span>
             </div>
           </div>
         </div>
