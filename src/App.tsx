@@ -34,8 +34,15 @@ export function App() {
   const [isTutorialOpen, setIsTutorialOpen] = useState(false); 
   
   // Study Session state 
-  const [activeStudy, setActiveStudy] = useState<{ title: string; cards: Flashcard[];} | null>(null); 
-  const [completedSession, setCompletedSession] = useState<{ reviewedLogs: { card: Flashcard; rating: ReviewRating}[];} | null>(null); 
+  const [activeStudy, setActiveStudy] = useState<{
+    title: string;
+    cards: Flashcard[];
+    isCramMode?: boolean;
+  } | null>(null); 
+  const [completedSession, setCompletedSession] = useState<{
+    reviewedLogs: { card: Flashcard; rating: ReviewRating }[];
+    isCramMode?: boolean;
+  } | null>(null); 
   
   // Live queries from Dexie IndexedDB 
   const subjects = useLiveQuery(() => db.subjects.toArray(), []) || []; 
@@ -215,10 +222,35 @@ export function App() {
   const startGlobalStudy = () => { 
     const dueCards = cards.filter((c) => c.dueDate <= Date.now()); 
     if (dueCards.length === 0) return; 
-    setActiveStudy({ title: 'Repaso de Hoy', cards: dueCards });
+    setActiveStudy({ title: 'Repaso de Hoy', cards: dueCards, isCramMode: false });
   }; 
+
+  const startCramStudySubject = (subjectId: string) => {
+    const targetSubject = subjects.find((s) => s.id === subjectId);
+    if (!targetSubject) return;
+    const subCards = cards.filter((c) => c.subjectId === subjectId);
+    if (subCards.length === 0) return;
+    setActiveStudy({
+      title: targetSubject.name,
+      cards: [...subCards],
+      isCramMode: true,
+    });
+  };
+
+  const startCramGlobalStudy = () => {
+    if (cards.length === 0) return;
+    setActiveStudy({
+      title: "Repaso Intensivo General",
+      cards: [...cards],
+      isCramMode: true,
+    });
+  };
   
-  const handleFinishStudySession = async ( reviewedLogs: { card: Flashcard; rating: ReviewRating}[] ) => { 
+  const handleFinishStudySession = async (
+    reviewedLogs: { card: Flashcard; rating: ReviewRating }[]
+  ) => { 
+    const isCram = activeStudy?.isCramMode ?? false;
+
     await db.transaction('rw', db.cards, db.reviewLogs, async () => { 
       const updatedCardsMap = new Map<string, Flashcard>(); 
 
@@ -226,41 +258,55 @@ export function App() {
         const currentCardState = updatedCardsMap.get(item.card.id) || item.card; 
         const sm2 = calculateSM2(currentCardState, item.rating); 
         
-        const nextCardState: Flashcard = { 
-          ...currentCardState, 
-          interval: sm2.interval, 
-          repetition: sm2.repetition, 
-          easeFactor: sm2.easeFactor, 
-          dueDate: sm2.dueDate, 
-          state: sm2.state, 
-          lastReviewed: Date.now(),
-        }; 
+        // In cram mode, we preserve existing spaced intervals, repetitions, and dueDates
+        // so the user can freely study all cards before an exam without resetting or descheduling them!
+        const nextCardState: Flashcard = isCram
+          ? {
+              ...currentCardState,
+              lastReviewed: Date.now(),
+            }
+          : { 
+              ...currentCardState, 
+              interval: sm2.interval, 
+              repetition: sm2.repetition, 
+              easeFactor: sm2.easeFactor, 
+              dueDate: sm2.dueDate, 
+              state: sm2.state, 
+              lastReviewed: Date.now(),
+            }; 
 
         updatedCardsMap.set(item.card.id, nextCardState); 
 
+        // Always record review log for streaks, today counts, and consistency heatmap
         await db.reviewLogs.add({ 
           id: `log-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`, 
           cardId: item.card.id, 
           rating: item.rating, 
           timestamp: Date.now(), 
-          interval: sm2.interval, 
-          easeFactor: sm2.easeFactor,
+          interval: isCram ? currentCardState.interval : sm2.interval, 
+          easeFactor: isCram ? currentCardState.easeFactor : sm2.easeFactor,
         });
       } 
 
       for (const [cardId, updatedCard] of updatedCardsMap.entries()) { 
-        await db.cards.update(cardId, { 
-          interval: updatedCard.interval, 
-          repetition: updatedCard.repetition, 
-          easeFactor: updatedCard.easeFactor, 
-          dueDate: updatedCard.dueDate, 
-          state: updatedCard.state, 
-          lastReviewed: updatedCard.lastReviewed,
-        });
+        if (isCram) {
+          await db.cards.update(cardId, {
+            lastReviewed: updatedCard.lastReviewed,
+          });
+        } else {
+          await db.cards.update(cardId, { 
+            interval: updatedCard.interval, 
+            repetition: updatedCard.repetition, 
+            easeFactor: updatedCard.easeFactor, 
+            dueDate: updatedCard.dueDate, 
+            state: updatedCard.state, 
+            lastReviewed: updatedCard.lastReviewed,
+          });
+        }
       }
     }); 
     setActiveStudy(null); 
-    setCompletedSession({ reviewedLogs});
+    setCompletedSession({ reviewedLogs, isCramMode: isCram });
   }; 
   
   const selectedSubject = subjects.find((s) => s.id === selectedSubjectId); 
@@ -307,6 +353,7 @@ export function App() {
             subjects={subjects}
             cards={cards}
             onStartGlobalStudy={startGlobalStudy}
+            onStartCramGlobal={startCramGlobalStudy}
             onStartStudySubject={(subjectId) => {
               const sub = subjects.find((s) => s.id === subjectId);
               if (!sub) return;
@@ -316,8 +363,9 @@ export function App() {
                 sessionCards = [...subCards];
               }
               if (sessionCards.length === 0) return;
-              setActiveStudy({ title: sub.name, cards: sessionCards });
+              setActiveStudy({ title: sub.name, cards: sessionCards, isCramMode: false });
             }}
+            onStartCramSubject={startCramStudySubject}
             onGoToSubjects={() => {
               setActiveView('subjects');
               setSelectedSubjectId(null);
@@ -330,6 +378,7 @@ export function App() {
             cards={cards} 
             onBack={() => setSelectedSubjectId(null)} 
             onStartStudySubject={startStudySubject} 
+            onStartCramSubject={startCramStudySubject}
             onStartStudyUnit={startStudyUnit} 
             onOpenNewUnit={() => { setEditingUnit(null); setIsUnitModalOpen(true);}} 
             onEditUnit={(unit) => { setEditingUnit(unit); setIsUnitModalOpen(true);}} 
@@ -365,12 +414,25 @@ export function App() {
       
       {/* Active Study Session Overlay */} 
       {activeStudy && ( 
-        <StudySession title={activeStudy.title} cards={activeStudy.cards} onFinishSession={handleFinishStudySession} onExit={() => setActiveStudy(null)} /> 
+        <StudySession
+          title={activeStudy.title}
+          cards={activeStudy.cards}
+          isCramMode={activeStudy.isCramMode}
+          onFinishSession={handleFinishStudySession}
+          onExit={() => setActiveStudy(null)}
+        /> 
       )} 
       
       {/* Session Complete Celebration Summary */} 
       {completedSession && ( 
-        <SessionSummary reviewedLogs={completedSession.reviewedLogs} currentStreak={currentStreak} reviewedTodayCount={reviewedTodayCount} dailyGoal={preferences.dailyGoal} onClose={() => setCompletedSession(null)} /> 
+        <SessionSummary
+          reviewedLogs={completedSession.reviewedLogs}
+          currentStreak={currentStreak}
+          reviewedTodayCount={reviewedTodayCount}
+          dailyGoal={preferences.dailyGoal}
+          isCramMode={completedSession.isCramMode}
+          onClose={() => setCompletedSession(null)}
+        /> 
       )} 
       
       {/* Subject Modal */} 

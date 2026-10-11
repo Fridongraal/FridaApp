@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-Color="#FAF5FF" />
+      <stop offset="1" stop-color="#EDE9FE" />
+    </linearGradient>
+
+    <!-- Head Gradient -->
+    <linearGradient id="headGrad" x1="100" y1="100" x2="412" y2="412" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E9D8FD" />
+      <stop offset="1" stop-color="#D6BCFA" />
+    </linearGradient>
+
+    <!-- Snout Gradient -->
+    <linearGradient id="snoutGrad" x1="170" y1="250" x2="340" y2="390" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FAF5FF" />
+      <stop offset="1" stop-color="#F3E8FF" />
+    </linearGradient>
+
+    <!-- Ear Dark Gradient -->
+    <linearGradient id="earDark" x1="100" y1="50" x2="180" y2="230" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9F7AEA" />
+      <stop offset="1" stop-color="#805AD5" />
+    </linearGradient>
+
+    <!-- Ear Light Gradient -->
+    <linearGradient id="earLight" x1="330" y1="50" x2="412" y2="230" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9F7AEA" />
+      <stop offset="1" stop-color="#805AD5" />
+    </linearGradient>
+
+    <!-- Collar Gradient -->
+    <linearGradient id="collarGrad" x1="150" y1="410" x2="360" y2="450" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6AD55" />
+      <stop offset="1" stop-color="#ED8936" />
+    </linearGradient>
+
+    <!-- Soft Drop Shadow for Icon -->
+    <filter id="iconShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#7C3AED" flood-opacity="0.18" />
+    </filter>
+  </defs>
+
+  <!-- Squircle Base / App Icon Background -->
+  <rect x="24" y="24" width="464" height="464" rx="116" fill="url(#bgGrad)" stroke="#DDD6FE" stroke-width="8" filter="url(#iconShadow)" />
+
+  <!-- Frida Mascot scaled up (Scale factor ~3.8x, centered) -->
+  <g transform="translate(28, 30) scale(3.8)">
+    <!-- Left Ear -->
+    <path
+      d="M 28 50 L 22 25 Q 20 15 30 15 L 40 18 Q 45 20 42 30 L 38 50 Z"
+      fill="url(#earDark)"
+    />
+    <path
+      d="M 30 45 L 26 26 Q 25 18 31 18 L 36 20 Q 39 21 37 27 L 35 45 Z"
+      fill="#E9D8FD"
+      opacity="0.65"
+    />
+
+    <!-- Right Ear -->
+    <path
+      d="M 92 50 L 98 25 Q 100 15 90 15 L 80 18 Q 75 20 78 30 L 82 50 Z"
+      fill="url(#earLight)"
+    />
+    <path
+      d="M 90 45 L 94 26 Q 95 18 89 18 L 84 20 Q 81 21 83 27 L 85 45 Z"
+      fill="#E9D8FD"
+      opacity="0.65"
+    />
+
+    <!-- Head -->
+    <rect
+      x="25"
+      y="30"
+      width="70"
+      height="70"
+      rx="28"
+      fill="url(#headGrad)"
+    />
+
+    <!-- Eyebrows -->
+    <ellipse
+      cx="42"
+      cy="40"
+      rx="6"
+      ry="10"
+      fill="#F3E8FF"
+      opacity="0.9"
+      transform="rotate(-15 42 40)"
+    />
+    <ellipse
+      cx="78"
+      cy="40"
+      rx="6"
+      ry="10"
+      fill="#F3E8FF"
+      opacity="0.9"
+      transform="rotate(15 78 40)"
+    />
+
+    <!-- Snout -->
+    <path
+      d="M 35 65 Q 35 55 60 55 Q 85 55 85 65 L 82 82 Q 80 92 60 92 Q 40 92 38 82 Z"
+      fill="url(#snoutGrad)"
+    />
+
+    <!-- Nose -->
+    <rect x="50" y="55" width="20" height="14" rx="7" fill="#2D3748" />
+    <ellipse
+      cx="55"
+      cy="59"
+      rx="3"
+      ry="1.5"
+      fill="#FFFFFF"
+      opacity="0.6"
+      transform="rotate(-10 55 59)"
+    />
+
+    <!-- Cheeks -->
+    <ellipse cx="32" cy="65" rx="5" ry="3" fill="#F687B3" opacity="0.45" />
+    <ellipse cx="88" cy="65" rx="5" ry="3" fill="#F687B3" opacity="0.45" />
+
+    <!-- Big Happy Eyes -->
+    <circle cx="42" cy="48" r="7" fill="#2D3748" />
+    <circle cx="40" cy="46" r="2.5" fill="#FFFFFF" />
+
+    <circle cx="78" cy="48" r="7" fill="#2D3748" />
+    <circle cx="76" cy="46" r="2.5" fill="#FFFFFF" />
+
+    <!-- Cute Smiling Mouth -->
+    <path
+      d="M 54 75 Q 60 82 66 75"
+      stroke="#2D3748"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      fill="none"
+    />
+
+    <!-- Collar -->
+    <path
+      d="M 35 96 Q 60 102 85 96"
+      stroke="url(#collarGrad)"
+      stroke-width="6"
+      stroke-linecap="round"
+      fill="none"
+    />
+
+    <!-- Bone Name Tag -->
+    <path
+      d="M 55 102 C 55 98, 65 98, 65 102 C 67 102, 67 108, 65 108 C 65 112, 55 112, 55 108 C 53 108, 53 102, 55 102 Z"
+      fill="#F6E05E"
+      stroke="#D69E2E"
+      stroke-width="1.5"
+    />
+  </g>
+</svg>

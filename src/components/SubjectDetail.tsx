@@ -12,6 +12,7 @@ import {
   Download,
   Upload,
   Tag,
+  Flame,
 } from "lucide-react";
 import type { Subject, Unit, Flashcard } from "../types";
 import { exportSubjectCardsToCSV } from "../services/importExport";
@@ -23,6 +24,7 @@ interface SubjectDetailProps {
   cards: Flashcard[];
   onBack: () => void;
   onStartStudySubject: (subjectId: string) => void;
+  onStartCramSubject: (subjectId: string) => void;
   onStartStudyUnit: (unitId: string) => void;
   onOpenNewUnit: () => void;
   onEditUnit: (unit: Unit) => void;
@@ -39,6 +41,7 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
   cards,
   onBack,
   onStartStudySubject,
+  onStartCramSubject,
   onStartStudyUnit,
   onOpenNewUnit,
   onEditUnit,
@@ -173,6 +176,16 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
           >
             <Layers className="w-4 h-4 text-purple-600" />
             <span>Nueva Unidad</span>
+          </button>
+
+          <button
+            onClick={() => onStartCramSubject(subject.id)}
+            disabled={subjectCards.length === 0}
+            title="Repasa todas las tarjetas de esta materia para un examen sin alterar tus intervalos de espaciado a largo plazo"
+            className="px-4 py-2.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 shadow-sm hover:bg-rose-100 disabled:opacity-40 font-bold text-xs flex items-center gap-1.5 cursor-pointer transition-all hover:-translate-y-px"
+          >
+            <Flame className="w-4 h-4 text-rose-500 fill-rose-500" />
+            <span>Modo Intensivo</span>
           </button>
 
           <button

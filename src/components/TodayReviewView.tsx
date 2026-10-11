@@ -14,6 +14,7 @@ import {
   Palette,
   Globe,
   HeartPulse,
+  Flame,
 } from "lucide-react";
 import type { Subject, Flashcard } from "../types";
 import { FridaMascot } from "./FridaMascot";
@@ -22,7 +23,9 @@ interface TodayReviewViewProps {
   subjects: Subject[];
   cards: Flashcard[];
   onStartGlobalStudy: () => void;
+  onStartCramGlobal?: () => void;
   onStartStudySubject: (subjectId: string) => void;
+  onStartCramSubject?: (subjectId: string) => void;
   onGoToSubjects: () => void;
 }
 
@@ -40,7 +43,9 @@ export const TodayReviewView: React.FC<TodayReviewViewProps> = ({
   subjects,
   cards,
   onStartGlobalStudy,
+  onStartCramGlobal,
   onStartStudySubject,
+  onStartCramSubject,
   onGoToSubjects,
 }) => {
   const now = Date.now();
@@ -80,15 +85,28 @@ export const TodayReviewView: React.FC<TodayReviewViewProps> = ({
           </div>
         </div>
 
-        {dueCards.length > 0 && (
-          <button
-            onClick={onStartGlobalStudy}
-            className="glass-button-primary inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-purple-500/20 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
-          >
-            <Play className="w-4 h-4 fill-current" />
-            <span>Estudiar todo ({dueCards.length})</span>
-          </button>
-        )}
+        <div className="flex items-center gap-2.5 flex-wrap">
+          {cards.length > 0 && onStartCramGlobal && (
+            <button
+              onClick={onStartCramGlobal}
+              title="Repasa todas las tarjetas libremente para un examen sin alterar tus intervalos a largo plazo"
+              className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl font-bold text-xs bg-rose-50 border border-rose-200 text-rose-700 hover:bg-rose-100 shadow-xs hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+            >
+              <Flame className="w-4 h-4 text-rose-500 fill-rose-500" />
+              <span>Modo Intensivo ({cards.length})</span>
+            </button>
+          )}
+
+          {dueCards.length > 0 && (
+            <button
+              onClick={onStartGlobalStudy}
+              className="glass-button-primary inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-2xl font-bold text-sm shadow-lg shadow-purple-500/20 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+            >
+              <Play className="w-4 h-4 fill-current" />
+              <span>Estudiar todo ({dueCards.length})</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {dueCards.length > 0 ? (
@@ -163,13 +181,24 @@ export const TodayReviewView: React.FC<TodayReviewViewProps> = ({
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => onStartStudySubject(subject.id)}
-                      className="px-4 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 cursor-pointer active:scale-95"
-                    >
-                      <Play className="w-3.5 h-3.5 fill-current" />
-                      <span>Repasar</span>
-                    </button>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {onStartCramSubject && (
+                        <button
+                          onClick={() => onStartCramSubject(subject.id)}
+                          title="Modo Intensivo para esta materia (repaso libre para examen)"
+                          className="p-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition-all cursor-pointer active:scale-95"
+                        >
+                          <Flame className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
+                        </button>
+                      )}
+                      <button
+                        onClick={() => onStartStudySubject(subject.id)}
+                        className="px-4 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 cursor-pointer active:scale-95"
+                      >
+                        <Play className="w-3.5 h-3.5 fill-current" />
+                        <span>Repasar</span>
+                      </button>
+                    </div>
                   </div>
                 );
               })}
@@ -201,10 +230,21 @@ export const TodayReviewView: React.FC<TodayReviewViewProps> = ({
                           </span>
                         </div>
                       </div>
-                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full shrink-0">
-                        <CheckCircle2 className="w-3 h-3" />
-                        Al día
-                      </span>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full shrink-0">
+                          <CheckCircle2 className="w-3 h-3" />
+                          Al día
+                        </span>
+                        {onStartCramSubject && (
+                          <button
+                            onClick={() => onStartCramSubject(subject.id)}
+                            title="Modo Intensivo para esta materia (repaso libre para examen)"
+                            className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition-all cursor-pointer active:scale-95"
+                          >
+                            <Flame className="w-3 h-3 fill-rose-500 text-rose-500" />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   );
                 })}
@@ -237,11 +277,11 @@ export const TodayReviewView: React.FC<TodayReviewViewProps> = ({
             <ul className="list-disc list-inside space-y-1 text-slate-600">
               <li>Descansar y dejar que tu cerebro fije los recuerdos.</li>
               <li>Añadir nuevas tarjetas en tus materias.</li>
-              <li>Repasar por adelantado entrando a una materia específica si tienes un examen cercano.</li>
+              <li>Activar el <strong>Modo Intensivo</strong> si tienes un examen cercano y quieres repasar todo libremente sin alterar tus fechas a largo plazo.</li>
             </ul>
           </div>
 
-          <div className="pt-2">
+          <div className="pt-2 flex items-center justify-center gap-3 flex-wrap">
             <button
               onClick={onGoToSubjects}
               className="px-6 py-3 rounded-2xl glass-button-primary font-bold text-xs inline-flex items-center gap-2 shadow-sm transition-all cursor-pointer hover:scale-[1.02] active:scale-95"
@@ -249,6 +289,16 @@ export const TodayReviewView: React.FC<TodayReviewViewProps> = ({
               <BookOpen className="w-4 h-4" />
               <span>Ver Mis Materias</span>
             </button>
+
+            {cards.length > 0 && onStartCramGlobal && (
+              <button
+                onClick={onStartCramGlobal}
+                className="px-6 py-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 font-bold text-xs inline-flex items-center gap-2 shadow-xs hover:bg-rose-100 transition-all cursor-pointer hover:scale-[1.02] active:scale-95"
+              >
+                <Flame className="w-4 h-4 text-rose-500 fill-rose-500" />
+                <span>Modo Intensivo ({cards.length} tarjetas)</span>
+              </button>
+            )}
           </div>
         </div>
       )}

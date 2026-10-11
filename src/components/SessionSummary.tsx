@@ -10,6 +10,7 @@ interface SessionSummaryProps {
   currentStreak: number;
   reviewedTodayCount: number;
   dailyGoal: number;
+  isCramMode?: boolean;
   onClose: () => void;
   onStudyAgain?: () => void;
 }
@@ -19,6 +20,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
   currentStreak,
   reviewedTodayCount,
   dailyGoal,
+  isCramMode = false,
   onClose,
   onStudyAgain,
 }) => {
@@ -29,12 +31,14 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
         particleCount: 90,
         spread: 75,
         origin: { y: 0.6 },
-        colors: ["#A78BFA", "#C4B5FD", "#818CF8", "#F472B6", "#34D399"],
+        colors: isCramMode
+          ? ["#FB7185", "#F43F5E", "#FDA4AF", "#A78BFA", "#FBBF24"]
+          : ["#A78BFA", "#C4B5FD", "#818CF8", "#F472B6", "#34D399"],
       });
     } catch (e) {
       // ignore
     }
-  }, []);
+  }, [isCramMode]);
 
   const countByRating = {
     1: reviewedLogs.filter((l) => l.rating === 1).length,
@@ -47,21 +51,43 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-[#FBF9FD]/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
-      <div className="bg-white border border-purple-100 rounded-3xl max-w-lg w-full p-8 text-center space-y-6 animate-in zoom-in-95 duration-300 shadow-2xl">
+      <div
+        className={`bg-white border rounded-3xl max-w-lg w-full p-8 text-center space-y-6 animate-in zoom-in-95 duration-300 shadow-2xl ${
+          isCramMode ? "border-rose-200" : "border-purple-100"
+        }`}
+      >
         {/* Celebrating Frida Mascot */}
-        <div className="w-24 h-24 rounded-3xl bg-purple-50 flex items-center justify-center mx-auto p-2">
+        <div
+          className={`w-24 h-24 rounded-3xl flex items-center justify-center mx-auto p-2 ${
+            isCramMode ? "bg-rose-50" : "bg-purple-50"
+          }`}
+        >
           <FridaMascot mood="celebrating" size={80} />
         </div>
         <div>
-          <h2 className="text-2xl font-black tracking-tight text-slate-800">
-            {" "}
-            ¡Excelente sesión con Frida! 🐾🎉{" "}
-          </h2>
-          <p className="text-sm opacity-70 mt-1">
-            {" "}
-            Cada repaso refuerza tus conexiones neuronales y consolida tu
-            memoria.{" "}
-          </p>
+          {isCramMode ? (
+            <>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-100 text-rose-800 text-xs font-bold mb-2 border border-rose-200">
+                <Flame className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
+                <span>Modo Intensivo Finalizado</span>
+              </div>
+              <h2 className="text-2xl font-black tracking-tight text-slate-800">
+                ¡Gran repaso para tu examen! 🐾🔥
+              </h2>
+              <p className="text-sm opacity-70 mt-1 text-slate-600">
+                Entrenaste tus conceptos a fondo. Tus fechas de repaso espaciado a largo plazo se mantienen intactas.
+              </p>
+            </>
+          ) : (
+            <>
+              <h2 className="text-2xl font-black tracking-tight text-slate-800">
+                ¡Excelente sesión con Frida! 🐾🎉
+              </h2>
+              <p className="text-sm opacity-70 mt-1 text-slate-600">
+                Cada repaso refuerza tus conexiones neuronales y consolida tu memoria.
+              </p>
+            </>
+          )}
         </div>
         {/* Highlight Stats */}
         <div className="grid grid-cols-2 gap-3">
