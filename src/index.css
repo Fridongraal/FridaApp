@@ -76,3 +76,42 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #B794F6;
 }
+
+/* 3D Flip Card Animation */
+.card-perspective {
+  perspective: 1200px;
+}
+
+.card-flipper {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  display: grid;
+  grid-template-areas: "card";
+}
+
+.card-flipper.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.card-flipper.no-transition {
+  transition: none !important;
+}
+
+.card-face {
+  grid-area: card;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.card-face-front {
+  transform: rotateY(0deg);
+}
+
+.card-face-back {
+  transform: rotateY(180deg);
+}

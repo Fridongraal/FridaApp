@@ -20,6 +20,8 @@ export const StudySession: React.FC<StudySessionProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [noTransition, setNoTransition] = useState(false);
   const [reviewedLogs, setReviewedLogs] = useState<{ card: Flashcard; rating: ReviewRating }[]>([]); 
   
   // Queue of cards
@@ -32,7 +34,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
   }, []); 
   
   const handleRate = useCallback( (rating: ReviewRating) => { 
-    if (!currentCard) return; 
+    if (!currentCard || isTransitioning) return; 
     playSuccessChime(); 
     const newReviewedLogs = [...reviewedLogs, { card: currentCard, rating}]; 
     setReviewedLogs(newReviewedLogs); 
@@ -42,10 +44,18 @@ export const StudySession: React.FC<StudySessionProps> = ({
     if (currentIndex + 1 >= sessionQueue.length) { 
       onFinishSession(newReviewedLogs);
     } else { 
-      setIsFlipped(false); 
-      setCurrentIndex((prev) => prev + 1);
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setNoTransition(true);
+        setIsFlipped(false);
+        setCurrentIndex((prev) => prev + 1);
+        setTimeout(() => {
+          setNoTransition(false);
+          setIsTransitioning(false);
+        }, 40);
+      }, 160);
     }
-  }, [currentCard, currentIndex, sessionQueue.length, reviewedLogs, onFinishSession]); 
+  }, [currentCard, currentIndex, sessionQueue.length, reviewedLogs, onFinishSession, isTransitioning]); 
   
   // Keyboard navigation
   useEffect(() => { 
@@ -54,9 +64,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
       
       if (e.code === 'Space' || e.key === 'Enter') { 
         e.preventDefault(); 
-        if (!isFlipped) { 
-          setIsFlipped(true);
-        }
+        setIsFlipped((prev) => !prev);
       } else if (e.key === 'Escape') { 
         e.preventDefault(); 
         onExit();
@@ -106,41 +114,69 @@ export const StudySession: React.FC<StudySessionProps> = ({
       </div> 
       
       {/* Main Flashcard Card Container */} 
-      <div className="max-w-2xl w-full mx-auto my-auto py-6"> 
-        <div onClick={handleFlip} className={`cursor-pointer min-h-[340px] sm:min-h-[380px] bg-white border border-purple-100 rounded-3xl p-8 sm:p-12 transition-all duration-300 flex flex-col justify-between shadow-2xl select-none relative ${ isFlipped ? 'border-purple-300 ring-2 ring-purple-100 ' : 'hover:-translate-y-1'}`} > 
-          {/* Top card pill indicator */} 
-          <div className="flex items-center justify-between"> 
-            <span className={`text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full ${ isFlipped ? 'bg-purple-100 text-purple-800 ' : 'bg-slate-100 text-slate-600 '}`} > 
-              {isFlipped ? 'Respuesta' : 'Pregunta'} 
-            </span> 
-            <div className="flex items-center gap-1.5 text-xs font-medium opacity-60"> 
-              <RotateCw className="w-3.5 h-3.5" /> 
-              <span>Espacio para girar</span> 
+      <div className={`max-w-2xl w-full mx-auto my-auto py-6 card-perspective transition-all duration-200 ${
+        isTransitioning ? "opacity-0 scale-95" : "opacity-100 scale-100"
+      }`}> 
+        <div
+          onClick={handleFlip}
+          className={`card-flipper cursor-pointer select-none ${
+            isFlipped ? "is-flipped" : ""
+          } ${noTransition ? "no-transition" : ""}`}
+        > 
+          {/* Front Face */} 
+          <div className="card-face card-face-front min-h-[340px] sm:min-h-[380px] bg-white border border-purple-100 rounded-3xl p-8 sm:p-12 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:border-purple-200 transition-all"> 
+            {/* Top card pill indicator */} 
+            <div className="flex items-center justify-between"> 
+              <span className="text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full bg-slate-100 text-slate-600"> 
+                Pregunta 
+              </span> 
+              <div className="flex items-center gap-1.5 text-xs font-medium text-slate-400"> 
+                <RotateCw className="w-3.5 h-3.5" /> 
+                <span>Espacio para girar</span> 
+              </div> 
+            </div> 
+            
+            {/* Card Content Area */} 
+            <div className="my-auto py-6 text-center"> 
+              <p className="text-xl sm:text-2xl lg:text-3xl font-medium leading-relaxed max-w-xl mx-auto text-slate-800">
+                {currentCard.front}
+              </p> 
+            </div> 
+            
+            {/* Bottom Card Footer Hint */} 
+            <div className="text-center text-xs text-slate-400 font-medium"> 
+              <span>Haz clic o presiona [Espacio] para ver la respuesta</span> 
             </div> 
           </div> 
-          
-          {/* Card Content Area */} 
-          <div className="my-auto py-6 text-center"> 
-            {!isFlipped ? ( 
-              <div className="space-y-4"> 
-                <p className="text-xl sm:text-2xl lg:text-3xl font-medium leading-relaxed max-w-xl mx-auto"> {currentCard.front} </p> 
+
+          {/* Back Face */} 
+          <div className="card-face card-face-back min-h-[340px] sm:min-h-[380px] bg-white border border-purple-300 ring-2 ring-purple-100 rounded-3xl p-8 sm:p-12 flex flex-col justify-between shadow-xl"> 
+            {/* Top card pill indicator */} 
+            <div className="flex items-center justify-between"> 
+              <span className="text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full bg-purple-100 text-purple-800 font-bold"> 
+                Respuesta 
+              </span> 
+              <div className="flex items-center gap-1.5 text-xs font-medium text-purple-400"> 
+                <RotateCw className="w-3.5 h-3.5" /> 
+                <span>Espacio para girar</span> 
               </div> 
-            ) : ( 
-              <div className="space-y-4 animate-in fade-in zoom-in-95 duration-200"> 
-                <p className="text-xs font-semibold uppercase tracking-wider opacity-50"> {currentCard.front} </p> 
-                <div className="w-12 h-0.5 bg-purple-300 mx-auto" /> 
-                <p className="text-lg sm:text-2xl font-medium leading-relaxed max-w-xl mx-auto whitespace-pre-wrap text-purple-950"> {currentCard.back} </p> 
-              </div> 
-            )} 
-          </div> 
-          
-          {/* Bottom Card Footer Hint */} 
-          <div className="text-center text-xs opacity-60"> 
-            {!isFlipped ? ( 
-              <span>Haz clic o presiona [Espacio] para ver la respuesta</span> 
-            ) : ( 
-              <span className="text-purple-600 font-semibold"> ¿Qué tal te fue recordándola? </span> 
-            )} 
+            </div> 
+            
+            {/* Card Content Area */} 
+            <div className="my-auto py-6 text-center space-y-4"> 
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                {currentCard.front}
+              </p> 
+              <div className="w-12 h-0.5 bg-purple-300 mx-auto" /> 
+              <p className="text-lg sm:text-2xl font-medium leading-relaxed max-w-xl mx-auto whitespace-pre-wrap text-purple-950">
+                {currentCard.back}
+              </p> 
+            </div> 
+            
+            {/* Bottom Card Footer Hint */} 
+            <div className="text-center text-xs font-semibold text-purple-600"> 
+              <span>¿Qué tal te fue recordándola?</span> 
+            </div> 
           </div> 
         </div> 
       </div> 
