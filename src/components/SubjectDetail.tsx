@@ -69,8 +69,9 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
 
   const cleanMarkdownPreview = (text: string): string => {
     return text
-      .replace(/[#*`_~>]/g, "")
+      .replace(/!\[(.*?)\]\(.*?\)/g, "[📷 Imagen]")
       .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+      .replace(/[#*`_~>]/g, "")
       .replace(/\n+/g, " ")
       .trim();
   };

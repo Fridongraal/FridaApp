@@ -5,11 +5,13 @@ import remarkGfm from "remark-gfm";
 interface MarkdownContentProps {
   content: string;
   className?: string;
+  onZoomImage?: (src: string, alt?: string) => void;
 }
 
 export const MarkdownContent: React.FC<MarkdownContentProps> = ({
   content,
   className = "",
+  onZoomImage,
 }) => {
   if (!content) return null;
 
@@ -86,6 +88,28 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = ({
             <td className="px-3 py-2 border-b border-purple-50 text-slate-700">
               {children}
             </td>
+          ),
+          img: ({ src, alt, ...props }) => (
+            <span className="my-2.5 flex flex-col items-center justify-center">
+              <img
+                src={src}
+                alt={alt || "Imagen"}
+                className="max-h-60 sm:max-h-72 w-auto max-w-full rounded-2xl object-contain border border-purple-100 shadow-sm bg-white p-1 hover:shadow-md transition-all cursor-zoom-in"
+                loading="lazy"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (src && onZoomImage) {
+                    onZoomImage(src, alt);
+                  }
+                }}
+                {...props}
+              />
+              {alt && alt !== "Imagen" && alt !== "image" && (
+                <span className="text-[11px] text-slate-400 mt-1 italic text-center block">
+                  {alt}
+                </span>
+              )}
+            </span>
           ),
         }}
       >

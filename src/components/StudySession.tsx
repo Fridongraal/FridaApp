@@ -5,6 +5,7 @@ import { getIntervalPreviews, calculateSM2 } from "../services/sm2";
 import { playSuccessChime } from "../services/audio";
 import { FridaMascot } from "./FridaMascot";
 import { MarkdownContent } from "./MarkdownContent";
+import { ImageZoomModal } from "./ImageZoomModal";
 
 interface StudySessionProps {
   title: string;
@@ -24,6 +25,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [noTransition, setNoTransition] = useState(false);
   const [reviewedLogs, setReviewedLogs] = useState<{ card: Flashcard; rating: ReviewRating }[]>([]);
+  const [zoomImage, setZoomImage] = useState<{ src: string; alt?: string } | null>(null);
 
   // Queue of cards (can expand as cards are failed/repeated, exactly like Anki)
   const [sessionQueue, setSessionQueue] = useState<Flashcard[]>(cards);
@@ -192,6 +194,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
             <div className="my-auto py-6 text-center w-full">
               <MarkdownContent
                 content={currentCard.front}
+                onZoomImage={(src, alt) => setZoomImage({ src, alt })}
                 className="text-xl sm:text-2xl font-medium leading-relaxed max-w-xl mx-auto text-slate-800"
               />
             </div>
@@ -220,12 +223,14 @@ export const StudySession: React.FC<StudySessionProps> = ({
               <div className="opacity-60 max-w-xl mx-auto">
                 <MarkdownContent
                   content={currentCard.front}
+                  onZoomImage={(src, alt) => setZoomImage({ src, alt })}
                   className="text-xs font-semibold text-slate-500"
                 />
               </div>
               <div className="w-12 h-0.5 bg-purple-300 mx-auto" />
               <MarkdownContent
                 content={currentCard.back}
+                onZoomImage={(src, alt) => setZoomImage({ src, alt })}
                 className="text-base sm:text-xl font-medium leading-relaxed max-w-xl mx-auto text-purple-950"
               />
             </div>
@@ -330,6 +335,14 @@ export const StudySession: React.FC<StudySessionProps> = ({
           </div>
         )}
       </div>
+
+      {/* Image Full-screen Zoom Modal */}
+      <ImageZoomModal
+        isOpen={!!zoomImage}
+        src={zoomImage?.src || ""}
+        alt={zoomImage?.alt}
+        onClose={() => setZoomImage(null)}
+      />
     </div>
   );
 };

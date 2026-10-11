@@ -12,9 +12,13 @@ import {
   List,
   ListOrdered,
   Quote,
+  Image as ImageIcon,
+  Loader2,
 } from "lucide-react";
 import type { Flashcard, Unit } from "../types";
 import { MarkdownContent } from "./MarkdownContent";
+import { ImageZoomModal } from "./ImageZoomModal";
+import { compressImageToDataUrl } from "../services/imageUtils";
 
 interface CardModalProps {
   isOpen: boolean;
@@ -42,9 +46,13 @@ export const CardModal: React.FC<CardModalProps> = ({
   const [back, setBack] = useState("");
   const [unitId, setUnitId] = useState(defaultUnitId || units[0]?.id || "");
   const [isPreview, setIsPreview] = useState(false);
+  const [isProcessingImage, setIsProcessingImage] = useState(false);
+  const [zoomImage, setZoomImage] = useState<{ src: string; alt?: string } | null>(null);
 
   const frontRef = useRef<HTMLTextAreaElement>(null);
   const backRef = useRef<HTMLTextAreaElement>(null);
+  const frontImageInputRef = useRef<HTMLInputElement>(null);
+  const backImageInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (initialData) {
@@ -119,6 +127,50 @@ export const CardModal: React.FC<CardModalProps> = ({
     }, 10);
   };
 
+  const handleInsertImage = async (field: "front" | "back", file: File) => {
+    setIsProcessingImage(true);
+    try {
+      const dataUrl = await compressImageToDataUrl(file);
+      const alt = file.name ? file.name.replace(/\.[^/.]+$/, "") : "Imagen";
+      applyMarkdown(field, `\n![${alt}](`, ")\n", dataUrl);
+    } catch (err) {
+      console.error("Error al procesar la imagen:", err);
+    } finally {
+      setIsProcessingImage(false);
+    }
+  };
+
+  const handlePaste = async (
+    e: React.ClipboardEvent<HTMLTextAreaElement>,
+    field: "front" | "back"
+  ) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.type.startsWith("image/")) {
+        e.preventDefault();
+        const file = item.getAsFile();
+        if (file) {
+          await handleInsertImage(field, file);
+        }
+        return;
+      }
+    }
+  };
+
+  const handleDrop = async (
+    e: React.DragEvent<HTMLTextAreaElement>,
+    field: "front" | "back"
+  ) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith("image/")) {
+      await handleInsertImage(field, file);
+    }
+  };
+
   const renderToolbar = (field: "front" | "back", label: string) => (
     <div className="flex items-center justify-between mb-1.5 flex-wrap gap-2">
       <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
@@ -181,6 +233,16 @@ export const CardModal: React.FC<CardModalProps> = ({
         >
           <Quote className="w-3.5 h-3.5" />
         </button>
+
+        {/* Image upload button */}
+        <button
+          type="button"
+          onClick={() => (field === "front" ? frontImageInputRef.current : backImageInputRef.current)?.click()}
+          className="p-1 hover:bg-white rounded-lg text-purple-700 hover:text-purple-900 transition-colors cursor-pointer border-l border-purple-200/50 pl-1.5 ml-0.5"
+          title="Subir imagen (o pegar con Ctrl+V o arrastrar)"
+        >
+          <ImageIcon className="w-3.5 h-3.5" />
+        </button>
       </div>
     </div>
   );
@@ -191,6 +253,30 @@ export const CardModal: React.FC<CardModalProps> = ({
         onKeyDown={handleKeyDown}
         className="bg-white rounded-3xl shadow-2xl border border-purple-100 w-full max-w-xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]"
       >
+        {/* Hidden image file inputs */}
+        <input
+          ref={frontImageInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) handleInsertImage("front", file);
+            e.target.value = "";
+          }}
+        />
+        <input
+          ref={backImageInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) handleInsertImage("back", file);
+            e.target.value = "";
+          }}
+        />
+
         {/* Header */}
         <div className="px-6 py-5 border-b border-purple-50 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -202,7 +288,7 @@ export const CardModal: React.FC<CardModalProps> = ({
                 {initialData ? "Editar Flashcard" : "Nueva Flashcard"}
               </h3>
               <p className="text-xs opacity-60 text-slate-500">
-                Soporta formato enriquecido con Markdown
+                Soporta Markdown, imágenes con Ctrl+V o arrastrando
               </p>
             </div>
           </div>
@@ -227,6 +313,14 @@ export const CardModal: React.FC<CardModalProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Processing Image Banner */}
+        {isProcessingImage && (
+          <div className="px-6 py-2.5 bg-purple-50 border-b border-purple-100 flex items-center gap-2 text-xs font-semibold text-purple-700 animate-in fade-in">
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            <span>Optimizando e insertando imagen...</span>
+          </div>
+        )}
 
         {/* Content */}
         <div className="p-6 overflow-y-auto space-y-4 flex-1">
@@ -276,7 +370,11 @@ export const CardModal: React.FC<CardModalProps> = ({
                   Frente (Pregunta)
                 </span>
                 {front.trim() ? (
-                  <MarkdownContent content={front} className="text-base text-slate-800" />
+                  <MarkdownContent
+                    content={front}
+                    className="text-base text-slate-800"
+                    onZoomImage={(src, alt) => setZoomImage({ src, alt })}
+                  />
                 ) : (
                   <span className="opacity-40 italic text-sm text-slate-500">
                     Escribe el frente...
@@ -288,7 +386,11 @@ export const CardModal: React.FC<CardModalProps> = ({
                   Dorso (Respuesta)
                 </span>
                 {back.trim() ? (
-                  <MarkdownContent content={back} className="text-base text-slate-700" />
+                  <MarkdownContent
+                    content={back}
+                    className="text-base text-slate-700"
+                    onZoomImage={(src, alt) => setZoomImage({ src, alt })}
+                  />
                 ) : (
                   <span className="opacity-40 italic text-sm text-slate-500">
                     Escribe el dorso...
@@ -306,9 +408,11 @@ export const CardModal: React.FC<CardModalProps> = ({
                   required
                   autoFocus
                   rows={3}
-                  placeholder="¿Cuál es la función de...? (Soporta **negrita**, listas, `código`)"
+                  placeholder="Escribe tu pregunta... (pega imágenes con Ctrl+V o usa el botón de imagen)"
                   value={front}
                   onChange={(e) => setFront(e.target.value)}
+                  onPaste={(e) => handlePaste(e, "front")}
+                  onDrop={(e) => handleDrop(e, "front")}
                   className="w-full px-4 py-3 rounded-2xl border border-purple-100 bg-purple-50/20 placeholder:opacity-40 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all resize-y text-slate-800 font-sans"
                 />
               </div>
@@ -318,9 +422,11 @@ export const CardModal: React.FC<CardModalProps> = ({
                   ref={backRef}
                   required
                   rows={5}
-                  placeholder="La explicación clave que necesitas recordar (Soporta Markdown completo)"
+                  placeholder="Escribe la respuesta... (pega diagramas o esquemas con Ctrl+V)"
                   value={back}
                   onChange={(e) => setBack(e.target.value)}
+                  onPaste={(e) => handlePaste(e, "back")}
+                  onDrop={(e) => handleDrop(e, "back")}
                   className="w-full px-4 py-3 rounded-2xl border border-purple-100 bg-purple-50/20 placeholder:opacity-40 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all resize-y text-slate-800 font-sans"
                 />
               </div>
@@ -346,7 +452,7 @@ export const CardModal: React.FC<CardModalProps> = ({
               <button
                 type="button"
                 onClick={() => handleSave(true)}
-                disabled={!front.trim() || !back.trim()}
+                disabled={!front.trim() || !back.trim() || isProcessingImage}
                 className="px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-40 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <PlusCircle className="w-3.5 h-3.5 text-purple-600" />
@@ -356,7 +462,7 @@ export const CardModal: React.FC<CardModalProps> = ({
             <button
               type="button"
               onClick={() => handleSave(false)}
-              disabled={!front.trim() || !back.trim()}
+              disabled={!front.trim() || !back.trim() || isProcessingImage}
               className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-purple-600 text-white shadow-sm hover:bg-purple-700 disabled:opacity-40 transition-all cursor-pointer hover:-translate-y-px"
             >
               {initialData ? "Guardar Cambios" : "Listo"}
@@ -364,6 +470,14 @@ export const CardModal: React.FC<CardModalProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Image Full-screen Zoom Modal */}
+      <ImageZoomModal
+        isOpen={!!zoomImage}
+        src={zoomImage?.src || ""}
+        alt={zoomImage?.alt}
+        onClose={() => setZoomImage(null)}
+      />
     </div>
   );
 };
