@@ -11,6 +11,7 @@ import {
   Clock,
   Download,
   Upload,
+  Tag,
 } from "lucide-react";
 import type { Subject, Unit, Flashcard } from "../types";
 import { exportSubjectCardsToCSV } from "../services/importExport";
@@ -48,6 +49,7 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
   onImportCards,
 }) => {
   const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({});
+  const [selectedTagFilter, setSelectedTagFilter] = useState<string | null>(null);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [targetUnitForImport, setTargetUnitForImport] = useState<Unit | null>(null);
 
@@ -59,6 +61,7 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
 
   const subjectCards = cards.filter((c) => c.subjectId === subject.id);
   const subjectDueCards = subjectCards.filter((c) => c.dueDate <= now);
+  const allSubjectTags = Array.from(new Set(subjectCards.flatMap((c) => c.tags || [])));
 
   const formatDueDate = (dueDate: number) => {
     if (dueDate <= now) return <span className="text-amber-600 font-bold">Hoy</span>;
@@ -183,6 +186,52 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
         </div>
       </div>
 
+      {/* Tag Filtering Bar */}
+      {allSubjectTags.length > 0 && (
+        <div className="flex items-center gap-2 flex-wrap p-3 rounded-2xl bg-white border border-purple-100 shadow-xs">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-500 pl-1 mr-1">
+            <Tag className="w-3.5 h-3.5 text-purple-600" />
+            <span>Filtrar por etiqueta:</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setSelectedTagFilter(null)}
+            className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              selectedTagFilter === null
+                ? "bg-purple-600 text-white shadow-xs"
+                : "bg-slate-100 hover:bg-slate-200/80 text-slate-600"
+            }`}
+          >
+            Todas ({subjectCards.length})
+          </button>
+          {allSubjectTags.map((tag) => {
+            const count = subjectCards.filter((c) => (c.tags || []).includes(tag)).length;
+            const isSelected = selectedTagFilter === tag;
+            return (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => setSelectedTagFilter(isSelected ? null : tag)}
+                className={`px-3 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  isSelected
+                    ? "bg-purple-600 text-white shadow-xs"
+                    : "bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200/60"
+                }`}
+              >
+                <span>#{tag}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                    isSelected ? "bg-purple-700 text-white" : "bg-purple-200/70 text-purple-900"
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {/* Units / Subtopics Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -198,9 +247,13 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
         {units.length > 0 ? (
           <div className="space-y-3">
             {units.map((unit) => {
-              const unitCards = cards.filter((c) => c.unitId === unit.id);
+              const rawUnitCards = cards.filter((c) => c.unitId === unit.id);
+              const unitCards = selectedTagFilter
+                ? rawUnitCards.filter((c) => (c.tags || []).includes(selectedTagFilter))
+                : rawUnitCards;
               const dueCount = unitCards.filter((c) => c.dueDate <= now).length;
-              const isExpanded = !!expandedUnits[unit.id];
+              const isExpanded =
+                selectedTagFilter && unitCards.length > 0 ? true : !!expandedUnits[unit.id];
 
               return (
                 <div
@@ -312,13 +365,36 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
                               className="bg-slate-50/70 border border-slate-100 p-3.5 rounded-xl flex items-center justify-between gap-4 text-xs"
                             >
                               <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1">
+                                <div className="flex items-center gap-2 mb-1 flex-wrap">
                                   <span className="font-bold text-purple-700 bg-purple-100 px-1.5 py-0.5 rounded text-[11px]">
                                     #{idx + 1}
                                   </span>
                                   <span className="font-semibold text-slate-800 truncate">
                                     {cleanMarkdownPreview(card.front)}
                                   </span>
+                                  {card.tags && card.tags.length > 0 && (
+                                    <div className="flex items-center gap-1 ml-1 flex-wrap">
+                                      {card.tags.map((tag) => (
+                                        <span
+                                          key={tag}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelectedTagFilter(
+                                              tag === selectedTagFilter ? null : tag
+                                            );
+                                          }}
+                                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full transition-colors cursor-pointer border ${
+                                            selectedTagFilter === tag
+                                              ? "bg-purple-600 text-white border-purple-600 shadow-xs"
+                                              : "bg-purple-50 text-purple-700 border-purple-200/60 hover:bg-purple-100"
+                                          }`}
+                                          title={`Filtrar por #${tag}`}
+                                        >
+                                          #{tag}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  )}
                                 </div>
                                 <p className="opacity-70 text-slate-600 truncate pl-6">
                                   {cleanMarkdownPreview(card.back)}

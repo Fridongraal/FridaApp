@@ -180,11 +180,22 @@ export const StudySession: React.FC<StudySessionProps> = ({
           {/* Front Face */}
           <div className="card-face card-face-front min-h-[340px] sm:min-h-[380px] bg-white border border-purple-100 rounded-3xl p-8 sm:p-12 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:border-purple-200 transition-all">
             {/* Top card pill indicator */}
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full bg-slate-100 text-slate-600">
-                Pregunta
-              </span>
-              <div className="flex items-center gap-1.5 text-xs font-medium text-slate-400">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full bg-slate-100 text-slate-600">
+                  Pregunta
+                </span>
+                {currentCard.tags &&
+                  currentCard.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200/60"
+                    >
+                      #{t}
+                    </span>
+                  ))}
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-medium text-slate-400 shrink-0">
                 <RotateCw className="w-3.5 h-3.5" />
                 <span>Espacio para girar</span>
               </div>
@@ -208,11 +219,22 @@ export const StudySession: React.FC<StudySessionProps> = ({
           {/* Back Face */}
           <div className="card-face card-face-back min-h-[340px] sm:min-h-[380px] bg-white border border-purple-300 ring-2 ring-purple-100 rounded-3xl p-8 sm:p-12 flex flex-col justify-between shadow-xl">
             {/* Top card pill indicator */}
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full bg-purple-100 text-purple-800 font-bold">
-                Respuesta
-              </span>
-              <div className="flex items-center gap-1.5 text-xs font-medium text-purple-400">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-xs font-bold uppercase tracking-wider px-3.5 py-1 rounded-full bg-purple-100 text-purple-800 font-bold">
+                  Respuesta
+                </span>
+                {currentCard.tags &&
+                  currentCard.tags.map((t) => (
+                    <span
+                      key={t}
+                      className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200/60"
+                    >
+                      #{t}
+                    </span>
+                  ))}
+              </div>
+              <div className="flex items-center gap-1.5 text-xs font-medium text-purple-400 shrink-0">
                 <RotateCw className="w-3.5 h-3.5" />
                 <span>Espacio para girar</span>
               </div>

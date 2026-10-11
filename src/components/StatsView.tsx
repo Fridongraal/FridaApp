@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Flame, Sparkles, BookOpen, Award, Target } from "lucide-react";
 import type { Subject, Flashcard, ReviewLog, UserPreferences } from "../types";
 import { FridaMascot } from "./FridaMascot";
+import { ConsistencyHeatmap } from "./ConsistencyHeatmap";
 interface StatsViewProps {
   subjects: Subject[];
   cards: Flashcard[];
@@ -27,6 +28,34 @@ export const StatsView: React.FC<StatsViewProps> = ({
   const reviewPercent = Math.round((reviewCards / totalCards) * 100);
   const learningPercent = Math.round((learningCards / totalCards) * 100);
   const newPercent = Math.round((newCards / totalCards) * 100);
+  const PRESET_GOALS = [10, 20, 30, 50];
+  const isCustomGoal = !PRESET_GOALS.includes(preferences.dailyGoal);
+  const [customGoalInput, setCustomGoalInput] = useState<string>(
+    isCustomGoal ? String(preferences.dailyGoal) : ""
+  );
+
+  useEffect(() => {
+    if (!PRESET_GOALS.includes(preferences.dailyGoal)) {
+      setCustomGoalInput(String(preferences.dailyGoal));
+    } else {
+      setCustomGoalInput("");
+    }
+  }, [preferences.dailyGoal]);
+
+  const handleSelectPreset = (goal: number) => {
+    setCustomGoalInput("");
+    onUpdatePreferences({ dailyGoal: goal });
+  };
+
+  const handleCustomGoalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setCustomGoalInput(val);
+    const parsed = parseInt(val, 10);
+    if (!isNaN(parsed) && parsed > 0 && parsed <= 9999) {
+      onUpdatePreferences({ dailyGoal: parsed });
+    }
+  };
+
   return (
     <div className="p-8 max-w-5xl mx-auto space-y-8 animate-in fade-in duration-300">
       {" "}
@@ -145,122 +174,123 @@ export const StatsView: React.FC<StatsViewProps> = ({
             {" "}
             Respuestas registradas{" "}
           </p>{" "}
-        </div>{" "}
-      </div>{" "}
-      {/* Memory Status Breakdown */}{" "}
-      <div className="glass-panel p-7 rounded-3xl space-y-6">
-        {" "}
+        </div> 
+      </div> 
+
+      {/* Consistency Heatmap */}
+      <ConsistencyHeatmap reviewLogs={reviewLogs} currentStreak={currentStreak} />
+
+      {/* Memory Status Breakdown */} 
+      <div className="glass-panel p-7 rounded-3xl space-y-6"> 
         <div>
-          {" "}
           <h3 className="text-lg font-bold">
-            {" "}
-            Distribución del Aprendizaje{" "}
-          </h3>{" "}
+            Distribución del Aprendizaje 
+          </h3> 
           <p className="text-xs opacity-70">
-            {" "}
-            Nivel de consolidación de tus tarjetas en la memoria{" "}
-          </p>{" "}
-        </div>{" "}
-        {/* Progress bar */}{" "}
-        <div className="w-full h-3.5 rounded-full bg-slate-200/60 overflow-hidden flex shadow-inner">
-          {" "}
+            Nivel de consolidación de tus tarjetas en la memoria 
+          </p> 
+        </div> 
+        {/* Progress bar */} 
+        <div className="w-full h-3.5 rounded-full bg-slate-200/60 overflow-hidden flex shadow-inner"> 
           <div
             className="bg-purple-600 transition-all duration-500"
             style={{ width: `${reviewPercent}%` }}
             title={`Consolidadas: ${reviewCards}`}
-          />{" "}
+          /> 
           <div
             className="bg-amber-400 transition-all duration-500"
             style={{ width: `${learningPercent}%` }}
             title={`En aprendizaje: ${learningCards}`}
-          />{" "}
+          /> 
           <div
             className="bg-slate-300 transition-all duration-500"
             style={{ width: `${newPercent}%` }}
             title={`Nuevas: ${newCards}`}
-          />{" "}
-        </div>{" "}
-        {/* Legend */}{" "}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-          {" "}
-          <div className="p-4 rounded-2xl glass-panel bg-purple-50/50 border-purple-200/50">
-            {" "}
-            <div className="flex items-center gap-2 mb-1">
-              {" "}
-              <span className="w-2.5 h-2.5 rounded-full bg-purple-600" />{" "}
+          /> 
+        </div> 
+        {/* Legend */} 
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2"> 
+          <div className="p-4 rounded-2xl glass-panel bg-purple-50/50 border-purple-200/50"> 
+            <div className="flex items-center gap-2 mb-1"> 
+              <span className="w-2.5 h-2.5 rounded-full bg-purple-600" /> 
               <span className="text-xs font-bold text-purple-900">
-                {" "}
-                Consolidadas ({reviewPercent}%){" "}
-              </span>{" "}
-            </div>{" "}
-            <p className="text-xl font-black text-purple-950">{reviewCards}</p>{" "}
+                Consolidadas ({reviewPercent}%) 
+              </span> 
+            </div> 
+            <p className="text-xl font-black text-purple-950">{reviewCards}</p> 
             <p className="text-[11px] opacity-70 mt-1">
-              {" "}
-              Repasadas exitosamente con intervalos crecientes.{" "}
-            </p>{" "}
-          </div>{" "}
-          <div className="p-4 rounded-2xl glass-panel bg-amber-50/50 border-amber-200/50">
-            {" "}
-            <div className="flex items-center gap-2 mb-1">
-              {" "}
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />{" "}
+              Repasadas exitosamente con intervalos crecientes. 
+            </p> 
+          </div> 
+          <div className="p-4 rounded-2xl glass-panel bg-amber-50/50 border-amber-200/50"> 
+            <div className="flex items-center gap-2 mb-1"> 
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> 
               <span className="text-xs font-bold text-amber-900">
-                {" "}
-                En aprendizaje ({learningPercent}%){" "}
-              </span>{" "}
-            </div>{" "}
-            <p className="text-xl font-black text-amber-950">{learningCards}</p>{" "}
+                En aprendizaje ({learningPercent}%) 
+              </span> 
+            </div> 
+            <p className="text-xl font-black text-amber-950">{learningCards}</p> 
             <p className="text-[11px] opacity-70 mt-1">
-              {" "}
-              Tarjetas que te costaron recientemente.{" "}
-            </p>{" "}
-          </div>{" "}
-          <div className="p-4 rounded-2xl glass-panel">
-            {" "}
-            <div className="flex items-center gap-2 mb-1">
-              {" "}
-              <span className="w-2.5 h-2.5 rounded-full bg-slate-400" />{" "}
+              Tarjetas que te costaron recientemente. 
+            </p> 
+          </div> 
+          <div className="p-4 rounded-2xl glass-panel"> 
+            <div className="flex items-center gap-2 mb-1"> 
+              <span className="w-2.5 h-2.5 rounded-full bg-slate-400" /> 
               <span className="text-xs font-bold opacity-80">
-                {" "}
-                Nuevas ({newPercent}%){" "}
-              </span>{" "}
-            </div>{" "}
-            <p className="text-xl font-black">{newCards}</p>{" "}
+                Nuevas ({newPercent}%) 
+              </span> 
+            </div> 
+            <p className="text-xl font-black">{newCards}</p> 
             <p className="text-[11px] opacity-70 mt-1">
-              {" "}
-              Creadas recientemente pendientes de primer repaso.{" "}
-            </p>{" "}
-          </div>{" "}
-        </div>{" "}
-      </div>{" "}
-      {/* Daily Goal Settings */}{" "}
-      <div className="glass-panel p-6 rounded-3xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        {" "}
-        <div>
-          {" "}
-          <h4 className="text-base font-bold flex items-center gap-2">
-            {" "}
-            <Target className="w-4 h-4 text-purple-600" />{" "}
-            <span>Meta Diaria</span>{" "}
-          </h4>{" "}
-          <p className="text-xs opacity-70 mt-0.5">
-            {" "}
-            Ajusta tu objetivo de tarjetas diarias{" "}
-          </p>{" "}
-        </div>{" "}
-        <div className="flex items-center gap-2">
-          {" "}
-          {[10, 20, 30, 50].map((goal) => (
+              Creadas recientemente pendientes de primer repaso. 
+            </p> 
+          </div> 
+        </div> 
+      </div> 
+
+      {/* Daily Goal Settings */} 
+      <div className="glass-panel p-6 rounded-3xl flex flex-col sm:flex-row sm:items-center justify-between gap-4"> 
+        <div> 
+          <h4 className="text-base font-bold flex items-center gap-2"> 
+            <Target className="w-4 h-4 text-purple-600" /> 
+            <span>Meta Diaria</span> 
+          </h4> 
+          <p className="text-xs opacity-70 mt-0.5"> 
+            Ajusta tu objetivo de tarjetas diarias 
+          </p> 
+        </div> 
+        <div className="flex flex-wrap items-center gap-2"> 
+          {PRESET_GOALS.map((goal) => (
             <button
               key={goal}
-              onClick={() => onUpdatePreferences({ dailyGoal: goal })}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${preferences.dailyGoal === goal ? "glass-button-primary" : "glass-button"}`}
+              onClick={() => handleSelectPreset(goal)}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                preferences.dailyGoal === goal && !customGoalInput
+                  ? "glass-button-primary shadow-sm"
+                  : "glass-button"
+              }`}
             >
-              {" "}
-              {goal} / día{" "}
+              {goal} / día
             </button>
-          ))}{" "}
-        </div>{" "}
+          ))} 
+          <div className="flex items-center gap-1.5 bg-white/70 px-2 py-1 rounded-xl border border-purple-100 shadow-2xs">
+            <span className="text-[11px] text-slate-500 font-semibold">Personalizada:</span>
+            <input
+              type="number"
+              min="1"
+              max="999"
+              value={customGoalInput}
+              onChange={handleCustomGoalChange}
+              placeholder={isCustomGoal ? String(preferences.dailyGoal) : "Ej: 25"}
+              className={`w-16 px-2 py-1 text-xs font-extrabold rounded-lg border text-center transition-all focus:outline-none focus:ring-2 focus:ring-purple-400 ${
+                isCustomGoal || customGoalInput
+                  ? "bg-purple-600 text-white border-purple-600 shadow-xs"
+                  : "bg-white border-slate-200 text-slate-800"
+              }`}
+            />
+          </div>
+        </div> 
       </div>{" "}
     </div>
   );

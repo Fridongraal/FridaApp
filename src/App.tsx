@@ -125,11 +125,20 @@ export function App() {
   }; 
   
   // ------------------- CRUD: Cards ------------------- 
-  const handleSaveCard = async ( data: { front: string; back: string; unitId: string}, keepOpen = false ) => { 
+  const handleSaveCard = async (
+    data: { front: string; back: string; unitId: string; tags?: string[] },
+    keepOpen = false
+  ) => { 
     const parentUnit = units.find((u) => u.id === data.unitId); 
     if (!parentUnit) return; 
     if (editingCard) { 
-      await db.cards.update(editingCard.id, { front: data.front, back: data.back, unitId: data.unitId, subjectId: parentUnit.subjectId,}); 
+      await db.cards.update(editingCard.id, {
+        front: data.front,
+        back: data.back,
+        unitId: data.unitId,
+        subjectId: parentUnit.subjectId,
+        tags: data.tags || [],
+      }); 
       setEditingCard(null);
     } else { 
       const newCard: Flashcard = { 
@@ -138,6 +147,7 @@ export function App() {
         unitId: data.unitId, 
         front: data.front, 
         back: data.back, 
+        tags: data.tags || [],
         createdAt: Date.now(), 
         interval: 1, 
         repetition: 0, 
@@ -376,6 +386,7 @@ export function App() {
         units={selectedSubjectId ? unitsInSelectedSubject : units} 
         defaultUnitId={cardDefaultUnitId} 
         isUnitLocked={isCardUnitLocked}
+        availableTags={Array.from(new Set(cards.flatMap((c) => c.tags || [])))}
       /> 
       {/* Tutorial Modal */} 
       <TutorialModal isOpen={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} /> 

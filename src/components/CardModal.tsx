@@ -14,6 +14,7 @@ import {
   Quote,
   Image as ImageIcon,
   Loader2,
+  Tag,
 } from "lucide-react";
 import type { Flashcard, Unit } from "../types";
 import { MarkdownContent } from "./MarkdownContent";
@@ -24,13 +25,14 @@ interface CardModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (
-    cardData: { front: string; back: string; unitId: string },
+    cardData: { front: string; back: string; unitId: string; tags?: string[] },
     keepOpen?: boolean
   ) => void;
   initialData?: Flashcard | null;
   units: Unit[];
   defaultUnitId?: string;
   isUnitLocked?: boolean;
+  availableTags?: string[];
 }
 
 export const CardModal: React.FC<CardModalProps> = ({
@@ -41,10 +43,13 @@ export const CardModal: React.FC<CardModalProps> = ({
   units,
   defaultUnitId,
   isUnitLocked = false,
+  availableTags = [],
 }) => {
   const [front, setFront] = useState("");
   const [back, setBack] = useState("");
   const [unitId, setUnitId] = useState(defaultUnitId || units[0]?.id || "");
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
   const [isPreview, setIsPreview] = useState(false);
   const [isProcessingImage, setIsProcessingImage] = useState(false);
   const [zoomImage, setZoomImage] = useState<{ src: string; alt?: string } | null>(null);
@@ -59,11 +64,14 @@ export const CardModal: React.FC<CardModalProps> = ({
       setFront(initialData.front);
       setBack(initialData.back);
       setUnitId(initialData.unitId);
+      setTags(initialData.tags || []);
     } else {
       setFront("");
       setBack("");
       setUnitId(defaultUnitId || units[0]?.id || "");
+      setTags([]);
     }
+    setTagInput("");
     setIsPreview(false);
   }, [initialData, defaultUnitId, units, isOpen]);
 
@@ -74,13 +82,37 @@ export const CardModal: React.FC<CardModalProps> = ({
     units.find((u) => u.id === defaultUnitId) ||
     units[0];
 
+  const handleAddTag = (rawTag: string) => {
+    const clean = rawTag.trim().replace(/^#+/, "").toLowerCase();
+    if (clean && !tags.includes(clean)) {
+      setTags([...tags, clean]);
+    }
+    setTagInput("");
+  };
+
+  const handleRemoveTag = (tagToRemove: string) => {
+    setTags(tags.filter((t) => t !== tagToRemove));
+  };
+
+  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      handleAddTag(tagInput);
+    }
+  };
+
   const handleSave = (keepOpen = false) => {
     const finalUnitId = isUnitLocked ? defaultUnitId || unitId : unitId;
     if (!front.trim() || !back.trim() || !finalUnitId) return;
-    onSave({ front: front.trim(), back: back.trim(), unitId: finalUnitId }, keepOpen);
+    onSave(
+      { front: front.trim(), back: back.trim(), unitId: finalUnitId, tags },
+      keepOpen
+    );
     if (keepOpen) {
       setFront("");
       setBack("");
+      setTags([]);
+      setTagInput("");
       frontRef.current?.focus();
     } else {
       onClose();
@@ -419,6 +451,19 @@ export const CardModal: React.FC<CardModalProps> = ({
                   </span>
                 )}
               </div>
+              {tags.length > 0 && (
+                <div className="flex items-center gap-1.5 flex-wrap pt-1 px-1">
+                  <span className="text-[11px] text-slate-400 font-semibold">Etiquetas:</span>
+                  {tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-purple-100 text-purple-800"
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           ) : (
             /* Edit Mode */
@@ -451,6 +496,82 @@ export const CardModal: React.FC<CardModalProps> = ({
                   onDrop={(e) => handleDrop(e, "back")}
                   className="w-full px-4 py-3 rounded-2xl border border-purple-100 bg-purple-50/20 placeholder:opacity-40 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all resize-y text-slate-800 font-sans"
                 />
+              </div>
+
+              {/* Tags Input Section */}
+              <div className="pt-1">
+                <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <Tag className="w-3.5 h-3.5 text-purple-600" />
+                    <span>Etiquetas / Tags</span>
+                  </span>
+                  <span className="text-[10px] font-normal text-slate-400">
+                    Presiona Enter o coma para añadir
+                  </span>
+                </label>
+
+                <div className="flex flex-wrap items-center gap-1.5 p-2 rounded-2xl border border-purple-100 bg-purple-50/20 focus-within:ring-2 focus-within:ring-purple-400 transition-all">
+                  {tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-purple-100 text-purple-800 text-xs font-bold shadow-2xs"
+                    >
+                      <span>#{tag}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveTag(tag)}
+                        className="opacity-50 hover:opacity-100 text-purple-900 cursor-pointer ml-0.5"
+                        title="Eliminar etiqueta"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </span>
+                  ))}
+
+                  <div className="flex-1 min-w-[140px] flex items-center">
+                    <input
+                      type="text"
+                      placeholder={
+                        tags.length === 0
+                          ? "Ej: examen, fórmulas, anatomía..."
+                          : "Añadir otra etiqueta..."
+                      }
+                      value={tagInput}
+                      onChange={(e) => setTagInput(e.target.value)}
+                      onKeyDown={handleTagInputKeyDown}
+                      className="w-full text-xs bg-transparent focus:outline-none text-slate-800 placeholder:text-slate-400 font-medium px-1 py-0.5"
+                    />
+                    {tagInput.trim() && (
+                      <button
+                        type="button"
+                        onClick={() => handleAddTag(tagInput)}
+                        className="px-2 py-0.5 rounded-lg bg-purple-600 text-white text-[11px] font-bold cursor-pointer shrink-0"
+                      >
+                        Añadir
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Suggestions from available tags */}
+                {availableTags && availableTags.length > 0 && (
+                  <div className="flex items-center gap-1.5 flex-wrap pt-1.5 pl-0.5">
+                    <span className="text-[10px] text-slate-400 font-semibold">Sugerencias:</span>
+                    {availableTags
+                      .filter((t) => !tags.includes(t))
+                      .slice(0, 6)
+                      .map((t) => (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => handleAddTag(t)}
+                          className="text-[11px] font-semibold px-2 py-0.5 rounded-lg bg-slate-100 hover:bg-purple-100 text-slate-600 hover:text-purple-700 transition-colors cursor-pointer"
+                        >
+                          +{t}
+                        </button>
+                      ))}
+                  </div>
+                )}
               </div>
             </>
           )}
