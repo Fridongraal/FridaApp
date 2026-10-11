@@ -4,6 +4,7 @@ import type { Flashcard, ReviewRating } from "../types";
 import { getIntervalPreviews, calculateSM2 } from "../services/sm2";
 import { playSuccessChime } from "../services/audio";
 import { FridaMascot } from "./FridaMascot";
+import { MarkdownContent } from "./MarkdownContent";
 
 interface StudySessionProps {
   title: string;
@@ -188,10 +189,11 @@ export const StudySession: React.FC<StudySessionProps> = ({
             </div>
 
             {/* Card Content Area */}
-            <div className="my-auto py-6 text-center">
-              <p className="text-xl sm:text-2xl lg:text-3xl font-medium leading-relaxed max-w-xl mx-auto text-slate-800">
-                {currentCard.front}
-              </p>
+            <div className="my-auto py-6 text-center w-full">
+              <MarkdownContent
+                content={currentCard.front}
+                className="text-xl sm:text-2xl font-medium leading-relaxed max-w-xl mx-auto text-slate-800"
+              />
             </div>
 
             {/* Bottom Card Footer Hint */}
@@ -214,14 +216,18 @@ export const StudySession: React.FC<StudySessionProps> = ({
             </div>
 
             {/* Card Content Area */}
-            <div className="my-auto py-6 text-center space-y-4">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-                {currentCard.front}
-              </p>
+            <div className="my-auto py-6 text-center space-y-4 w-full">
+              <div className="opacity-60 max-w-xl mx-auto">
+                <MarkdownContent
+                  content={currentCard.front}
+                  className="text-xs font-semibold text-slate-500"
+                />
+              </div>
               <div className="w-12 h-0.5 bg-purple-300 mx-auto" />
-              <p className="text-lg sm:text-2xl font-medium leading-relaxed max-w-xl mx-auto whitespace-pre-wrap text-purple-950">
-                {currentCard.back}
-              </p>
+              <MarkdownContent
+                content={currentCard.back}
+                className="text-base sm:text-xl font-medium leading-relaxed max-w-xl mx-auto text-purple-950"
+              />
             </div>
 
             {/* Bottom Card Footer Hint */}

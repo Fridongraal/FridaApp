@@ -1,6 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { X, Sparkles, Eye, PlusCircle, Layers } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  X,
+  Sparkles,
+  Eye,
+  PlusCircle,
+  Layers,
+  Bold,
+  Italic,
+  Code,
+  FileCode,
+  List,
+  ListOrdered,
+  Quote,
+} from "lucide-react";
 import type { Flashcard, Unit } from "../types";
+import { MarkdownContent } from "./MarkdownContent";
 
 interface CardModalProps {
   isOpen: boolean;
@@ -29,6 +43,9 @@ export const CardModal: React.FC<CardModalProps> = ({
   const [unitId, setUnitId] = useState(defaultUnitId || units[0]?.id || "");
   const [isPreview, setIsPreview] = useState(false);
 
+  const frontRef = useRef<HTMLTextAreaElement>(null);
+  const backRef = useRef<HTMLTextAreaElement>(null);
+
   useEffect(() => {
     if (initialData) {
       setFront(initialData.front);
@@ -44,15 +61,19 @@ export const CardModal: React.FC<CardModalProps> = ({
 
   if (!isOpen) return null;
 
-  const targetUnit = units.find((u) => u.id === unitId) || units.find((u) => u.id === defaultUnitId) || units[0];
+  const targetUnit =
+    units.find((u) => u.id === unitId) ||
+    units.find((u) => u.id === defaultUnitId) ||
+    units[0];
 
   const handleSave = (keepOpen = false) => {
-    const finalUnitId = isUnitLocked ? (defaultUnitId || unitId) : unitId;
+    const finalUnitId = isUnitLocked ? defaultUnitId || unitId : unitId;
     if (!front.trim() || !back.trim() || !finalUnitId) return;
     onSave({ front: front.trim(), back: back.trim(), unitId: finalUnitId }, keepOpen);
     if (keepOpen) {
       setFront("");
       setBack("");
+      frontRef.current?.focus();
     } else {
       onClose();
     }
@@ -64,6 +85,105 @@ export const CardModal: React.FC<CardModalProps> = ({
       handleSave(false);
     }
   };
+
+  const applyMarkdown = (
+    field: "front" | "back",
+    wrapperStart: string,
+    wrapperEnd = wrapperStart,
+    placeholder = "texto"
+  ) => {
+    const textarea = field === "front" ? frontRef.current : backRef.current;
+    const value = field === "front" ? front : back;
+    const setter = field === "front" ? setFront : setBack;
+
+    if (!textarea) {
+      setter((prev) => `${prev}${wrapperStart}${placeholder}${wrapperEnd}`);
+      return;
+    }
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = value.substring(start, end) || placeholder;
+
+    const before = value.substring(0, start);
+    const after = value.substring(end);
+    const updated = `${before}${wrapperStart}${selectedText}${wrapperEnd}${after}`;
+
+    setter(updated);
+
+    setTimeout(() => {
+      textarea.focus();
+      const newStart = start + wrapperStart.length;
+      const newEnd = newStart + selectedText.length;
+      textarea.setSelectionRange(newStart, newEnd);
+    }, 10);
+  };
+
+  const renderToolbar = (field: "front" | "back", label: string) => (
+    <div className="flex items-center justify-between mb-1.5 flex-wrap gap-2">
+      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600">
+        {label}
+      </label>
+      <div className="flex items-center gap-0.5 bg-purple-50/70 p-0.5 rounded-xl border border-purple-100/70 shadow-2xs">
+        <button
+          type="button"
+          onClick={() => applyMarkdown(field, "**", "**", "negrita")}
+          className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-purple-700 transition-colors cursor-pointer"
+          title="Negrita (**texto**)"
+        >
+          <Bold className="w-3.5 h-3.5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => applyMarkdown(field, "*", "*", "cursiva")}
+          className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-purple-700 transition-colors cursor-pointer"
+          title="Cursiva (*texto*)"
+        >
+          <Italic className="w-3.5 h-3.5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => applyMarkdown(field, "`", "`", "código")}
+          className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-purple-700 transition-colors cursor-pointer"
+          title="Código en línea (`código`)"
+        >
+          <Code className="w-3.5 h-3.5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => applyMarkdown(field, "\n```\n", "\n```\n", "código")}
+          className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-purple-700 transition-colors cursor-pointer"
+          title="Bloque de código (```...```)"
+        >
+          <FileCode className="w-3.5 h-3.5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => applyMarkdown(field, "\n- ", "", "elemento")}
+          className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-purple-700 transition-colors cursor-pointer"
+          title="Lista de viñetas (- elemento)"
+        >
+          <List className="w-3.5 h-3.5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => applyMarkdown(field, "\n1. ", "", "elemento")}
+          className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-purple-700 transition-colors cursor-pointer"
+          title="Lista numerada (1. elemento)"
+        >
+          <ListOrdered className="w-3.5 h-3.5" />
+        </button>
+        <button
+          type="button"
+          onClick={() => applyMarkdown(field, "\n> ", "", "cita")}
+          className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-purple-700 transition-colors cursor-pointer"
+          title="Cita (> texto)"
+        >
+          <Quote className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-in fade-in duration-200">
@@ -82,7 +202,7 @@ export const CardModal: React.FC<CardModalProps> = ({
                 {initialData ? "Editar Flashcard" : "Nueva Flashcard"}
               </h3>
               <p className="text-xs opacity-60 text-slate-500">
-                Frente para la pregunta y Dorso para la respuesta
+                Soporta formato enriquecido con Markdown
               </p>
             </div>
           </div>
@@ -155,47 +275,53 @@ export const CardModal: React.FC<CardModalProps> = ({
                 <span className="text-[10px] font-bold uppercase tracking-wider text-purple-600 block mb-2">
                   Frente (Pregunta)
                 </span>
-                <p className="font-medium whitespace-pre-wrap text-base text-slate-800">
-                  {front || <span className="opacity-40 italic">Escribe el frente...</span>}
-                </p>
+                {front.trim() ? (
+                  <MarkdownContent content={front} className="text-base text-slate-800" />
+                ) : (
+                  <span className="opacity-40 italic text-sm text-slate-500">
+                    Escribe el frente...
+                  </span>
+                )}
               </div>
               <div className="p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
                   Dorso (Respuesta)
                 </span>
-                <p className="whitespace-pre-wrap text-base text-slate-700">
-                  {back || <span className="opacity-40 italic">Escribe el dorso...</span>}
-                </p>
+                {back.trim() ? (
+                  <MarkdownContent content={back} className="text-base text-slate-700" />
+                ) : (
+                  <span className="opacity-40 italic text-sm text-slate-500">
+                    Escribe el dorso...
+                  </span>
+                )}
               </div>
             </div>
           ) : (
             /* Edit Mode */
             <>
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-slate-600">
-                  Frente (Pregunta o Concepto) *
-                </label>
+                {renderToolbar("front", "Frente (Pregunta o Concepto) *")}
                 <textarea
+                  ref={frontRef}
                   required
                   autoFocus
                   rows={3}
-                  placeholder="¿Cuál es la función de...? o Término a memorizar"
+                  placeholder="¿Cuál es la función de...? (Soporta **negrita**, listas, `código`)"
                   value={front}
                   onChange={(e) => setFront(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl border border-purple-100 bg-purple-50/20 placeholder:opacity-40 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all resize-y text-slate-800"
+                  className="w-full px-4 py-3 rounded-2xl border border-purple-100 bg-purple-50/20 placeholder:opacity-40 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all resize-y text-slate-800 font-sans"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-slate-600">
-                  Dorso (Respuesta o Explicación) *
-                </label>
+                {renderToolbar("back", "Dorso (Respuesta o Explicación) *")}
                 <textarea
+                  ref={backRef}
                   required
-                  rows={4}
-                  placeholder="La explicación clave o respuesta que necesitas recordar"
+                  rows={5}
+                  placeholder="La explicación clave que necesitas recordar (Soporta Markdown completo)"
                   value={back}
                   onChange={(e) => setBack(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl border border-purple-100 bg-purple-50/20 placeholder:opacity-40 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all resize-y text-slate-800"
+                  className="w-full px-4 py-3 rounded-2xl border border-purple-100 bg-purple-50/20 placeholder:opacity-40 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all resize-y text-slate-800 font-sans"
                 />
               </div>
             </>

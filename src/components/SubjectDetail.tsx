@@ -67,6 +67,14 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
     return <span className="opacity-60">En {diffDays} días</span>;
   };
 
+  const cleanMarkdownPreview = (text: string): string => {
+    return text
+      .replace(/[#*`_~>]/g, "")
+      .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+      .replace(/\n+/g, " ")
+      .trim();
+  };
+
   const handleExportCSV = () => {
     if (subjectCards.length === 0) return;
     exportSubjectCardsToCSV(subject.name, units, subjectCards);
@@ -308,11 +316,11 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
                                     #{idx + 1}
                                   </span>
                                   <span className="font-semibold text-slate-800 truncate">
-                                    {card.front}
+                                    {cleanMarkdownPreview(card.front)}
                                   </span>
                                 </div>
                                 <p className="opacity-70 text-slate-600 truncate pl-6">
-                                  {card.back}
+                                  {cleanMarkdownPreview(card.back)}
                                 </p>
                               </div>
                               <div className="flex items-center gap-3 shrink-0">
