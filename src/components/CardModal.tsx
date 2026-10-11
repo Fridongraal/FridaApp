@@ -132,7 +132,29 @@ export const CardModal: React.FC<CardModalProps> = ({
     try {
       const dataUrl = await compressImageToDataUrl(file);
       const alt = file.name ? file.name.replace(/\.[^/.]+$/, "") : "Imagen";
-      applyMarkdown(field, `\n![${alt}](`, ")\n", dataUrl);
+      
+      const textarea = field === "front" ? frontRef.current : backRef.current;
+      const value = field === "front" ? front : back;
+      const setter = field === "front" ? setFront : setBack;
+
+      const markdownImg = `\n![${alt}](${dataUrl})\n`;
+
+      if (!textarea) {
+        setter((prev) => `${prev}${markdownImg}`);
+      } else {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const before = value.substring(0, start);
+        const after = value.substring(end);
+        const updated = `${before}${markdownImg}${after}`;
+        setter(updated);
+
+        setTimeout(() => {
+          textarea.focus();
+          const newPos = start + markdownImg.length;
+          textarea.setSelectionRange(newPos, newPos);
+        }, 10);
+      }
     } catch (err) {
       console.error("Error al procesar la imagen:", err);
     } finally {

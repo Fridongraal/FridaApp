@@ -19,6 +19,7 @@ export const MarkdownContent: React.FC<MarkdownContentProps> = ({
     <div className={`markdown-content leading-relaxed break-words ${className}`}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
+        urlTransform={(url) => url}
         components={{
           h1: ({ children }) => (
             <h1 className="text-xl sm:text-2xl font-bold my-2 text-slate-900">{children}</h1>
