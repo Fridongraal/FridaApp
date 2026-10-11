@@ -49,7 +49,7 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
 }) => {
   const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({});
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
-  const [selectedUnitForImport, setSelectedUnitForImport] = useState<string | undefined>(undefined);
+  const [targetUnitForImport, setTargetUnitForImport] = useState<Unit | null>(null);
 
   const now = Date.now();
 
@@ -72,8 +72,13 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
     exportSubjectCardsToCSV(subject.name, units, subjectCards);
   };
 
-  const handleOpenImport = (unitId?: string) => {
-    setSelectedUnitForImport(unitId || units[0]?.id);
+  const handleOpenSubjectImport = () => {
+    setTargetUnitForImport(null);
+    setIsImportModalOpen(true);
+  };
+
+  const handleOpenUnitImport = (unit: Unit) => {
+    setTargetUnitForImport(unit);
     setIsImportModalOpen(true);
   };
 
@@ -131,7 +136,7 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
           </button>
 
           <button
-            onClick={() => handleOpenImport()}
+            onClick={handleOpenSubjectImport}
             disabled={units.length === 0}
             title={units.length === 0 ? "Crea una unidad primero" : "Importar tarjetas desde un archivo CSV"}
             className="px-3.5 py-2.5 rounded-2xl bg-white border border-purple-100 shadow-sm hover:bg-purple-50/50 disabled:opacity-40 font-semibold text-xs flex items-center gap-1.5 cursor-pointer text-slate-700"
@@ -231,8 +236,8 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
                       </button>
 
                       <button
-                        onClick={() => handleOpenImport(unit.id)}
-                        title="Importar CSV a esta unidad"
+                        onClick={() => handleOpenUnitImport(unit)}
+                        title={`Importar CSV directamente a "${unit.name}"`}
                         className="p-2 rounded-xl bg-purple-50 text-purple-700 hover:bg-purple-100 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
                       >
                         <Upload className="w-4 h-4 text-purple-600" />
@@ -359,7 +364,7 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
                             </button>
                             <span>o</span>
                             <button
-                              onClick={() => handleOpenImport(unit.id)}
+                              onClick={() => handleOpenUnitImport(unit)}
                               className="text-purple-600 font-bold hover:underline cursor-pointer"
                             >
                               Importar archivo CSV
@@ -400,7 +405,7 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
         onClose={() => setIsImportModalOpen(false)}
         units={units}
         subjectName={subject.name}
-        defaultUnitId={selectedUnitForImport}
+        targetUnit={targetUnitForImport}
         onImport={onImportCards}
       />
     </div>

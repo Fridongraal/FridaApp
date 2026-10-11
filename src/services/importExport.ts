@@ -161,7 +161,8 @@ export interface ParsedCSVCard {
 export function parseCardsCSV(
   rawText: string,
   defaultUnitId: string,
-  units: Unit[]
+  units: Unit[],
+  overrideUnitId?: string
 ): { cards: ParsedCSVCard[]; error?: string } {
   // Strip UTF-8 BOM if present
   let text = rawText;
@@ -294,15 +295,15 @@ export function parseCardsCSV(
 
     if (!front && !back) continue;
 
-    let matchedUnitId = defaultUnitId;
-    if (unitName && unitNameToId.has(unitName.toLowerCase())) {
+    let matchedUnitId = overrideUnitId || defaultUnitId;
+    if (!overrideUnitId && unitName && unitNameToId.has(unitName.toLowerCase())) {
       matchedUnitId = unitNameToId.get(unitName.toLowerCase())!;
     }
 
     parsedCards.push({
       front: front || "(Vacío)",
       back: back || "(Vacío)",
-      unitName: unitName || undefined,
+      unitName: overrideUnitId ? undefined : (unitName || undefined),
       unitId: matchedUnitId,
     });
   }

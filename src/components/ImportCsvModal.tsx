@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { X, Upload, FileSpreadsheet, CheckCircle2, AlertCircle, HelpCircle } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { X, Upload, FileSpreadsheet, CheckCircle2, AlertCircle, HelpCircle, Layers } from "lucide-react";
 import type { Unit } from "../types";
 import { parseCardsCSV, type ParsedCSVCard } from "../services/importExport";
 
@@ -8,7 +8,7 @@ interface ImportCsvModalProps {
   onClose: () => void;
   units: Unit[];
   subjectName: string;
-  defaultUnitId?: string;
+  targetUnit?: Unit | null;
   onImport: (cards: { front: string; back: string; unitId: string }[]) => void;
 }
 
@@ -17,11 +17,11 @@ export const ImportCsvModal: React.FC<ImportCsvModalProps> = ({
   onClose,
   units,
   subjectName,
-  defaultUnitId,
+  targetUnit,
   onImport,
 }) => {
   const [selectedUnitId, setSelectedUnitId] = useState<string>(
-    defaultUnitId || units[0]?.id || ""
+    targetUnit?.id || units[0]?.id || ""
   );
   const [fileName, setFileName] = useState<string>("");
   const [parsedCards, setParsedCards] = useState<ParsedCSVCard[]>([]);
@@ -29,7 +29,23 @@ export const ImportCsvModal: React.FC<ImportCsvModalProps> = ({
   const [showHelp, setShowHelp] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Reset state when opening modal or changing targetUnit
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedUnitId(targetUnit?.id || units[0]?.id || "");
+      setFileName("");
+      setParsedCards([]);
+      setError(null);
+      setShowHelp(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  }, [isOpen, targetUnit, units]);
+
   if (!isOpen) return null;
+
+  const isLockedToUnit = !!targetUnit;
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -40,7 +56,15 @@ export const ImportCsvModal: React.FC<ImportCsvModalProps> = ({
 
     try {
       const text = await file.text();
-      const result = parseCardsCSV(text, selectedUnitId || units[0]?.id || "", units);
+      // If locked to a specific unit, pass targetUnit.id as overrideUnitId
+      const effectiveOverride = isLockedToUnit ? targetUnit.id : undefined;
+      const result = parseCardsCSV(
+        text,
+        selectedUnitId || units[0]?.id || "",
+        units,
+        effectiveOverride
+      );
+
       if (result.error) {
         setError(result.error);
         setParsedCards([]);
@@ -59,7 +83,6 @@ export const ImportCsvModal: React.FC<ImportCsvModalProps> = ({
 
   const handleUnitChange = (newUnitId: string) => {
     setSelectedUnitId(newUnitId);
-    // Update unitId in parsed cards if they don't have a specific unit matched
     setParsedCards((prev) =>
       prev.map((c) => ({
         ...c,
@@ -74,7 +97,9 @@ export const ImportCsvModal: React.FC<ImportCsvModalProps> = ({
     const cardsToImport = parsedCards.map((c) => ({
       front: c.front,
       back: c.back,
-      unitId: c.unitId || selectedUnitId || units[0]?.id || "",
+      unitId: isLockedToUnit
+        ? targetUnit.id
+        : c.unitId || selectedUnitId || units[0]?.id || "",
     }));
 
     onImport(cardsToImport);
@@ -91,8 +116,16 @@ export const ImportCsvModal: React.FC<ImportCsvModalProps> = ({
               <FileSpreadsheet className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-lg text-slate-800">Importar Tarjetas desde CSV</h3>
-              <p className="text-xs text-purple-600 font-medium">Materia: {subjectName}</p>
+              <h3 className="font-bold text-lg text-slate-800">
+                {isLockedToUnit
+                  ? `Importar Tarjetas a "${targetUnit.name}"`
+                  : "Importar Tarjetas desde CSV"}
+              </h3>
+              <p className="text-xs text-purple-600 font-medium">
+                {isLockedToUnit
+                  ? `Materia: ${subjectName} • Destino fijado`
+                  : `Materia: ${subjectName}`}
+              </p>
             </div>
           </div>
           <button
@@ -105,26 +138,44 @@ export const ImportCsvModal: React.FC<ImportCsvModalProps> = ({
 
         {/* Body */}
         <div className="p-6 overflow-y-auto space-y-5 flex-1">
-          {/* Target Unit Selector */}
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-              Unidad de destino predeterminada
-            </label>
-            <select
-              value={selectedUnitId}
-              onChange={(e) => handleUnitChange(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-purple-100 bg-purple-50/30 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 font-medium"
-            >
-              {units.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.name}
-                </option>
-              ))}
-            </select>
-            <p className="text-[11px] text-slate-400 mt-1">
-              Si tu CSV incluye una tercera columna con el nombre de la unidad, se asignará automáticamente.
-            </p>
-          </div>
+          {/* Target Unit Display / Selector */}
+          {isLockedToUnit ? (
+            /* Locked unit banner */
+            <div className="bg-purple-50/70 border border-purple-100 rounded-2xl p-4 flex items-center gap-3.5">
+              <div className="p-2.5 rounded-xl bg-purple-600 text-white shrink-0 shadow-xs">
+                <Layers className="w-4 h-4" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-bold text-slate-800">
+                  Unidad seleccionada: <span className="text-purple-700">{targetUnit.name}</span>
+                </p>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  Todas las tarjetas importadas se añadirán automáticamente a esta unidad.
+                </p>
+              </div>
+            </div>
+          ) : (
+            /* Selectable dropdown for general subject import */
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                Unidad de destino predeterminada
+              </label>
+              <select
+                value={selectedUnitId}
+                onChange={(e) => handleUnitChange(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-xl border border-purple-100 bg-purple-50/30 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 font-medium"
+              >
+                {units.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.name}
+                  </option>
+                ))}
+              </select>
+              <p className="text-[11px] text-slate-400 mt-1">
+                Si tu CSV incluye una tercera columna con el nombre de la unidad, se asignará automáticamente.
+              </p>
+            </div>
+          )}
 
           {/* File Picker */}
           <div>
@@ -177,9 +228,9 @@ export const ImportCsvModal: React.FC<ImportCsvModalProps> = ({
               <div className="mt-3 pt-3 border-t border-slate-200 text-xs text-slate-600 space-y-2">
                 <p>El archivo puede estar separado por comas (,), punto y coma (;) o tabulaciones.</p>
                 <div className="bg-white p-2.5 rounded-lg border border-slate-200 font-mono text-[11px] text-slate-700">
-                  Frente,Dorso,Unidad<br />
-                  "¿Qué es la mitosis?","Es la división celular...",Unidad 1<br />
-                  "¿Qué es el ADN?","Ácido desoxirribonucleico...",Unidad 1
+                  Frente,Dorso<br />
+                  "¿Qué es la mitosis?","Es la división celular..."<br />
+                  "¿Qué es el ADN?","Ácido desoxirribonucleico..."
                 </div>
                 <p className="text-[11px] text-slate-500">
                   💡 Si usas Anki, puedes exportar tu mazo como "Notas en texto plano" y seleccionarlo directamente aquí.
