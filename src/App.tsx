@@ -15,6 +15,7 @@ import { SessionSummary } from './components/SessionSummary';
 import { TutorialModal } from './components/TutorialModal';
 import { StatsView } from './components/StatsView';
 import { SettingsView } from './components/SettingsView'; 
+import { TodayReviewView } from './components/TodayReviewView';
 
 export function App() { 
   const [preferences, setPreferences] = useState(getUserPreferences); 
@@ -202,12 +203,9 @@ export function App() {
   }; 
   
   const startGlobalStudy = () => { 
-    const dueCards = cards.filter((c) => c.dueDate <= now); 
-    if (dueCards.length === 0) { 
-      alert('¡Felicitaciones! No tienes tarjetas pendientes de repaso para hoy.'); 
-      return;
-    } 
-    setActiveStudy({ title: 'Repaso Global del Día', cards: dueCards,});
+    const dueCards = cards.filter((c) => c.dueDate <= Date.now()); 
+    if (dueCards.length === 0) return; 
+    setActiveStudy({ title: 'Repaso de Hoy', cards: dueCards });
   }; 
   
   const handleFinishStudySession = async ( reviewedLogs: { card: Flashcard; rating: ReviewRating}[] ) => { 
@@ -267,12 +265,8 @@ export function App() {
         activeView={activeView} 
         selectedSubjectId={selectedSubjectId} 
         onSelectView={(view) => { 
-          if (view === 'global-study') { 
-            startGlobalStudy();
-          } else { 
-            setActiveView(view); 
-            setSelectedSubjectId(null);
-          }
+          setActiveView(view); 
+          setSelectedSubjectId(null);
         }} 
         onSelectSubject={(id) => { 
           setActiveView('subjects'); 
@@ -298,6 +292,27 @@ export function App() {
           /> 
         ) : activeView === 'stats' ? ( 
           <StatsView subjects={subjects} cards={cards} reviewLogs={reviewLogs} currentStreak={currentStreak} reviewedTodayCount={reviewedTodayCount} preferences={preferences} onUpdatePreferences={handleUpdatePreferences} /> 
+        ) : activeView === 'global-study' ? (
+          <TodayReviewView
+            subjects={subjects}
+            cards={cards}
+            onStartGlobalStudy={startGlobalStudy}
+            onStartStudySubject={(subjectId) => {
+              const sub = subjects.find((s) => s.id === subjectId);
+              if (!sub) return;
+              const subCards = cards.filter((c) => c.subjectId === subjectId);
+              let sessionCards = subCards.filter((c) => c.dueDate <= Date.now());
+              if (sessionCards.length === 0) {
+                sessionCards = [...subCards];
+              }
+              if (sessionCards.length === 0) return;
+              setActiveStudy({ title: sub.name, cards: sessionCards });
+            }}
+            onGoToSubjects={() => {
+              setActiveView('subjects');
+              setSelectedSubjectId(null);
+            }}
+          />
         ) : selectedSubject ? ( 
           <SubjectDetail 
             subject={selectedSubject} 

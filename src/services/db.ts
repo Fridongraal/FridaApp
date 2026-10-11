@@ -92,7 +92,7 @@ export async function seedDatabaseIfEmpty() {
       subjectId: sampleSubjectId,
       unitId: sampleUnitId,
       front: "¿Cómo decide Frida cuándo volver a mostrarte una tarjeta?",
-      back: 'Usa el algoritmo SM-2: si calificas una tarjeta como"Lo sé", el intervalo entre repasos crece exponencialmente. Si pones"Repetir", se reencola para consolidarla.',
+      back: 'Usa el algoritmo SM-2: con 4 opciones precisas (Otra vez, Difícil, Bien y Fácil), Frida ajusta el momento exacto para volver a repasar la tarjeta y fijarla en tu memoria.',
       createdAt: now,
       interval: 1,
       repetition: 0,

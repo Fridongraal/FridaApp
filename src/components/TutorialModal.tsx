@@ -30,11 +30,11 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({
     },
     {
       mood: "celebrating" as const,
-      badge: "Tu Única Tarea: 3 Botones Sencillos",
-      title: "Cero fricción mental al calificar",
+      badge: "Calificación Estilo Anki",
+      title: "Intervalos exactos al calificar",
       description:
-        'En otras apps dudar entre"Bien" o"Fácil" cansa la cabeza. En Frida solo tienes 3 opciones claras: 1: Repetir (no me acordé), 2: Me costó (dudé), 3: Lo sé (la recordé fácil). Frida calcula todos los intervalos automáticamente.',
-      tip: "Usa los atajos de teclado: [Espacio] para voltear y las teclas [1], [2] o [3] para responder al instante.",
+        'En Frida cuentas con 4 opciones precisas y rápidas: 1: Otra vez (< 1 min), 2: Difícil (10 min), 3: Bien (1 día) y 4: Fácil (4 días). Frida programa los intervalos automáticamente según tu desempeño.',
+      tip: "Usa los atajos de teclado: [Espacio] o [Enter] para voltear y las teclas [1], [2], [3] o [4] para calificar al instante.",
     },
   ];
   const current = slides[slide];

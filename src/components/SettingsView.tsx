@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Volume2,
   VolumeX,
@@ -33,6 +33,34 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const PRESET_GOALS = [10, 20, 30, 50];
+  const isCustomGoal = !PRESET_GOALS.includes(preferences.dailyGoal);
+  const [customGoalInput, setCustomGoalInput] = useState<string>(
+    isCustomGoal ? String(preferences.dailyGoal) : ""
+  );
+
+  useEffect(() => {
+    if (!PRESET_GOALS.includes(preferences.dailyGoal)) {
+      setCustomGoalInput(String(preferences.dailyGoal));
+    } else {
+      setCustomGoalInput("");
+    }
+  }, [preferences.dailyGoal]);
+
+  const handleSelectPreset = (goal: number) => {
+    setCustomGoalInput("");
+    onUpdatePreferences({ dailyGoal: goal });
+  };
+
+  const handleCustomGoalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setCustomGoalInput(val);
+    const parsed = parseInt(val, 10);
+    if (!isNaN(parsed) && parsed > 0 && parsed <= 9999) {
+      onUpdatePreferences({ dailyGoal: parsed });
+    }
+  };
 
   const handleExport = async () => {
     setIsExporting(true);
@@ -142,21 +170,39 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            {[10, 20, 30, 50].map((goal) => (
+          <div className="flex flex-wrap items-center gap-2">
+            {PRESET_GOALS.map((goal) => (
               <button
                 key={goal}
                 type="button"
-                onClick={() => onUpdatePreferences({ dailyGoal: goal })}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  preferences.dailyGoal === goal
+                onClick={() => handleSelectPreset(goal)}
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  preferences.dailyGoal === goal && !customGoalInput
                     ? "bg-purple-600 text-white shadow-md hover:bg-purple-700 hover:-translate-y-px"
                     : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm"
                 }`}
               >
-                {goal} tarjetas
+                {goal}
               </button>
             ))}
+
+            <div className="flex items-center gap-1.5 bg-slate-50 p-1 rounded-2xl border border-slate-200/80">
+              <span className="text-[11px] text-slate-500 font-semibold pl-2">Personalizada:</span>
+              <input
+                type="number"
+                min="1"
+                max="999"
+                value={customGoalInput}
+                onChange={handleCustomGoalChange}
+                placeholder={isCustomGoal ? String(preferences.dailyGoal) : "Ej: 25"}
+                className={`w-16 px-2.5 py-1 text-xs font-extrabold rounded-xl border text-center transition-all focus:outline-none focus:ring-2 focus:ring-purple-400 ${
+                  isCustomGoal || customGoalInput
+                    ? "bg-purple-600 text-white border-purple-600 shadow-xs placeholder-purple-200"
+                    : "bg-white border-slate-200 text-slate-800"
+                }`}
+              />
+              <span className="text-xs text-slate-500 font-medium pr-2">tarjetas</span>
+            </div>
           </div>
         </div>
 
