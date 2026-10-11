@@ -86,6 +86,16 @@ export const TodayReviewView: React.FC<TodayReviewViewProps> = ({
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">
+          {dueCards.length > 0 && (
+            <button
+              onClick={onStartGlobalStudy}
+              className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-sm shadow-lg shadow-purple-600/25 hover:shadow-xl hover:shadow-purple-600/30 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer inline-flex items-center justify-center gap-2.5"
+            >
+              <Play className="w-4 h-4 fill-current" />
+              <span>Estudiar todo ({dueCards.length})</span>
+            </button>
+          )}
+
           {cards.length > 0 && onStartCramGlobal && (
             <button
               onClick={onStartCramGlobal}
@@ -94,16 +104,6 @@ export const TodayReviewView: React.FC<TodayReviewViewProps> = ({
             >
               <Flame className="w-4 h-4 text-rose-500 fill-rose-500" />
               <span>Modo Intensivo ({cards.length})</span>
-            </button>
-          )}
-
-          {dueCards.length > 0 && (
-            <button
-              onClick={onStartGlobalStudy}
-              className="glass-button-primary inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-2xl font-bold text-sm shadow-lg shadow-purple-500/20 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
-            >
-              <Play className="w-4 h-4 fill-current" />
-              <span>Estudiar todo ({dueCards.length})</span>
             </button>
           )}
         </div>
@@ -182,6 +182,13 @@ export const TodayReviewView: React.FC<TodayReviewViewProps> = ({
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={() => onStartStudySubject(subject.id)}
+                        className="px-4 py-2.5 rounded-xl bg-purple-600 text-white hover:bg-purple-700 shadow-xs text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 cursor-pointer active:scale-95 hover:scale-102"
+                      >
+                        <Play className="w-3.5 h-3.5 fill-current" />
+                        <span>Repasar</span>
+                      </button>
                       {onStartCramSubject && (
                         <button
                           onClick={() => onStartCramSubject(subject.id)}
@@ -191,13 +198,6 @@ export const TodayReviewView: React.FC<TodayReviewViewProps> = ({
                           <Flame className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
                         </button>
                       )}
-                      <button
-                        onClick={() => onStartStudySubject(subject.id)}
-                        className="px-4 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold flex items-center gap-1.5 transition-all shrink-0 cursor-pointer active:scale-95"
-                      >
-                        <Play className="w-3.5 h-3.5 fill-current" />
-                        <span>Repasar</span>
-                      </button>
                     </div>
                   </div>
                 );

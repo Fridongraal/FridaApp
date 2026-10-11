@@ -179,30 +179,28 @@ export const SubjectList: React.FC<SubjectListProps> = ({
                     </div>{" "}
                   </div>{" "}
                 </div>{" "}
-                {/* Bottom Actions */}{" "}
+                {/* Bottom Actions: Study prioritized first */}
                 <div className="flex items-center gap-2 pt-2">
-                  {" "}
-                  <button
-                    onClick={() => onSelectSubject(sub.id)}
-                    className="flex-1 py-2.5 px-3 rounded-xl glass-button font-bold text-xs transition-colors text-center cursor-pointer"
-                  >
-                    {" "}
-                    Ver unidades{" "}
-                  </button>{" "}
                   <button
                     onClick={() => onStartStudy(sub.id)}
                     disabled={subCards.length === 0}
-                    className="py-2.5 px-4 rounded-xl glass-button-primary disabled:opacity-40 font-bold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-xs shadow-md shadow-purple-500/20 disabled:opacity-40 transition-all flex items-center justify-center gap-1.5 cursor-pointer hover:scale-[1.02] active:scale-95"
                     title={
                       subCards.length === 0
                         ? "Agrega tarjetas primero"
-                        : "Estudiar esta materia"
+                        : "Iniciar sesión de estudio"
                     }
                   >
-                    {" "}
-                    <Play className="w-3.5 h-3.5 fill-current" />{" "}
-                    <span>Estudiar</span>{" "}
-                  </button>{" "}
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                    <span>Estudiar</span>
+                  </button>
+
+                  <button
+                    onClick={() => onSelectSubject(sub.id)}
+                    className="py-2.5 px-3.5 rounded-xl bg-white border border-purple-100 hover:bg-purple-50/60 font-semibold text-xs text-slate-700 transition-colors text-center cursor-pointer shadow-2xs"
+                  >
+                    Ver unidades
+                  </button>
                 </div>{" "}
               </div>
             );

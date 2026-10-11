@@ -138,64 +138,72 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
           </div>
         </div>
 
-        {/* Header Actions */}
-        <div className="flex items-center flex-wrap gap-2">
-          {/* Card Management */}
-          <button
-            onClick={() => onOpenNewCard()}
-            disabled={units.length === 0}
-            className="px-4 py-2.5 rounded-2xl bg-white border border-purple-100 shadow-sm hover:bg-purple-50/50 disabled:opacity-40 font-semibold text-xs flex items-center gap-1.5 cursor-pointer text-slate-700"
-          >
-            <Plus className="w-4 h-4 text-purple-600" />
-            <span>Nueva Tarjeta</span>
-          </button>
+        {/* Header Actions: Two-tier layout prioritizing study */}
+        <div className="flex flex-col items-start md:items-end gap-3 shrink-0 w-full md:w-auto">
+          {/* Row 1: Primary Study Actions */}
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <button
+              onClick={() => onStartStudySubject(subject.id)}
+              disabled={subjectCards.length === 0}
+              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg shadow-purple-600/25 hover:shadow-xl hover:shadow-purple-600/30 disabled:opacity-40 font-black text-sm flex items-center gap-2.5 cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0"
+              title={subjectCards.length === 0 ? "Agrega tarjetas para empezar a estudiar" : "Iniciar sesión de estudio espaciado"}
+            >
+              <Play className="w-4 h-4 fill-current" />
+              <span>Estudiar Materia</span>
+            </button>
 
-          <button
-            onClick={handleOpenSubjectImport}
-            disabled={units.length === 0}
-            title={units.length === 0 ? "Crea una unidad primero" : "Importar tarjetas desde un archivo CSV"}
-            className="px-3.5 py-2.5 rounded-2xl bg-white border border-purple-100 shadow-sm hover:bg-purple-50/50 disabled:opacity-40 font-semibold text-xs flex items-center gap-1.5 cursor-pointer text-slate-700"
-          >
-            <Upload className="w-4 h-4 text-purple-600" />
-            <span>Importar CSV</span>
-          </button>
+            <button
+              onClick={() => onStartCramSubject(subject.id)}
+              disabled={subjectCards.length === 0}
+              title="Repasa todas las tarjetas de esta materia para un examen sin alterar tus intervalos de espaciado a largo plazo"
+              className="px-4.5 py-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 shadow-xs hover:bg-rose-100 disabled:opacity-40 font-bold text-xs flex items-center gap-2 cursor-pointer transition-all hover:-translate-y-px active:translate-y-0"
+            >
+              <Flame className="w-4 h-4 text-rose-500 fill-rose-500" />
+              <span>Modo Intensivo</span>
+            </button>
+          </div>
 
-          <button
-            onClick={handleExportCSV}
-            disabled={subjectCards.length === 0}
-            title={subjectCards.length === 0 ? "No hay tarjetas para exportar" : "Descargar tarjetas en formato CSV"}
-            className="px-3.5 py-2.5 rounded-2xl bg-white border border-purple-100 shadow-sm hover:bg-purple-50/50 disabled:opacity-40 font-semibold text-xs flex items-center gap-1.5 cursor-pointer text-slate-700"
-          >
-            <Download className="w-4 h-4 text-purple-600" />
-            <span>Exportar CSV</span>
-          </button>
+          {/* Row 2: Secondary Content Management */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={() => onOpenNewCard()}
+              disabled={units.length === 0}
+              title={units.length === 0 ? "Crea una unidad primero" : "Crear una nueva flashcard"}
+              className="px-3.5 py-2 rounded-xl bg-white border border-purple-100 shadow-2xs hover:bg-purple-50/70 disabled:opacity-40 font-semibold text-xs flex items-center gap-1.5 cursor-pointer text-slate-700 transition-colors"
+            >
+              <Plus className="w-3.5 h-3.5 text-purple-600" />
+              <span>Nueva Tarjeta</span>
+            </button>
 
-          <button
-            onClick={onOpenNewUnit}
-            className="px-4 py-2.5 rounded-2xl bg-white border border-purple-100 shadow-sm hover:bg-purple-50/50 font-semibold text-xs flex items-center gap-1.5 cursor-pointer text-slate-700"
-          >
-            <Layers className="w-4 h-4 text-purple-600" />
-            <span>Nueva Unidad</span>
-          </button>
+            <button
+              onClick={handleOpenSubjectImport}
+              disabled={units.length === 0}
+              title={units.length === 0 ? "Crea una unidad primero" : "Importar tarjetas desde un archivo CSV"}
+              className="px-3.5 py-2 rounded-xl bg-white border border-purple-100 shadow-2xs hover:bg-purple-50/70 disabled:opacity-40 font-semibold text-xs flex items-center gap-1.5 cursor-pointer text-slate-700 transition-colors"
+            >
+              <Upload className="w-3.5 h-3.5 text-purple-600" />
+              <span>Importar CSV</span>
+            </button>
 
-          <button
-            onClick={() => onStartCramSubject(subject.id)}
-            disabled={subjectCards.length === 0}
-            title="Repasa todas las tarjetas de esta materia para un examen sin alterar tus intervalos de espaciado a largo plazo"
-            className="px-4 py-2.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 shadow-sm hover:bg-rose-100 disabled:opacity-40 font-bold text-xs flex items-center gap-1.5 cursor-pointer transition-all hover:-translate-y-px"
-          >
-            <Flame className="w-4 h-4 text-rose-500 fill-rose-500" />
-            <span>Modo Intensivo</span>
-          </button>
+            <button
+              onClick={handleExportCSV}
+              disabled={subjectCards.length === 0}
+              title={subjectCards.length === 0 ? "No hay tarjetas para exportar" : "Descargar tarjetas en formato CSV"}
+              className="px-3.5 py-2 rounded-xl bg-white border border-purple-100 shadow-2xs hover:bg-purple-50/70 disabled:opacity-40 font-semibold text-xs flex items-center gap-1.5 cursor-pointer text-slate-700 transition-colors"
+            >
+              <Download className="w-3.5 h-3.5 text-purple-600" />
+              <span>Exportar CSV</span>
+            </button>
 
-          <button
-            onClick={() => onStartStudySubject(subject.id)}
-            disabled={subjectCards.length === 0}
-            className="px-5 py-2.5 rounded-2xl bg-purple-600 text-white shadow-md hover:bg-purple-700 disabled:opacity-40 font-bold text-xs flex items-center gap-1.5 cursor-pointer transition-all hover:-translate-y-px"
-          >
-            <Play className="w-4 h-4 fill-current" />
-            <span>Estudiar Materia</span>
-          </button>
+            <button
+              onClick={onOpenNewUnit}
+              title="Crear un nuevo capítulo o unidad temática"
+              className="px-3.5 py-2 rounded-xl bg-white border border-purple-100 shadow-2xs hover:bg-purple-50/70 font-semibold text-xs flex items-center gap-1.5 cursor-pointer text-slate-700 transition-colors"
+            >
+              <Layers className="w-3.5 h-3.5 text-purple-600" />
+              <span>Nueva Unidad</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -299,12 +307,22 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
                       </p>
                     </div>
 
-                    {/* Unit actions */}
+                    {/* Unit actions: Study prioritized first */}
                     <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => onStartStudyUnit(unit.id)}
+                        disabled={unitCards.length === 0}
+                        title="Estudiar solo esta unidad"
+                        className="px-3.5 py-1.5 rounded-xl bg-purple-600 text-white shadow-sm hover:bg-purple-700 disabled:opacity-40 text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-all hover:scale-102 active:scale-95"
+                      >
+                        <Play className="w-3.5 h-3.5 fill-current" />
+                        <span>Estudiar</span>
+                      </button>
+
                       <button
                         onClick={() => onOpenNewCard(unit.id)}
                         title="Agregar tarjeta a esta unidad"
-                        className="p-2 rounded-xl bg-purple-50 text-purple-700 hover:bg-purple-100 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                        className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-purple-50 text-purple-700 hover:bg-purple-100 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
                       >
                         <Plus className="w-4 h-4 text-purple-600" />
                         <span className="hidden sm:inline">Tarjeta</span>
@@ -313,20 +331,10 @@ export const SubjectDetail: React.FC<SubjectDetailProps> = ({
                       <button
                         onClick={() => handleOpenUnitImport(unit)}
                         title={`Importar CSV directamente a "${unit.name}"`}
-                        className="p-2 rounded-xl bg-purple-50 text-purple-700 hover:bg-purple-100 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                        className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-purple-50 text-purple-700 hover:bg-purple-100 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
                       >
                         <Upload className="w-4 h-4 text-purple-600" />
                         <span className="hidden sm:inline">CSV</span>
-                      </button>
-
-                      <button
-                        onClick={() => onStartStudyUnit(unit.id)}
-                        disabled={unitCards.length === 0}
-                        title="Estudiar solo esta unidad"
-                        className="px-3.5 py-1.5 rounded-xl bg-purple-600 text-white shadow-sm hover:bg-purple-700 disabled:opacity-40 text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-all"
-                      >
-                        <Play className="w-3.5 h-3.5 fill-current" />
-                        <span>Estudiar</span>
                       </button>
 
                       <button

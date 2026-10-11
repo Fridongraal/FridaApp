@@ -591,12 +591,19 @@ export const CardModal: React.FC<CardModalProps> = ({
             para guardar
           </span>
           <div className="flex items-center gap-2.5 ml-auto">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+            >
+              Cancelar
+            </button>
             {!initialData && (
               <button
                 type="button"
                 onClick={() => handleSave(true)}
                 disabled={!front.trim() || !back.trim() || isProcessingImage}
-                className="px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 disabled:opacity-40 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                className="px-4 py-2 rounded-xl text-xs font-semibold bg-purple-50 border border-purple-100 text-purple-700 hover:bg-purple-100 disabled:opacity-40 transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
               >
                 <PlusCircle className="w-3.5 h-3.5 text-purple-600" />
                 <span>Guardar y otra</span>
@@ -606,7 +613,7 @@ export const CardModal: React.FC<CardModalProps> = ({
               type="button"
               onClick={() => handleSave(false)}
               disabled={!front.trim() || !back.trim() || isProcessingImage}
-              className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-purple-600 text-white shadow-sm hover:bg-purple-700 disabled:opacity-40 transition-all cursor-pointer hover:-translate-y-px"
+              className="px-6 py-2.5 rounded-xl text-sm font-bold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-md shadow-purple-500/20 disabled:opacity-40 transition-all cursor-pointer hover:-translate-y-px active:translate-y-0"
             >
               {initialData ? "Guardar Cambios" : "Listo"}
             </button>
