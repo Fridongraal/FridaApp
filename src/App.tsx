@@ -154,6 +154,27 @@ export function App() {
     await db.cards.delete(cardId);
   }; 
   
+  const handleImportCards = async (newCards: { front: string; back: string; unitId: string }[]) => {
+    if (newCards.length === 0) return;
+    const cardsToAdd: Flashcard[] = newCards.map((c) => {
+      const parentUnit = units.find((u) => u.id === c.unitId);
+      return {
+        id: `card-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
+        subjectId: parentUnit?.subjectId || selectedSubjectId || "",
+        unitId: c.unitId,
+        front: c.front,
+        back: c.back,
+        createdAt: Date.now(),
+        interval: 1,
+        repetition: 0,
+        easeFactor: 2.5,
+        dueDate: Date.now() - 1000,
+        state: "new" as const,
+      };
+    });
+    await db.cards.bulkAdd(cardsToAdd);
+  }; 
+  
   // ------------------- STUDY SESSIONS ------------------- 
   const startStudySubject = (subjectId: string) => { 
     const targetSubject = subjects.find((s) => s.id === subjectId); 
@@ -236,7 +257,11 @@ export function App() {
       {/* Main Content Area */} 
       <main className="flex-1 overflow-y-auto"> 
         {activeView === 'settings' ? ( 
-          <SettingsView preferences={preferences} onUpdatePreferences={handleUpdatePreferences} /> 
+          <SettingsView
+            preferences={preferences}
+            onUpdatePreferences={handleUpdatePreferences}
+            onBackupRestored={() => setPreferences(getUserPreferences())}
+          /> 
         ) : activeView === 'stats' ? ( 
           <StatsView subjects={subjects} cards={cards} reviewLogs={reviewLogs} currentStreak={currentStreak} reviewedTodayCount={reviewedTodayCount} preferences={preferences} onUpdatePreferences={handleUpdatePreferences} /> 
         ) : selectedSubject ? ( 
@@ -253,6 +278,7 @@ export function App() {
             onOpenNewCard={(unitId) => { setEditingCard(null); setCardDefaultUnitId(unitId); setIsCardModalOpen(true);}} 
             onEditCard={(card) => { setEditingCard(card); setCardDefaultUnitId(card.unitId); setIsCardModalOpen(true);}} 
             onDeleteCard={handleDeleteCard} 
+            onImportCards={handleImportCards}
           /> 
         ) : ( 
           <SubjectList 
