@@ -26,7 +26,7 @@
 [data-theme="windows-vista"],
 [data-theme="windows-vista"] body {
   font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Geneva, "Segoe UI", sans-serif !important;
-  font-size: 12px !important;
+  font-size: 16px !important;
   letter-spacing: 0px !important;
   color: #000000 !important;
   background-color: #008080 !important;
@@ -34,6 +34,7 @@
   background-size: 4px 4px !important;
   background-attachment: fixed !important;
   -webkit-font-smoothing: subpixel-antialiased;
+  zoom: 1.05;
 }
 
 /* Sharp retro 90-degree corners everywhere in Windows 95 */
@@ -211,7 +212,7 @@
   padding-left: 1px !important;
 }
 
-/* Windows 95 Primary Push Buttons (Estudiar Materia / Estudiar todo / Guardar) */
+/* Windows 95 Primary Default Action Buttons (Estudiar / Estudiar todo / Empezar ahora / Repasar / Guardar) */
 [data-theme="windows-95"] .glass-button-primary,
 [data-theme="windows-95"] button.bg-purple-600,
 [data-theme="windows-95"] button[class*="bg-purple-600"],
@@ -220,35 +221,70 @@
 [data-theme="windows-vista"] button.bg-purple-600,
 [data-theme="windows-vista"] button[class*="bg-purple-600"],
 [data-theme="windows-vista"] button[class*="from-purple-600"] {
-  background: #000080 !important;
-  border-top: 2px solid #ffffff !important;
-  border-left: 2px solid #ffffff !important;
-  border-right: 2px solid #000000 !important;
-  border-bottom: 2px solid #000000 !important;
-  box-shadow: inset 1px 1px 0px #2050a0, inset -1px -1px 0px #000040, 0 0 0 1px #000000 !important;
-  color: #ffffff !important;
+  background: #c0c0c0 !important;
+  color: #000080 !important;
+  border: 2px solid #000000 !important;
+  box-shadow: 
+    inset 1px 1px 0px #ffffff,
+    inset -1px -1px 0px #808080,
+    inset 2px 2px 0px #dfdfdf,
+    inset -2px -2px 0px #404040 !important;
+  font-family: "MS Sans Serif", Tahoma, sans-serif !important;
   font-weight: bold !important;
   text-shadow: none !important;
+}
+
+[data-theme="windows-95"] .glass-button-primary *,
+[data-theme="windows-95"] button.bg-purple-600 *,
+[data-theme="windows-95"] button[class*="bg-purple-600"] *,
+[data-theme="windows-95"] button[class*="from-purple-600"] *,
+[data-theme="windows-vista"] .glass-button-primary *,
+[data-theme="windows-vista"] button.bg-purple-600 *,
+[data-theme="windows-vista"] button[class*="bg-purple-600"] *,
+[data-theme="windows-vista"] button[class*="from-purple-600"] * {
+  color: #000080 !important;
+  fill: #000080 !important;
 }
 
 [data-theme="windows-95"] .glass-button-primary:hover,
 [data-theme="windows-95"] button.bg-purple-600:hover,
 [data-theme="windows-95"] button[class*="bg-purple-600"]:hover,
+[data-theme="windows-95"] button[class*="from-purple-600"]:hover,
 [data-theme="windows-vista"] .glass-button-primary:hover,
 [data-theme="windows-vista"] button.bg-purple-600:hover,
-[data-theme="windows-vista"] button[class*="bg-purple-600"]:hover {
-  background: #1084d0 !important;
-  color: #ffffff !important;
+[data-theme="windows-vista"] button[class*="bg-purple-600"]:hover,
+[data-theme="windows-vista"] button[class*="from-purple-600"]:hover {
+  background: #ffffff !important;
+  color: #000080 !important;
+}
+
+[data-theme="windows-95"] .glass-button-primary:hover *,
+[data-theme="windows-95"] button.bg-purple-600:hover *,
+[data-theme="windows-95"] button[class*="bg-purple-600"]:hover *,
+[data-theme="windows-95"] button[class*="from-purple-600"]:hover *,
+[data-theme="windows-vista"] .glass-button-primary:hover *,
+[data-theme="windows-vista"] button.bg-purple-600:hover *,
+[data-theme="windows-vista"] button[class*="bg-purple-600"]:hover *,
+[data-theme="windows-vista"] button[class*="from-purple-600"]:hover * {
+  color: #000080 !important;
+  fill: #000080 !important;
 }
 
 [data-theme="windows-95"] .glass-button-primary:active,
 [data-theme="windows-95"] button.bg-purple-600:active,
+[data-theme="windows-95"] button[class*="bg-purple-600"]:active,
+[data-theme="windows-95"] button[class*="from-purple-600"]:active,
 [data-theme="windows-vista"] .glass-button-primary:active,
-[data-theme="windows-vista"] button.bg-purple-600:active {
-  border-top: 2px solid #000000 !important;
-  border-left: 2px solid #000000 !important;
-  border-right: 2px solid #ffffff !important;
-  border-bottom: 2px solid #ffffff !important;
+[data-theme="windows-vista"] button.bg-purple-600:active,
+[data-theme="windows-vista"] button[class*="bg-purple-600"]:active,
+[data-theme="windows-vista"] button[class*="from-purple-600"]:active {
+  border: 2px solid #000000 !important;
+  box-shadow: 
+    inset 1px 1px 0px #000000,
+    inset -1px -1px 0px #ffffff,
+    inset 2px 2px 0px #808080 !important;
+  padding-top: 1px !important;
+  padding-left: 1px !important;
 }
 
 /* Windows 95 Inputs, Textareas, Dropdowns (Sunken Inset Wells) */
@@ -368,32 +404,6 @@
   color: #000000 !important;
 }
 
-/* Buttons with bg-purple-600 become navy buttons with white text */
-[data-theme="windows-95"] button.bg-purple-600,
-[data-theme="windows-95"] button[class*="bg-purple-600"],
-[data-theme="windows-95"] button[class*="from-purple-600"],
-[data-theme="windows-vista"] button.bg-purple-600,
-[data-theme="windows-vista"] button[class*="bg-purple-600"],
-[data-theme="windows-vista"] button[class*="from-purple-600"] {
-  background: #000080 !important;
-  border-top: 2px solid #ffffff !important;
-  border-left: 2px solid #ffffff !important;
-  border-right: 2px solid #000000 !important;
-  border-bottom: 2px solid #000000 !important;
-  box-shadow: inset 1px 1px 0px #2050a0, inset -1px -1px 0px #000040, 0 0 0 1px #000000 !important;
-  color: #ffffff !important;
-  font-weight: bold !important;
-}
-
-[data-theme="windows-95"] button.bg-purple-600 *,
-[data-theme="windows-95"] button[class*="bg-purple-600"] *,
-[data-theme="windows-95"] button[class*="from-purple-600"] *,
-[data-theme="windows-vista"] button.bg-purple-600 *,
-[data-theme="windows-vista"] button[class*="bg-purple-600"] *,
-[data-theme="windows-vista"] button[class*="from-purple-600"] * {
-  color: #ffffff !important;
-}
-
 /* Purge purple borders and focus rings */
 [data-theme="windows-95"] [class*="border-purple-"],
 [data-theme="windows-vista"] [class*="border-purple-"] {
@@ -417,16 +427,197 @@
 [data-theme="windows-95"] h2:not([class*="text-white"]),
 [data-theme="windows-95"] h3:not([class*="text-white"]),
 [data-theme="windows-95"] h4:not([class*="text-white"]),
-[data-theme="windows-95"] p:not([class*="text-white"]),
-[data-theme="windows-95"] span:not([class*="text-white"]),
+[data-theme="windows-95"] p:not([class*="text-white"]):not(button *),
+[data-theme="windows-95"] span:not([class*="text-white"]):not(button *):not([class*="titlebar"] *),
 [data-theme="windows-95"] label,
 [data-theme="windows-vista"] h1:not([class*="text-white"]),
 [data-theme="windows-vista"] h2:not([class*="text-white"]),
 [data-theme="windows-vista"] h3:not([class*="text-white"]),
 [data-theme="windows-vista"] h4:not([class*="text-white"]),
-[data-theme="windows-vista"] p:not([class*="text-white"]),
-[data-theme="windows-vista"] span:not([class*="text-white"]),
+[data-theme="windows-vista"] p:not([class*="text-white"]):not(button *),
+[data-theme="windows-vista"] span:not([class*="text-white"]):not(button *):not([class*="titlebar"] *),
 [data-theme="windows-vista"] label {
+  color: #000000 !important;
+}
+
+/* ==========================================================================
+   WINDOWS 95: ÁRBOL DE LOGROS (Achievement Tree Window)
+   Transforms modern dark boxes into an authentic Windows 95 panel with
+   sunken white index wells and crisp readable typography.
+   ========================================================================== */
+[data-theme="windows-95"] .bg-slate-900,
+[data-theme="windows-vista"] .bg-slate-900 {
+  background: #c0c0c0 !important;
+  border-top: 3px solid #ffffff !important;
+  border-left: 3px solid #ffffff !important;
+  border-right: 3px solid #000000 !important;
+  border-bottom: 3px solid #000000 !important;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080, 4px 4px 0 rgba(0, 0, 0, 0.4) !important;
+  color: #000000 !important;
+}
+
+/* Trophy header box */
+[data-theme="windows-95"] .bg-slate-900 .bg-amber-400\/20,
+[data-theme="windows-vista"] .bg-slate-900 .bg-amber-400\/20 {
+  background: #ffffff !important;
+  border: 2px solid #808080 !important;
+  box-shadow: inset 1px 1px 0 #000000 !important;
+}
+
+[data-theme="windows-95"] .bg-slate-900 h3,
+[data-theme="windows-vista"] .bg-slate-900 h3 {
+  color: #000080 !important;
+  font-weight: 900 !important;
+}
+
+[data-theme="windows-95"] .bg-slate-900 p,
+[data-theme="windows-vista"] .bg-slate-900 p {
+  color: #222222 !important;
+}
+
+/* Branch filter buttons in achievement tree */
+[data-theme="windows-95"] .bg-slate-900 .bg-slate-800,
+[data-theme="windows-vista"] .bg-slate-900 .bg-slate-800 {
+  background: #c0c0c0 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080 !important;
+  color: #000000 !important;
+  font-weight: bold !important;
+}
+
+[data-theme="windows-95"] .bg-slate-900 .bg-slate-800 *,
+[data-theme="windows-vista"] .bg-slate-900 .bg-slate-800 * {
+  color: #000000 !important;
+}
+
+/* Active tab button */
+[data-theme="windows-95"] .bg-slate-900 button.bg-amber-400,
+[data-theme="windows-vista"] .bg-slate-900 button.bg-amber-400 {
+  background: #000080 !important;
+  border-top: 2px solid #000000 !important;
+  border-left: 2px solid #000000 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  box-shadow: inset 1px 1px 0 #000000 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="windows-95"] .bg-slate-900 button.bg-amber-400 *,
+[data-theme="windows-vista"] .bg-slate-900 button.bg-amber-400 * {
+  color: #ffffff !important;
+}
+
+/* Branch containers: Sunken White Wells */
+[data-theme="windows-95"] .bg-slate-900 .bg-slate-950\/70,
+[data-theme="windows-95"] .bg-slate-900 .bg-slate-950,
+[data-theme="windows-vista"] .bg-slate-900 .bg-slate-950\/70,
+[data-theme="windows-vista"] .bg-slate-900 .bg-slate-950 {
+  background: #ffffff !important;
+  border-top: 2px solid #808080 !important;
+  border-left: 2px solid #808080 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  box-shadow: inset 1px 1px 0 #000000 !important;
+  color: #000000 !important;
+}
+
+/* Branch titles & text */
+[data-theme="windows-95"] .bg-slate-900 h4,
+[data-theme="windows-vista"] .bg-slate-900 h4 {
+  color: #000080 !important;
+  font-weight: bold !important;
+}
+
+/* Branch descriptions & counts */
+[data-theme="windows-95"] .bg-slate-900 .text-slate-400,
+[data-theme="windows-95"] .bg-slate-900 .text-slate-500,
+[data-theme="windows-vista"] .bg-slate-900 .text-slate-400,
+[data-theme="windows-vista"] .bg-slate-900 .text-slate-500 {
+  color: #333333 !important;
+}
+
+/* Achievement Node hover */
+[data-theme="windows-95"] .bg-slate-900 .group:hover,
+[data-theme="windows-vista"] .bg-slate-900 .group:hover {
+  background: #f0f0f0 !important;
+}
+
+/* Selected achievement node */
+[data-theme="windows-95"] .bg-slate-900 .ring-amber-400,
+[data-theme="windows-vista"] .bg-slate-900 .ring-amber-400 {
+  background: #e0e0e0 !important;
+  border: 1px dotted #000080 !important;
+  --tw-ring-color: transparent !important;
+  box-shadow: inset 1px 1px 0 #808080 !important;
+}
+
+/* Unlocked node tile */
+[data-theme="windows-95"] .bg-slate-900 [class*="bg-gradient-to-tr"],
+[data-theme="windows-vista"] .bg-slate-900 [class*="bg-gradient-to-tr"] {
+  background: #c0c0c0 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #808080 !important;
+}
+
+/* Node level and title text */
+[data-theme="windows-95"] .bg-slate-900 span.text-amber-400,
+[data-theme="windows-95"] .bg-slate-900 span[class*="text-amber-400"],
+[data-theme="windows-vista"] .bg-slate-900 span.text-amber-400,
+[data-theme="windows-vista"] .bg-slate-900 span[class*="text-amber-400"] {
+  color: #7b4c00 !important;
+  font-weight: bold !important;
+}
+
+[data-theme="windows-95"] .bg-slate-900 h5,
+[data-theme="windows-vista"] .bg-slate-900 h5 {
+  color: #000000 !important;
+  font-weight: bold !important;
+}
+
+/* Node connector lines */
+[data-theme="windows-95"] .bg-slate-900 .bg-amber-400,
+[data-theme="windows-vista"] .bg-slate-900 .bg-amber-400 {
+  background: #000080 !important;
+}
+[data-theme="windows-95"] .bg-slate-900 .bg-slate-700,
+[data-theme="windows-95"] .bg-slate-900 .bg-slate-800,
+[data-theme="windows-vista"] .bg-slate-900 .bg-slate-700,
+[data-theme="windows-vista"] .bg-slate-900 .bg-slate-800 {
+  background: #808080 !important;
+}
+
+/* Inspection Card (bottom) */
+[data-theme="windows-95"] .bg-slate-900 .bg-slate-950,
+[data-theme="windows-vista"] .bg-slate-900 .bg-slate-950 {
+  background: #dfdfdf !important;
+  border: 2px solid #808080 !important;
+  box-shadow: inset 1px 1px 0 #ffffff !important;
+}
+
+[data-theme="windows-95"] .bg-slate-900 .bg-slate-950 *,
+[data-theme="windows-vista"] .bg-slate-900 .bg-slate-950 * {
+  color: #000000 !important;
+}
+
+/* Probar Notificación / Sonido Épico buttons */
+[data-theme="windows-95"] .bg-slate-900 button,
+[data-theme="windows-vista"] .bg-slate-900 button {
+  background: #c0c0c0 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  color: #000000 !important;
+}
+
+[data-theme="windows-95"] .bg-slate-900 button *,
+[data-theme="windows-vista"] .bg-slate-900 button * {
   color: #000000 !important;
 }
 
