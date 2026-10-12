@@ -50,10 +50,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     Math.round((reviewedTodayCount / dailyGoal) * 100),
   );
   return (
-    <aside className="w-72 bg-white shadow-sm border-r border-purple-100 flex flex-col h-screen select-none shrink-0 transition-all z-20">
-      {" "}
-      {/* Brand Header with Frida Mascot */}{" "}
-      <div className="p-5 border-b border-purple-50 flex items-center justify-between">
+    <aside className="w-72 bg-white shadow-sm border-r border-purple-100 flex flex-col h-full max-h-screen overflow-hidden select-none shrink-0 transition-all z-20">
+      {/* Brand Header with Frida Mascot */}
+      <div className="p-5 border-b border-purple-50 flex items-center justify-between shrink-0">
         {" "}
         <div className="flex items-center gap-3">
           {" "}
@@ -77,91 +76,75 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>{" "}
         </div>{" "}
       </div>{" "}
-      {/* Daily Progress Mini-Dashboard */}{" "}
-      <div className="mx-4 mt-4 mb-2 p-3 rounded-2xl bg-slate-50 border border-slate-100">
-        {" "}
+      {/* Daily Progress Mini-Dashboard */}
+      <div className="mx-4 mt-4 mb-2 p-3 rounded-2xl bg-slate-50 border border-slate-100 shrink-0">
         <div className="flex items-center justify-between mb-2">
-          {" "}
           <div className="flex items-center gap-2">
-            {" "}
             <div
               className={`p-1.5 rounded-xl ${currentStreak > 0 ? "bg-amber-100 text-amber-600" : "bg-slate-200 text-slate-400"}`}
             >
-              {" "}
-              <Flame className="w-4 h-4 fill-current" />{" "}
-            </div>{" "}
+              <Flame className="w-4 h-4 fill-current" />
+            </div>
             <div>
-              {" "}
               <span className="text-[11px] font-medium text-slate-500 block leading-tight">
                 Racha
-              </span>{" "}
+              </span>
               <span className="text-sm font-black text-slate-800">
-                {" "}
-                {currentStreak} {currentStreak === 1 ? "día" : "días"}{" "}
-              </span>{" "}
-            </div>{" "}
-          </div>{" "}
+                {currentStreak} {currentStreak === 1 ? "día" : "días"}
+              </span>
+            </div>
+          </div>
           <span className="text-xs font-bold px-2 py-1 bg-white border border-slate-200 rounded-lg text-purple-700 shadow-sm">
-            {" "}
-            {reviewedTodayCount}/{dailyGoal} hoy{" "}
-          </span>{" "}
-        </div>{" "}
-        {/* Progress bar */}{" "}
+            {reviewedTodayCount}/{dailyGoal} hoy
+          </span>
+        </div>
+        {/* Progress bar */}
         <div className="w-full bg-white h-2 rounded-full overflow-hidden mt-1.5 border border-purple-100">
-          {" "}
           <div
             className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full transition-all duration-500"
             style={{ width: `${goalProgress}%` }}
-          />{" "}
-        </div>{" "}
+          />
+        </div>
         <p className="text-[11px] text-slate-500 mt-1.5 text-right font-medium">
-          {" "}
           {goalProgress >= 100
             ? "🎉 ¡Meta cumplida hoy!"
-            : `Faltan ${Math.max(0, dailyGoal - reviewedTodayCount)} tarjetas`}{" "}
-        </p>{" "}
-      </div>{" "}
-      {/* Navigation Links */}{" "}
-      <div className="px-3 py-1 space-y-1">
-        {" "}
+            : `Faltan ${Math.max(0, dailyGoal - reviewedTodayCount)} tarjetas`}
+        </p>
+      </div>
+      {/* Navigation Links */}
+      <div className="px-3 py-1 space-y-1 shrink-0">
         <button
           onClick={() => {
             onSelectView("subjects");
           }}
           className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-all ${activeView === "subjects" && !selectedSubjectId ? "bg-purple-100 text-purple-900 font-bold" : "text-slate-600 hover:bg-purple-50/50"}`}
         >
-          {" "}
           <div className="flex items-center gap-2.5">
-            {" "}
-            <BookOpen className="w-4 h-4 text-purple-600" />{" "}
-            <span>Mis Materias</span>{" "}
-          </div>{" "}
+            <BookOpen className="w-4 h-4 text-purple-600" />
+            <span>Mis Materias</span>
+          </div>
           <span className="text-xs font-semibold px-2 py-0.5 rounded-lg bg-purple-100/70 text-purple-700">
-            {" "}
-            {subjects.length}{" "}
-          </span>{" "}
-        </button>{" "}
+            {subjects.length}
+          </span>
+        </button>
         <button
           onClick={() => {
             onSelectView("global-study");
           }}
           className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-all ${activeView === "global-study" ? "bg-purple-100 text-purple-900 font-bold" : "text-slate-600 hover:bg-purple-50/50"}`}
         >
-          {" "}
           <div className="flex items-center gap-2.5">
-            {" "}
-            <Calendar className="w-4 h-4 text-indigo-500" />{" "}
-            <span>Repaso de Hoy</span>{" "}
-          </div>{" "}
+            <Calendar className="w-4 h-4 text-indigo-500" />
+            <span>Repaso de Hoy</span>
+          </div>
           {totalDueCards > 0 ? (
             <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-purple-600 text-white animate-pulse">
-              {" "}
-              {totalDueCards}{" "}
+              {totalDueCards}
             </span>
           ) : (
             <span className="text-xs text-slate-400 font-medium">Al día</span>
-          )}{" "}
-        </button>{" "}
+          )}
+        </button>
         <button
           onClick={() => {
             onSelectView("stats");
@@ -173,9 +156,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span>Progreso</span>
           </div>
         </button>
-      </div>{" "}
-      {/* Subjects Sub-list */}{" "}
-      <div className="flex-1 overflow-y-auto px-3 py-2 mt-2">
+      </div>
+      {/* Subjects Sub-list */}
+      <div className="flex-1 min-h-0 overflow-y-auto px-3 py-2 mt-1">
         {" "}
         <div className="flex items-center justify-between px-2 mb-2">
           {" "}
@@ -229,7 +212,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>{" "}
       </div>{" "}
       {/* User Profile Mini Bar */}
-      <div className="px-3 pt-2 pb-1 border-t border-purple-50">
+      <div className="px-3 pt-2 pb-1 border-t border-purple-50 shrink-0 mt-auto">
         <button
           onClick={() => onSelectView("profile")}
           className={`w-full flex items-center gap-2.5 p-2 rounded-2xl transition-all cursor-pointer text-left ${
@@ -282,27 +265,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Footer / Tutorial / Settings */}
-      <div className="p-3 pt-1 space-y-1">
-        {" "}
+      <div className="p-3 pt-1 space-y-1 shrink-0">
         <button
           onClick={() => onSelectView("settings")}
           className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all ${activeView === "settings" ? "bg-purple-100 text-purple-900 font-bold" : "text-slate-600 hover:bg-purple-50 hover:text-purple-700"}`}
         >
-          {" "}
           <div className="flex items-center gap-2.5">
-            {" "}
-            <Settings className="w-4 h-4 text-purple-500" />{" "}
-            <span>Configuración</span>{" "}
-          </div>{" "}
-        </button>{" "}
+            <Settings className="w-4 h-4 text-purple-500" />
+            <span>Configuración</span>
+          </div>
+        </button>
         <button
           onClick={onOpenTutorial}
           className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-purple-50 hover:text-purple-700 transition-colors"
         >
-          {" "}
-          <HelpCircle className="w-4 h-4 text-purple-500" />{" "}
-          <span>¿Cómo funciona Frida?</span>{" "}
-        </button>{" "}
+          <HelpCircle className="w-4 h-4 text-purple-500" />
+          <span>¿Cómo funciona Frida?</span>
+        </button>
       </div>{" "}
     </aside>
   );

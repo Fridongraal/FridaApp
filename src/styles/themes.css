@@ -335,8 +335,8 @@
 }
 
 /* Windows 95 Dialog Windows & Modals */
-[data-theme="windows-95"] .fixed.inset-0 > div:last-child,
-[data-theme="windows-vista"] .fixed.inset-0 > div:last-child {
+[data-theme="windows-95"] .fixed.inset-0.items-center > div,
+[data-theme="windows-vista"] .fixed.inset-0.items-center > div {
   background: #c0c0c0 !important;
   border-top: 3px solid #ffffff !important;
   border-left: 3px solid #ffffff !important;
@@ -348,8 +348,8 @@
 }
 
 /* Windows 95 Dialog Titlebars (Classic Navy Titlebar) */
-[data-theme="windows-95"] .fixed.inset-0 > div:last-child > div:first-child,
-[data-theme="windows-vista"] .fixed.inset-0 > div:last-child > div:first-child {
+[data-theme="windows-95"] .fixed.inset-0.items-center > div > div:first-child,
+[data-theme="windows-vista"] .fixed.inset-0.items-center > div > div:first-child {
   background: linear-gradient(90deg, #000080 0%, #1084d0 100%) !important;
   color: #ffffff !important;
   padding: 4px 8px !important;
@@ -357,13 +357,13 @@
   border-bottom: none !important;
 }
 
-[data-theme="windows-95"] .fixed.inset-0 > div:last-child > div:first-child *,
-[data-theme="windows-vista"] .fixed.inset-0 > div:last-child > div:first-child * {
+[data-theme="windows-95"] .fixed.inset-0.items-center > div > div:first-child *,
+[data-theme="windows-vista"] .fixed.inset-0.items-center > div > div:first-child * {
   color: #ffffff !important;
 }
 
-[data-theme="windows-95"] .fixed.inset-0 > div:last-child > div:first-child button,
-[data-theme="windows-vista"] .fixed.inset-0 > div:last-child > div:first-child button {
+[data-theme="windows-95"] .fixed.inset-0.items-center > div > div:first-child button,
+[data-theme="windows-vista"] .fixed.inset-0.items-center > div > div:first-child button {
   background: #c0c0c0 !important;
   border-top: 1px solid #ffffff !important;
   border-left: 1px solid #ffffff !important;
@@ -378,8 +378,8 @@
   justify-content: center !important;
 }
 
-[data-theme="windows-95"] .fixed.inset-0 > div:last-child > div:first-child button *,
-[data-theme="windows-vista"] .fixed.inset-0 > div:last-child > div:first-child button * {
+[data-theme="windows-95"] .fixed.inset-0.items-center > div > div:first-child button *,
+[data-theme="windows-vista"] .fixed.inset-0.items-center > div > div:first-child button * {
   color: #000000 !important;
 }
 
@@ -818,7 +818,7 @@
 }
 
 /* Frutiger Aero Modals */
-[data-theme="frutiger-aero"] .fixed.inset-0 > div:last-child {
+[data-theme="frutiger-aero"] .fixed.inset-0.items-center > div {
   border: 3px solid rgba(255, 255, 255, 0.95) !important;
   border-radius: 32px !important;
   box-shadow: 
@@ -831,105 +831,179 @@
    (Faithful to uploaded media assets!)
    ========================================================================== */
 
-/* --- WINDOWS 95: Study Session Ratings (3D Bevel Push Buttons) --- */
-[data-theme="windows-95"] button[class*="bg-rose-50"],
-[data-theme="windows-vista"] button[class*="bg-rose-50"] {
+/* --- WINDOWS 95: Study Session "Mostrar Respuesta" Button --- */
+[data-theme="windows-95"] .fixed.inset-0.flex-col button:has(kbd),
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button:has(kbd) {
   background: #c0c0c0 !important;
-  border-top: 2px solid #ffffff !important;
-  border-left: 2px solid #ffffff !important;
-  border-right: 2px solid #000000 !important;
-  border-bottom: 2px solid #000000 !important;
-  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080 !important;
-  color: #8b0000 !important;
-  border-radius: 0px !important;
-  font-family: "MS Sans Serif", Tahoma, sans-serif !important;
-  font-weight: bold !important;
-  text-shadow: none !important;
-}
-[data-theme="windows-95"] button[class*="bg-rose-50"] *,
-[data-theme="windows-vista"] button[class*="bg-rose-50"] * {
-  color: #8b0000 !important;
-}
-
-[data-theme="windows-95"] button[class*="bg-amber-50"],
-[data-theme="windows-vista"] button[class*="bg-amber-50"] {
-  background: #c0c0c0 !important;
-  border-top: 2px solid #ffffff !important;
-  border-left: 2px solid #ffffff !important;
-  border-right: 2px solid #000000 !important;
-  border-bottom: 2px solid #000000 !important;
-  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080 !important;
-  color: #805300 !important;
-  border-radius: 0px !important;
-  font-family: "MS Sans Serif", Tahoma, sans-serif !important;
-  font-weight: bold !important;
-  text-shadow: none !important;
-}
-[data-theme="windows-95"] button[class*="bg-amber-50"] *,
-[data-theme="windows-vista"] button[class*="bg-amber-50"] * {
-  color: #805300 !important;
-}
-
-[data-theme="windows-95"] button[class*="bg-emerald-50"],
-[data-theme="windows-vista"] button[class*="bg-emerald-50"] {
-  background: #c0c0c0 !important;
-  border-top: 2px solid #ffffff !important;
-  border-left: 2px solid #ffffff !important;
-  border-right: 2px solid #000000 !important;
-  border-bottom: 2px solid #000000 !important;
-  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080 !important;
-  color: #006400 !important;
-  border-radius: 0px !important;
-  font-family: "MS Sans Serif", Tahoma, sans-serif !important;
-  font-weight: bold !important;
-  text-shadow: none !important;
-}
-[data-theme="windows-95"] button[class*="bg-emerald-50"] *,
-[data-theme="windows-vista"] button[class*="bg-emerald-50"] * {
-  color: #006400 !important;
-}
-
-[data-theme="windows-95"] button[class*="bg-purple-50"],
-[data-theme="windows-95"] button[class*="bg-indigo-50"],
-[data-theme="windows-vista"] button[class*="bg-purple-50"],
-[data-theme="windows-vista"] button[class*="bg-indigo-50"] {
-  background: #c0c0c0 !important;
-  border-top: 2px solid #ffffff !important;
-  border-left: 2px solid #ffffff !important;
-  border-right: 2px solid #000000 !important;
-  border-bottom: 2px solid #000000 !important;
-  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080 !important;
   color: #000080 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: 
+    inset 1px 1px 0 #ffffff, 
+    inset -1px -1px 0 #808080, 
+    2px 2px 0 rgba(0, 0, 0, 0.35) !important;
   border-radius: 0px !important;
+  min-height: 52px !important;
+  padding: 12px 32px !important;
   font-family: "MS Sans Serif", Tahoma, sans-serif !important;
+  font-size: 15px !important;
   font-weight: bold !important;
-  text-shadow: none !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
 }
-[data-theme="windows-95"] button[class*="bg-purple-50"] *,
-[data-theme="windows-95"] button[class*="bg-indigo-50"] *,
-[data-theme="windows-vista"] button[class*="bg-purple-50"] *,
-[data-theme="windows-vista"] button[class*="bg-indigo-50"] * {
+
+[data-theme="windows-95"] .fixed.inset-0.flex-col button:has(kbd) *,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button:has(kbd) * {
   color: #000080 !important;
 }
 
-/* Windows 95 Rating Buttons Active/Pressed State */
-[data-theme="windows-95"] button[class*="bg-rose-50"]:active,
-[data-theme="windows-95"] button[class*="bg-amber-50"]:active,
-[data-theme="windows-95"] button[class*="bg-emerald-50"]:active,
-[data-theme="windows-95"] button[class*="bg-purple-50"]:active,
-[data-theme="windows-95"] button[class*="bg-indigo-50"]:active,
-[data-theme="windows-vista"] button[class*="bg-rose-50"]:active,
-[data-theme="windows-vista"] button[class*="bg-amber-50"]:active,
-[data-theme="windows-vista"] button[class*="bg-emerald-50"]:active,
-[data-theme="windows-vista"] button[class*="bg-purple-50"]:active,
-[data-theme="windows-vista"] button[class*="bg-indigo-50"]:active {
+[data-theme="windows-95"] .fixed.inset-0.flex-col button:has(kbd):hover,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button:has(kbd):hover {
+  background: #ffffff !important;
+}
+
+[data-theme="windows-95"] .fixed.inset-0.flex-col button:has(kbd):active,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button:has(kbd):active {
   border-top: 2px solid #000000 !important;
   border-left: 2px solid #000000 !important;
   border-right: 2px solid #ffffff !important;
   border-bottom: 2px solid #ffffff !important;
-  box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #dfdfdf !important;
-  padding-top: 1px !important;
-  padding-left: 1px !important;
+  box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #ffffff !important;
+  padding-top: 13px !important;
+  padding-left: 33px !important;
+}
+
+[data-theme="windows-95"] .fixed.inset-0.flex-col button:has(kbd) kbd,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button:has(kbd) kbd {
+  background: #dfdfdf !important;
+  color: #000000 !important;
+  border-top: 1px solid #ffffff !important;
+  border-left: 1px solid #ffffff !important;
+  border-right: 1px solid #000000 !important;
+  border-bottom: 1px solid #000000 !important;
+  box-shadow: 1px 1px 0 #808080 !important;
+  padding: 2px 8px !important;
+  font-family: "Courier New", monospace !important;
+  font-weight: bold !important;
+  font-size: 11px !important;
+  border-radius: 0px !important;
+}
+
+/* --- WINDOWS 95: Study Session Ratings (3D Bevel Push Buttons - Rellenos y Espaciosos) --- */
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-rose-50"],
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-amber-50"],
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-emerald-50"],
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-sky-50"],
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-purple-50"],
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-rose-50"],
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-amber-50"],
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-emerald-50"],
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-sky-50"],
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-purple-50"] {
+  background: #c0c0c0 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: 
+    inset 1px 1px 0 #ffffff, 
+    inset -1px -1px 0 #808080, 
+    2px 2px 0 rgba(0, 0, 0, 0.35) !important;
+  border-radius: 0px !important;
+  min-height: 70px !important;
+  padding: 12px 10px !important;
+  font-family: "MS Sans Serif", Tahoma, sans-serif !important;
+  text-shadow: none !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-rose-50"]:hover,
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-amber-50"]:hover,
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-emerald-50"]:hover,
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-sky-50"]:hover,
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-purple-50"]:hover,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-rose-50"]:hover,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-amber-50"]:hover,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-emerald-50"]:hover,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-sky-50"]:hover,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-purple-50"]:hover {
+  background: #ffffff !important;
+}
+
+/* 1: Otra vez (Dark Crimson) */
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-rose-50"] span,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-rose-50"] span {
+  color: #8b0000 !important;
+}
+/* 2: Difícil (Dark Amber) */
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-amber-50"] span,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-amber-50"] span {
+  color: #805300 !important;
+}
+/* 3: Bien (Dark Forest Green) */
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-emerald-50"] span,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-emerald-50"] span {
+  color: #006400 !important;
+}
+/* 4: Fácil (Dark Navy) */
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-sky-50"] span,
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-purple-50"] span,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-sky-50"] span,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-purple-50"] span {
+  color: #000080 !important;
+}
+
+/* Number badges 1, 2, 3, 4 (Sunken Retro Keycap) */
+[data-theme="windows-95"] .fixed.inset-0.flex-col button span[class*="font-mono"],
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button span[class*="font-mono"] {
+  background: #dfdfdf !important;
+  color: #000000 !important;
+  border-top: 1px solid #ffffff !important;
+  border-left: 1px solid #ffffff !important;
+  border-right: 1px solid #000000 !important;
+  border-bottom: 1px solid #000000 !important;
+  box-shadow: 1px 1px 0 #808080 !important;
+  padding: 1px 5px !important;
+  font-weight: bold !important;
+  font-size: 11px !important;
+  border-radius: 0px !important;
+}
+
+/* Interval Preview text size in Windows 95 ratings */
+[data-theme="windows-95"] .fixed.inset-0.flex-col button > span:first-child,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button > span:first-child {
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  margin-bottom: 2px !important;
+}
+
+/* Windows 95 Rating Buttons Active/Pressed State */
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-rose-50"]:active,
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-amber-50"]:active,
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-emerald-50"]:active,
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-sky-50"]:active,
+[data-theme="windows-95"] .fixed.inset-0.flex-col button[class*="bg-purple-50"]:active,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-rose-50"]:active,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-amber-50"]:active,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-emerald-50"]:active,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-sky-50"]:active,
+[data-theme="windows-vista"] .fixed.inset-0.flex-col button[class*="bg-purple-50"]:active {
+  border-top: 2px solid #000000 !important;
+  border-left: 2px solid #000000 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #ffffff !important;
+  padding-top: 13px !important;
+  padding-left: 11px !important;
 }
 
 /* Windows 95 Flashcard Face: Sunken White Index Card */
@@ -992,7 +1066,8 @@
 }
 
 [data-theme="frutiger-aero"] button[class*="bg-purple-50"],
-[data-theme="frutiger-aero"] button[class*="bg-indigo-50"] {
+[data-theme="frutiger-aero"] button[class*="bg-indigo-50"],
+[data-theme="frutiger-aero"] button[class*="bg-sky-50"] {
   background: linear-gradient(180deg, #4eb6f7 0%, #1e87e5 48%, #1464bf 52%, #42a4f5 100%) !important;
   border: 2px solid rgba(255, 255, 255, 0.95) !important;
   color: #ffffff !important;
@@ -1004,7 +1079,8 @@
     inset 0 -2px 3px rgba(0, 0, 0, 0.3) !important;
 }
 [data-theme="frutiger-aero"] button[class*="bg-purple-50"] *,
-[data-theme="frutiger-aero"] button[class*="bg-indigo-50"] * {
+[data-theme="frutiger-aero"] button[class*="bg-indigo-50"] *,
+[data-theme="frutiger-aero"] button[class*="bg-sky-50"] * {
   color: #ffffff !important;
 }
 
