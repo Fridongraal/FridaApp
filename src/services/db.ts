@@ -121,6 +121,8 @@ export function getUserPreferences(): UserPreferences {
       return {
         dailyGoal: 20,
         soundEnabled: true,
+        buttonSoundEnabled: true,
+        clickSoundStyle: "keyboard-thock",
         hasSeenTutorial: false,
         userName: "Estudiante",
         userAvatar: "",
@@ -137,6 +139,8 @@ export function getUserPreferences(): UserPreferences {
   return {
     dailyGoal: 20,
     soundEnabled: true,
+    buttonSoundEnabled: true,
+    clickSoundStyle: "keyboard-thock",
     hasSeenTutorial: false,
     userName: "Estudiante",
     userAvatar: "",

@@ -1,4 +1,4 @@
-import type { ReviewRating } from "../types";
+import type { ReviewRating, ClickSoundStyle } from "../types";
 import { getUserPreferences } from "./db";
 
 // Web Audio API synthesized sound cues for Frida
@@ -306,4 +306,115 @@ export function playAchievementSound(soundEnabled?: boolean) {
  */
 export function playSuccessChime(soundEnabled?: boolean) {
   playRatingSound(3, soundEnabled);
+}
+
+/**
+ * Sonido táctil y relajante de teclado / clic al pulsar cualquier botón.
+ * Estilos disponibles:
+ * - 'keyboard-thock' : Switch mecánico lubricado "thocky" profundo y suave.
+ * - 'soft-click'     : Clic táctil moderno tipo gota/pulsador suave.
+ * - 'retro-switch'   : Clic mecánico táctil vintage estilo teclado 90s.
+ */
+export function playButtonClickSound(
+  style: ClickSoundStyle = "keyboard-thock",
+  soundEnabled?: boolean
+) {
+  if (!isAudioAllowed(soundEnabled)) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+  // Sutil variación aleatoria de tono para sensación orgánica de teclado real (+/- 4%)
+  const pitchFactor = 1 + (Math.random() * 0.08 - 0.04);
+
+  if (style === "keyboard-thock") {
+    // 1. Golpe cálido de baja frecuencia (switch tocando fondo)
+    const thockOsc = ctx.createOscillator();
+    const thockGain = ctx.createGain();
+    thockOsc.type = "sine";
+    const baseFreq = 220 * pitchFactor;
+    thockOsc.frequency.setValueAtTime(baseFreq, now);
+    thockOsc.frequency.exponentialRampToValueAtTime(75, now + 0.038);
+
+    thockGain.gain.setValueAtTime(0.055, now);
+    thockGain.gain.exponentialRampToValueAtTime(0.001, now + 0.038);
+
+    thockOsc.connect(thockGain);
+    thockGain.connect(ctx.destination);
+    thockOsc.start(now);
+    thockOsc.stop(now + 0.038);
+
+    // 2. Fricción suave y aterciopelada del switch (ruido filtrado)
+    try {
+      const bufferSize = Math.floor(ctx.sampleRate * 0.025); // 25ms
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2);
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(1150 * pitchFactor, now);
+      filter.Q.value = 1.6;
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.035, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+
+      noise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(ctx.destination);
+      noise.start(now);
+    } catch {
+      // Ignorar si el navegador no permite crear buffers
+    }
+  } else if (style === "soft-click") {
+    // Clic táctil moderno y sutil
+    const clickOsc = ctx.createOscillator();
+    const clickGain = ctx.createGain();
+    clickOsc.type = "sine";
+    clickOsc.frequency.setValueAtTime(540 * pitchFactor, now);
+    clickOsc.frequency.exponentialRampToValueAtTime(190, now + 0.022);
+
+    clickGain.gain.setValueAtTime(0.045, now);
+    clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.022);
+
+    clickOsc.connect(clickGain);
+    clickGain.connect(ctx.destination);
+    clickOsc.start(now);
+    clickOsc.stop(now + 0.022);
+  } else if (style === "retro-switch") {
+    // Retro switch mecánico estilo 90s
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = "triangle";
+    osc1.frequency.setValueAtTime(1200 * pitchFactor, now);
+    osc1.frequency.exponentialRampToValueAtTime(400, now + 0.015);
+
+    gain1.gain.setValueAtTime(0.045, now);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.015);
+
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.015);
+
+    // Segundo rebote táctil
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = "sine";
+    osc2.frequency.setValueAtTime(320 * pitchFactor, now + 0.008);
+    osc2.frequency.exponentialRampToValueAtTime(110, now + 0.028);
+
+    gain2.gain.setValueAtTime(0.035, now + 0.008);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.028);
+
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(now + 0.008);
+    osc2.stop(now + 0.028);
+  }
 }

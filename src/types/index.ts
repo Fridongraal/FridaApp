@@ -53,9 +53,13 @@ export interface DailyStats {
 
 export type AppTheme = "original" | "windows-95" | "frutiger-aero" | "windows-vista";
 
+export type ClickSoundStyle = "keyboard-thock" | "soft-click" | "retro-switch";
+
 export interface UserPreferences {
   dailyGoal: number;
   soundEnabled: boolean;
+  buttonSoundEnabled?: boolean;
+  clickSoundStyle?: ClickSoundStyle;
   hasSeenTutorial: boolean;
   userName?: string;
   userAvatar?: string;

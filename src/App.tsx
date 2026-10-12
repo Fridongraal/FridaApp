@@ -19,7 +19,7 @@ import { TodayReviewView } from './components/TodayReviewView';
 import { ProfileView } from './components/ProfileView';
 import { AchievementToast } from './components/AchievementToast';
 import { evaluateAchievements, ACHIEVEMENTS, type Achievement } from './services/achievements';
-import { playAchievementSound } from './services/audio';
+import { playAchievementSound, playButtonClickSound } from './services/audio';
 
 export function App() { 
   const [preferences, setPreferences] = useState(getUserPreferences); 
@@ -63,6 +63,26 @@ export function App() {
     const activeTheme = preferences.theme || 'original';
     document.documentElement.setAttribute('data-theme', activeTheme);
   }, [preferences.theme]);
+  
+  // Global soothing button click / keyboard sound effect
+  useEffect(() => {
+    const handleGlobalClick = (e: MouseEvent) => {
+      if (!preferences.soundEnabled) return;
+      if (preferences.buttonSoundEnabled === false) return;
+
+      const target = (e.target as HTMLElement).closest(
+        'button, [role="button"], input[type="submit"]'
+      );
+      if (!target) return;
+      if ((target as HTMLButtonElement).disabled) return;
+      if (target.getAttribute('data-no-click-sound') === 'true') return;
+
+      playButtonClickSound(preferences.clickSoundStyle, preferences.soundEnabled);
+    };
+
+    window.addEventListener('click', handleGlobalClick, { capture: true });
+    return () => window.removeEventListener('click', handleGlobalClick, { capture: true });
+  }, [preferences.soundEnabled, preferences.buttonSoundEnabled, preferences.clickSoundStyle]);
   
   // Seed on startup 
   useEffect(() => { 

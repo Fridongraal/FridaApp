@@ -11,8 +11,9 @@ import {
   CheckCircle2,
   AlertCircle,
   Palette,
+  Keyboard,
 } from "lucide-react";
-import type { UserPreferences, AppTheme } from "../types";
+import type { UserPreferences, AppTheme, ClickSoundStyle } from "../types";
 import { FridaMascot } from "./FridaMascot";
 import { exportFullBackup, importFullBackup } from "../services/importExport";
 import {
@@ -20,6 +21,7 @@ import {
   playRatingSound,
   playFridaBarkSound,
   playCelebrationFanfare,
+  playButtonClickSound,
 } from "../services/audio";
 
 interface SettingsViewProps {
@@ -379,9 +381,88 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             </button>
           </div>
 
+          {/* Relaxing Button & Keyboard Clicks Configuration */}
+          <div className="pt-3 border-t border-slate-100 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-purple-50 text-purple-600">
+                  <Keyboard className="w-4 h-4" />
+                </div>
+                <div>
+                  <h5 className="font-bold text-sm text-slate-800">
+                    Clics Táctiles de Teclado en Botones
+                  </h5>
+                  <p className="text-xs text-slate-500">
+                    Reproduce un sonido relajante de pulsación mecánica al hacer clic en cualquier botón
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const current = preferences.buttonSoundEnabled !== false;
+                  const next = !current;
+                  onUpdatePreferences({ buttonSoundEnabled: next });
+                  if (next) {
+                    playButtonClickSound(preferences.clickSoundStyle || "keyboard-thock", true);
+                  }
+                }}
+                className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all shadow-xs border cursor-pointer shrink-0 ${
+                  preferences.buttonSoundEnabled !== false
+                    ? "bg-purple-600 text-white border-transparent hover:bg-purple-700 shadow-sm"
+                    : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
+                }`}
+              >
+                {preferences.buttonSoundEnabled !== false ? "Activado" : "Desactivado"}
+              </button>
+            </div>
+
+            {/* Click Sound Style Selector */}
+            {preferences.buttonSoundEnabled !== false && (
+              <div className="flex flex-wrap items-center gap-2 pl-9">
+                <span className="text-[11px] font-semibold text-slate-400 mr-1">
+                  Estilo de pulsación:
+                </span>
+                {[
+                  { id: "keyboard-thock" as ClickSoundStyle, label: "⌨️ Teclado Thock", desc: "Mecánico profundo y relajante" },
+                  { id: "soft-click" as ClickSoundStyle, label: "🖱️ Clic Táctil", desc: "Suave y moderno" },
+                  { id: "retro-switch" as ClickSoundStyle, label: "💾 Retro 90s", desc: "Interruptor clásico vintage" },
+                ].map((styleOption) => {
+                  const isSelected = (preferences.clickSoundStyle || "keyboard-thock") === styleOption.id;
+                  return (
+                    <button
+                      key={styleOption.id}
+                      type="button"
+                      title={styleOption.desc}
+                      onClick={() => {
+                        onUpdatePreferences({ clickSoundStyle: styleOption.id });
+                        playButtonClickSound(styleOption.id, true);
+                      }}
+                      className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition-all cursor-pointer flex items-center gap-1 ${
+                        isSelected
+                          ? "bg-purple-100 text-purple-800 border-purple-300 shadow-2xs scale-102"
+                          : "bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border-slate-200"
+                      }`}
+                    >
+                      <span>{styleOption.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
           {/* Sound Preview Audition Buttons */}
           <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-2">
             <span className="text-[11px] font-semibold text-slate-400 mr-1">Probar sonido:</span>
+            <button
+              type="button"
+              onClick={() => playButtonClickSound(preferences.clickSoundStyle || "keyboard-thock", true)}
+              className="px-2.5 py-1 text-xs font-medium rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 transition-colors cursor-pointer"
+            >
+              ⌨️ Clic Teclado
+            </button>
             <button
               type="button"
               onClick={() => playCardFlipSound(true)}
