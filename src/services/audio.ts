@@ -249,6 +249,59 @@ export function playCelebrationFanfare(soundEnabled?: boolean) {
 }
 
 /**
+ * Sonido épico y triunfal de logro desbloqueado (estilo Minecraft / videojuego RPG).
+ * Arpegio heroico ascendente con resonancia cristalina y acorde final sostenido.
+ */
+export function playAchievementSound(soundEnabled?: boolean) {
+  if (!isAudioAllowed(soundEnabled)) return;
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const now = ctx.currentTime;
+
+  // Secuencia épica de notas: C4, E4, G4, C5, E5, G5, C6 (triunfo heroico)
+  const fanfareNotes = [
+    { freq: 261.63, time: 0.0, dur: 0.12, type: "triangle" as OscillatorType, vol: 0.09 }, // C4
+    { freq: 329.63, time: 0.08, dur: 0.12, type: "triangle" as OscillatorType, vol: 0.09 }, // E4
+    { freq: 392.0, time: 0.16, dur: 0.14, type: "triangle" as OscillatorType, vol: 0.1 }, // G4
+    { freq: 523.25, time: 0.24, dur: 0.18, type: "sine" as OscillatorType, vol: 0.11 }, // C5
+    { freq: 659.25, time: 0.32, dur: 0.22, type: "sine" as OscillatorType, vol: 0.12 }, // E5
+    { freq: 783.99, time: 0.4, dur: 0.35, type: "sine" as OscillatorType, vol: 0.12 }, // G5
+    { freq: 1046.5, time: 0.48, dur: 0.85, type: "sine" as OscillatorType, vol: 0.14 }, // C6
+    { freq: 1318.51, time: 0.5, dur: 0.85, type: "sine" as OscillatorType, vol: 0.08 }, // E6
+    { freq: 1567.98, time: 0.52, dur: 0.85, type: "sine" as OscillatorType, vol: 0.06 }, // G6
+  ];
+
+  fanfareNotes.forEach((n) => {
+    const t = now + n.time;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = n.type;
+    osc.frequency.setValueAtTime(n.freq, t);
+    gain.gain.setValueAtTime(n.vol, t);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + n.dur);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + n.dur);
+  });
+
+  // Impacto grave de logro
+  const bass = ctx.createOscillator();
+  const bassGain = ctx.createGain();
+  bass.type = "sine";
+  bass.frequency.setValueAtTime(130.81, now); // C3
+  bass.frequency.exponentialRampToValueAtTime(65.4, now + 0.35); // C2
+  bassGain.gain.setValueAtTime(0.12, now);
+  bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+  bass.connect(bassGain);
+  bassGain.connect(ctx.destination);
+  bass.start(now);
+  bass.stop(now + 0.35);
+}
+
+/**
  * Compatibilidad hacia atrás con chime genérico
  */
 export function playSuccessChime(soundEnabled?: boolean) {

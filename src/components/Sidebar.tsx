@@ -7,7 +7,6 @@ import {
   BarChart3,
   Calendar,
   Settings,
-  User,
 } from "lucide-react";
 import type { Subject, Flashcard } from "../types";
 import { FridaMascot } from "./FridaMascot";
@@ -172,17 +171,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="flex items-center gap-2.5">
             <BarChart3 className="w-4 h-4 text-purple-600" />
             <span>Progreso</span>
-          </div>
-        </button>
-        <button
-          onClick={() => {
-            onSelectView("profile");
-          }}
-          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-all ${activeView === "profile" ? "bg-purple-100 text-purple-900 font-bold" : "text-slate-600 hover:bg-purple-50/50"}`}
-        >
-          <div className="flex items-center gap-2.5">
-            <User className="w-4 h-4 text-purple-600" />
-            <span>Mi Perfil</span>
           </div>
         </button>
       </div>{" "}

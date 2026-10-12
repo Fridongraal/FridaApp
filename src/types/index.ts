@@ -59,4 +59,5 @@ export interface UserPreferences {
   userAvatar?: string;
   userBio?: string;
   joinedDate?: number;
+  unlockedAchievementIds?: string[];
 }

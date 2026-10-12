@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, seedDatabaseIfEmpty, getUserPreferences, saveUserPreferences } from './services/db';
 import { calculateSM2 } from './services/sm2';
@@ -17,11 +17,17 @@ import { StatsView } from './components/StatsView';
 import { SettingsView } from './components/SettingsView'; 
 import { TodayReviewView } from './components/TodayReviewView';
 import { ProfileView } from './components/ProfileView';
+import { AchievementToast } from './components/AchievementToast';
+import { evaluateAchievements, ACHIEVEMENTS, type Achievement } from './services/achievements';
+import { playAchievementSound } from './services/audio';
 
 export function App() { 
   const [preferences, setPreferences] = useState(getUserPreferences); 
   const [activeView, setActiveView] = useState<'subjects' | 'global-study' | 'stats' | 'profile' | 'settings'>('subjects'); 
   const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(null); 
+  const [activeAchievementToast, setActiveAchievementToast] = useState<Achievement | null>(null);
+  const [achievementQueue, setAchievementQueue] = useState<Achievement[]>([]);
+  const isFirstEvaluationRef = useRef(true); 
   
   // Modals state 
   const [isSubjectModalOpen, setIsSubjectModalOpen] = useState(false); 
@@ -72,6 +78,56 @@ export function App() {
   const handleUpdatePreferences = (newPrefs: Partial<typeof preferences>) => { 
     const updated = saveUserPreferences(newPrefs); 
     setPreferences(updated);
+  }; 
+
+  // ------------------- ACHIEVEMENTS EVALUATION -------------------
+  useEffect(() => {
+    // Wait until Dexie collections are ready
+    if (cards.length === 0 && reviewLogs.length === 0 && subjects.length === 0) return;
+
+    const { newlyUnlocked, allUnlockedIds } = evaluateAchievements(
+      preferences,
+      subjects,
+      cards,
+      reviewLogs,
+      currentStreak
+    );
+
+    if (newlyUnlocked.length > 0) {
+      handleUpdatePreferences({ unlockedAchievementIds: allUnlockedIds });
+
+      if (!isFirstEvaluationRef.current) {
+        playAchievementSound(preferences.soundEnabled);
+        setAchievementQueue((prev) => [...prev, ...newlyUnlocked]);
+      }
+    }
+
+    if (isFirstEvaluationRef.current) {
+      isFirstEvaluationRef.current = false;
+    }
+  }, [
+    reviewLogs.length,
+    currentStreak,
+    cards.length,
+    subjects.length,
+    preferences.userName,
+    preferences.userAvatar,
+  ]);
+
+  // Process achievement toast queue sequentially
+  useEffect(() => {
+    if (!activeAchievementToast && achievementQueue.length > 0) {
+      const [next, ...rest] = achievementQueue;
+      setActiveAchievementToast(next);
+      setAchievementQueue(rest);
+    }
+  }, [activeAchievementToast, achievementQueue]);
+
+  const handleTriggerTestAchievement = () => {
+    playAchievementSound(preferences.soundEnabled);
+    const sample =
+      ACHIEVEMENTS.find((a) => a.type === "challenge") || ACHIEVEMENTS[0];
+    setActiveAchievementToast(sample);
   }; 
   
   // ------------------- CRUD: Subjects ------------------- 
@@ -357,6 +413,7 @@ export function App() {
             cards={cards}
             reviewLogs={reviewLogs}
             currentStreak={currentStreak}
+            onTriggerTestAchievement={handleTriggerTestAchievement}
           />
         ) : activeView === 'stats' ? ( 
           <StatsView subjects={subjects} cards={cards} reviewLogs={reviewLogs} currentStreak={currentStreak} reviewedTodayCount={reviewedTodayCount} preferences={preferences} onUpdatePreferences={handleUpdatePreferences} /> 
@@ -466,6 +523,16 @@ export function App() {
       /> 
       {/* Tutorial Modal */} 
       <TutorialModal isOpen={isTutorialOpen} onClose={() => setIsTutorialOpen(false)} /> 
+
+      {/* Minecraft-style Achievement Dropdown Notification Toast */}
+      <AchievementToast
+        achievement={activeAchievementToast}
+        onDismiss={() => setActiveAchievementToast(null)}
+        onViewAchievements={() => {
+          setActiveAchievementToast(null);
+          setActiveView('profile');
+        }}
+      />
     </div> 
   );
 } 
