@@ -115,11 +115,31 @@ const PREFS_KEY = "frida_user_preferences";
 export function getUserPreferences(): UserPreferences {
   try {
     const raw = localStorage.getItem(PREFS_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return {
+        dailyGoal: 20,
+        soundEnabled: true,
+        hasSeenTutorial: false,
+        userName: "Estudiante",
+        userAvatar: "",
+        userBio: "Construyendo mi conocimiento tarjeta a tarjeta 🐾",
+        joinedDate: Date.now(),
+        ...parsed,
+      };
+    }
   } catch (e) {
     console.error("Failed to read preferences", e);
   }
-  return { dailyGoal: 20, soundEnabled: true, hasSeenTutorial: false };
+  return {
+    dailyGoal: 20,
+    soundEnabled: true,
+    hasSeenTutorial: false,
+    userName: "Estudiante",
+    userAvatar: "",
+    userBio: "Construyendo mi conocimiento tarjeta a tarjeta 🐾",
+    joinedDate: Date.now(),
+  };
 }
 export function saveUserPreferences(
   prefs: Partial<UserPreferences>,

@@ -62,7 +62,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
             isCramMode ? "bg-rose-50" : "bg-purple-50"
           }`}
         >
-          <FridaMascot mood="celebrating" size={80} />
+          <FridaMascot mood="celebrating" size={80} interactive />
         </div>
         <div>
           {isCramMode ? (

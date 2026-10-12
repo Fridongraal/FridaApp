@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Plus,
   Book,
@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import type { Subject, Flashcard, Unit } from "../types";
 import { FridaMascot } from "./FridaMascot";
+import { getDynamicGreeting } from "../services/greetings";
+
 interface SubjectListProps {
   subjects: Subject[];
   units: Unit[];
@@ -26,6 +28,7 @@ interface SubjectListProps {
   onOpenNewSubject: () => void;
   onEditSubject: (subject: Subject) => void;
   onDeleteSubject: (subjectId: string) => void;
+  userName?: string;
 }
 const ICON_MAP: Record<string, React.ElementType> = {
   Book,
@@ -45,37 +48,45 @@ export const SubjectList: React.FC<SubjectListProps> = ({
   onOpenNewSubject,
   onEditSubject,
   onDeleteSubject,
+  userName = "Estudiante",
 }) => {
   const now = Date.now();
+  const [greetingSeed, setGreetingSeed] = useState(0);
+  const greeting = getDynamicGreeting(userName, greetingSeed);
   return (
     <div className="p-8 max-w-6xl mx-auto space-y-8 animate-in fade-in duration-300">
       {" "}
-      {/* Top Welcome / Header with Mascot */}{" "}
+      {/* Top Welcome / Header with Mascot */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        {" "}
         <div className="flex items-center gap-4">
-          {" "}
           <FridaMascot
             mood="happy"
             size={56}
             className="hidden sm:inline-flex shrink-0"
-          />{" "}
+            interactive
+          />
           <div>
-            {" "}
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              {" "}
-              Mis Materias{" "}
-            </h2>{" "}
-            <p className="text-sm opacity-70 mt-0.5">
-              {" "}
-              Organiza tus asignaturas por unidades y repasa con Frida sin
-              sobrecarga{" "}
-            </p>{" "}
-          </div>{" "}
-        </div>{" "}
+            <div className="flex items-center gap-2">
+              <h2 className="text-2xl sm:text-3xl font-black tracking-tight bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-800 bg-clip-text text-transparent">
+                {greeting.salutation}
+              </h2>
+              <button
+                type="button"
+                onClick={() => setGreetingSeed((s) => s + 1)}
+                title="Cambiar mensaje inspirador"
+                className="p-1 rounded-lg text-purple-400 hover:text-purple-600 hover:bg-purple-50 transition-colors cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4" />
+              </button>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5 max-w-xl">
+              {greeting.subheading}
+            </p>
+          </div>
+        </div>
         <button
           onClick={onOpenNewSubject}
-          className="glass-button-primary inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm cursor-pointer"
+          className="glass-button-primary inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl font-bold text-sm cursor-pointer shadow-md shadow-purple-500/15 shrink-0"
         >
           {" "}
           <Plus className="w-4 h-4" /> <span>Nueva Materia</span>{" "}

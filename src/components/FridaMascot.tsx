@@ -1,26 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
+import { playFridaBarkSound } from "../services/audio";
 
 interface FridaMascotProps {
   mood?: "happy" | "studying" | "celebrating" | "sleepy";
   className?: string;
   size?: number;
+  interactive?: boolean;
 }
 
 export const FridaMascot: React.FC<FridaMascotProps> = ({
   mood = "happy",
   className = "",
   size = 120, // Increased default size
+  interactive = true,
 }) => {
+  const [isReacting, setIsReacting] = useState(false);
+  const [bubbleText, setBubbleText] = useState<string | null>(null);
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (!interactive) return;
+    e.stopPropagation();
+    playFridaBarkSound();
+    setIsReacting(true);
+    const phrases = [
+      "¡Guau! 🐾",
+      "¡Tú puedes! ✨",
+      "¡A estudiar! 📚",
+      "¡Vamos bien! 🌟",
+      "🐾 *Wiggle*",
+      "¡Genial! 💖",
+    ];
+    const phrase = phrases[Math.floor(Math.random() * phrases.length)];
+    setBubbleText(phrase);
+    setTimeout(() => setIsReacting(false), 500);
+    setTimeout(() => setBubbleText(null), 1400);
+  };
+
   return (
     <div
-      className={`relative inline-flex items-center justify-center select-none ${className}`}
+      onClick={handleClick}
+      className={`relative inline-flex items-center justify-center select-none ${
+        interactive ? "cursor-pointer active:scale-95 transition-transform" : ""
+      } ${isReacting ? "animate-bounce" : ""} ${className}`}
       style={{ width: size, height: size }}
+      title={interactive ? "¡Haz clic en Frida! 🐾" : undefined}
     >
+      {bubbleText && (
+        <div className="absolute -top-7 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-white text-purple-700 text-[11px] font-extrabold rounded-full shadow-md border border-purple-200 whitespace-nowrap animate-in fade-in zoom-in-75 duration-150 z-20 pointer-events-none">
+          {bubbleText}
+        </div>
+      )}
       <svg
         viewBox="0 0 120 120"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full drop-shadow-sm transition-transform duration-300 hover:scale-[1.02]"
+        className="w-full h-full drop-shadow-sm transition-transform duration-300 hover:scale-[1.04]"
       >
         <defs>
           <linearGradient

@@ -7,16 +7,18 @@ import {
   BarChart3,
   Calendar,
   Settings,
+  User,
 } from "lucide-react";
 import type { Subject, Flashcard } from "../types";
 import { FridaMascot } from "./FridaMascot";
+
 interface SidebarProps {
   subjects: Subject[];
   cards: Flashcard[];
-  activeView: "subjects" | "global-study" | "stats" | "settings";
+  activeView: "subjects" | "global-study" | "stats" | "profile" | "settings";
   selectedSubjectId: string | null;
   onSelectView: (
-    view: "subjects" | "global-study" | "stats" | "settings",
+    view: "subjects" | "global-study" | "stats" | "profile" | "settings"
   ) => void;
   onSelectSubject: (subjectId: string) => void;
   onOpenNewSubject: () => void;
@@ -24,6 +26,8 @@ interface SidebarProps {
   currentStreak: number;
   reviewedTodayCount: number;
   dailyGoal: number;
+  userName?: string;
+  userAvatar?: string;
 }
 export const Sidebar: React.FC<SidebarProps> = ({
   subjects,
@@ -37,6 +41,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   currentStreak,
   reviewedTodayCount,
   dailyGoal,
+  userName,
+  userAvatar,
 }) => {
   const now = Date.now();
   const totalDueCards = cards.filter((c) => c.dueDate <= now).length;
@@ -163,13 +169,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
           }}
           className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-all ${activeView === "stats" ? "bg-purple-100 text-purple-900 font-bold" : "text-slate-600 hover:bg-purple-50/50"}`}
         >
-          {" "}
           <div className="flex items-center gap-2.5">
-            {" "}
-            <BarChart3 className="w-4 h-4 text-purple-600" />{" "}
-            <span>Progreso</span>{" "}
-          </div>{" "}
-        </button>{" "}
+            <BarChart3 className="w-4 h-4 text-purple-600" />
+            <span>Progreso</span>
+          </div>
+        </button>
+        <button
+          onClick={() => {
+            onSelectView("profile");
+          }}
+          className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-all ${activeView === "profile" ? "bg-purple-100 text-purple-900 font-bold" : "text-slate-600 hover:bg-purple-50/50"}`}
+        >
+          <div className="flex items-center gap-2.5">
+            <User className="w-4 h-4 text-purple-600" />
+            <span>Mi Perfil</span>
+          </div>
+        </button>
       </div>{" "}
       {/* Subjects Sub-list */}{" "}
       <div className="flex-1 overflow-y-auto px-3 py-2 mt-2">
@@ -225,8 +240,61 @@ export const Sidebar: React.FC<SidebarProps> = ({
           )}{" "}
         </div>{" "}
       </div>{" "}
-      {/* Footer / Tutorial / Settings */}{" "}
-      <div className="p-3 border-t border-purple-50 space-y-1">
+      {/* User Profile Mini Bar */}
+      <div className="px-3 pt-2 pb-1 border-t border-purple-50">
+        <button
+          onClick={() => onSelectView("profile")}
+          className={`w-full flex items-center gap-2.5 p-2 rounded-2xl transition-all cursor-pointer text-left ${
+            activeView === "profile"
+              ? "bg-purple-100 text-purple-950 font-bold border border-purple-200 shadow-xs"
+              : "hover:bg-purple-50/60"
+          }`}
+          title="Ver y editar mi perfil"
+        >
+          <div className="w-8 h-8 rounded-xl bg-purple-100 flex items-center justify-center overflow-hidden shrink-0 border border-purple-200">
+            {userAvatar?.startsWith("data:image") ? (
+              <img
+                src={userAvatar}
+                alt={userName || "Avatar"}
+                className="w-full h-full object-cover"
+              />
+            ) : userAvatar === "avatar:frida" ? (
+              <FridaMascot mood="happy" size={24} />
+            ) : userAvatar?.startsWith("avatar:") ? (
+              <span className="text-sm">
+                {userAvatar === "avatar:fox"
+                  ? "🦊"
+                  : userAvatar === "avatar:cat"
+                  ? "🐱"
+                  : userAvatar === "avatar:grad"
+                  ? "🎓"
+                  : userAvatar === "avatar:owl"
+                  ? "🦉"
+                  : userAvatar === "avatar:rocket"
+                  ? "🚀"
+                  : userAvatar === "avatar:lightning"
+                  ? "⚡"
+                  : "🌸"}
+              </span>
+            ) : (
+              <span className="font-extrabold text-xs text-purple-700">
+                {(userName || "E").charAt(0).toUpperCase()}
+              </span>
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <span className="text-xs font-bold text-slate-800 block truncate leading-tight">
+              {userName || "Estudiante"}
+            </span>
+            <span className="text-[10px] text-purple-600 font-medium block truncate">
+              Mi Perfil
+            </span>
+          </div>
+        </button>
+      </div>
+
+      {/* Footer / Tutorial / Settings */}
+      <div className="p-3 pt-1 space-y-1">
         {" "}
         <button
           onClick={() => onSelectView("settings")}

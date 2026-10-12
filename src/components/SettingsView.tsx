@@ -14,6 +14,12 @@ import {
 import type { UserPreferences } from "../types";
 import { FridaMascot } from "./FridaMascot";
 import { exportFullBackup, importFullBackup } from "../services/importExport";
+import {
+  playCardFlipSound,
+  playRatingSound,
+  playFridaBarkSound,
+  playCelebrationFanfare,
+} from "../services/audio";
 
 interface SettingsViewProps {
   preferences: UserPreferences;
@@ -207,30 +213,92 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         {/* Audio Effects Section */}
-        <div className="bg-white rounded-3xl p-6 flex items-center justify-between gap-4 shadow-sm border border-purple-100">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-purple-100 text-purple-600">
-              {preferences.soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+        <div className="bg-white rounded-3xl p-6 space-y-4 shadow-sm border border-purple-100">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-2xl bg-purple-100 text-purple-600">
+                {preferences.soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+              </div>
+              <div>
+                <h4 className="font-bold text-base text-slate-800">Efectos de Sonido</h4>
+                <p className="text-xs opacity-70 text-slate-500">
+                  Giro táctil de carta, calificaciones 1-4, ladrido de Frida y fanfarria al terminar
+                </p>
+              </div>
             </div>
-            <div>
-              <h4 className="font-bold text-base text-slate-800">Efectos de Sonido</h4>
-              <p className="text-xs opacity-70 text-slate-500">
-                Campanillas suaves al calificar y fanfarria al completar una sesión
-              </p>
-            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                const next = !preferences.soundEnabled;
+                onUpdatePreferences({ soundEnabled: next });
+                if (next) {
+                  playRatingSound(3, true);
+                }
+              }}
+              className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm border cursor-pointer ${
+                preferences.soundEnabled
+                  ? "bg-purple-600 text-white border-transparent hover:bg-purple-700 hover:-translate-y-px shadow-md"
+                  : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
+              }`}
+            >
+              {preferences.soundEnabled ? "Activados" : "Silenciados"}
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => onUpdatePreferences({ soundEnabled: !preferences.soundEnabled })}
-            className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm border cursor-pointer ${
-              preferences.soundEnabled
-                ? "bg-purple-600 text-white border-transparent hover:bg-purple-700 hover:-translate-y-px shadow-md"
-                : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
-            }`}
-          >
-            {preferences.soundEnabled ? "Activados" : "Silenciados"}
-          </button>
+          {/* Sound Preview Audition Buttons */}
+          <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-2">
+            <span className="text-[11px] font-semibold text-slate-400 mr-1">Probar sonido:</span>
+            <button
+              type="button"
+              onClick={() => playCardFlipSound(true)}
+              className="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-50 hover:bg-purple-50 text-slate-700 hover:text-purple-700 border border-slate-200/80 transition-colors cursor-pointer"
+            >
+              🃏 Volteo
+            </button>
+            <button
+              type="button"
+              onClick={() => playRatingSound(1, true)}
+              className="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-50 hover:bg-rose-50 text-slate-700 hover:text-rose-700 border border-slate-200/80 transition-colors cursor-pointer"
+            >
+              ⭕ Otra vez
+            </button>
+            <button
+              type="button"
+              onClick={() => playRatingSound(2, true)}
+              className="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-50 hover:bg-amber-50 text-slate-700 hover:text-amber-700 border border-slate-200/80 transition-colors cursor-pointer"
+            >
+              🟠 Difícil
+            </button>
+            <button
+              type="button"
+              onClick={() => playRatingSound(3, true)}
+              className="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 border border-slate-200/80 transition-colors cursor-pointer"
+            >
+              🔵 Bien
+            </button>
+            <button
+              type="button"
+              onClick={() => playRatingSound(4, true)}
+              className="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200/80 transition-colors cursor-pointer"
+            >
+              🟢 Fácil
+            </button>
+            <button
+              type="button"
+              onClick={() => playFridaBarkSound(true)}
+              className="px-2.5 py-1 text-xs font-medium rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 transition-colors cursor-pointer"
+            >
+              🐾 Frida Guau
+            </button>
+            <button
+              type="button"
+              onClick={() => playCelebrationFanfare(true)}
+              className="px-2.5 py-1 text-xs font-medium rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 transition-colors cursor-pointer"
+            >
+              🎉 Fanfarria
+            </button>
+          </div>
         </div>
 
         {/* Full Backup & Restore Section */}

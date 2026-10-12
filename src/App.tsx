@@ -16,10 +16,11 @@ import { TutorialModal } from './components/TutorialModal';
 import { StatsView } from './components/StatsView';
 import { SettingsView } from './components/SettingsView'; 
 import { TodayReviewView } from './components/TodayReviewView';
+import { ProfileView } from './components/ProfileView';
 
 export function App() { 
   const [preferences, setPreferences] = useState(getUserPreferences); 
-  const [activeView, setActiveView] = useState<'subjects' | 'global-study' | 'stats' | 'settings'>('subjects'); 
+  const [activeView, setActiveView] = useState<'subjects' | 'global-study' | 'stats' | 'profile' | 'settings'>('subjects'); 
   const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(null); 
   
   // Modals state 
@@ -336,6 +337,8 @@ export function App() {
         currentStreak={currentStreak} 
         reviewedTodayCount={reviewedTodayCount} 
         dailyGoal={preferences.dailyGoal} 
+        userName={preferences.userName}
+        userAvatar={preferences.userAvatar}
       /> 
       
       {/* Main Content Area */} 
@@ -346,12 +349,22 @@ export function App() {
             onUpdatePreferences={handleUpdatePreferences}
             onBackupRestored={() => setPreferences(getUserPreferences())}
           /> 
+        ) : activeView === 'profile' ? (
+          <ProfileView
+            preferences={preferences}
+            onUpdatePreferences={handleUpdatePreferences}
+            subjects={subjects}
+            cards={cards}
+            reviewLogs={reviewLogs}
+            currentStreak={currentStreak}
+          />
         ) : activeView === 'stats' ? ( 
           <StatsView subjects={subjects} cards={cards} reviewLogs={reviewLogs} currentStreak={currentStreak} reviewedTodayCount={reviewedTodayCount} preferences={preferences} onUpdatePreferences={handleUpdatePreferences} /> 
         ) : activeView === 'global-study' ? (
           <TodayReviewView
             subjects={subjects}
             cards={cards}
+            userName={preferences.userName}
             onStartGlobalStudy={startGlobalStudy}
             onStartCramGlobal={startCramGlobalStudy}
             onStartStudySubject={(subjectId) => {
@@ -403,6 +416,7 @@ export function App() {
             subjects={subjects} 
             units={units} 
             cards={cards} 
+            userName={preferences.userName}
             onSelectSubject={(id) => setSelectedSubjectId(id)} 
             onStartStudy={startStudySubject} 
             onOpenNewSubject={() => { setEditingSubject(null); setIsSubjectModalOpen(true);}} 

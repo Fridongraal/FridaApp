@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import type { Subject, Flashcard } from "../types";
 import { FridaMascot } from "./FridaMascot";
+import { getDynamicGreeting } from "../services/greetings";
 
 interface TodayReviewViewProps {
   subjects: Subject[];
@@ -27,6 +28,7 @@ interface TodayReviewViewProps {
   onStartStudySubject: (subjectId: string) => void;
   onStartCramSubject?: (subjectId: string) => void;
   onGoToSubjects: () => void;
+  userName?: string;
 }
 
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -47,8 +49,11 @@ export const TodayReviewView: React.FC<TodayReviewViewProps> = ({
   onStartStudySubject,
   onStartCramSubject,
   onGoToSubjects,
+  userName = "Estudiante",
 }) => {
   const now = Date.now();
+  const [greetingSeed, setGreetingSeed] = React.useState(1);
+  const greeting = getDynamicGreeting(userName, greetingSeed);
   const dueCards = cards.filter((c) => c.dueDate <= now);
 
   // Group by subjects
@@ -76,11 +81,21 @@ export const TodayReviewView: React.FC<TodayReviewViewProps> = ({
             <Calendar className="w-7 h-7" />
           </div>
           <div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-800">
-              Repaso de Hoy
-            </h2>
-            <p className="text-sm opacity-70 mt-0.5 text-slate-600">
-              Revisión inteligente programada para consolidar tu memoria a largo plazo
+            <div className="flex items-center gap-2">
+              <h2 className="text-2xl sm:text-3xl font-black tracking-tight bg-gradient-to-r from-purple-700 via-indigo-600 to-purple-800 bg-clip-text text-transparent">
+                {greeting.salutation}
+              </h2>
+              <button
+                type="button"
+                onClick={() => setGreetingSeed((s) => s + 1)}
+                title="Cambiar mensaje inspirador"
+                className="p-1 rounded-lg text-purple-400 hover:text-purple-600 hover:bg-purple-50 transition-colors cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4" />
+              </button>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
+              {greeting.subheading}
             </p>
           </div>
         </div>

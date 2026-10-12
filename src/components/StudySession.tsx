@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { X, RotateCw, Keyboard, Flame } from "lucide-react";
+import { X, RotateCw, Keyboard, Flame, Volume2, VolumeX } from "lucide-react";
 import type { Flashcard, ReviewRating } from "../types";
 import { getIntervalPreviews, calculateSM2 } from "../services/sm2";
-import { playSuccessChime } from "../services/audio";
+import { playCardFlipSound, playRatingSound } from "../services/audio";
+import { getUserPreferences, saveUserPreferences } from "../services/db";
 import { FridaMascot } from "./FridaMascot";
 import { MarkdownContent } from "./MarkdownContent";
 import { ImageZoomModal } from "./ImageZoomModal";
@@ -28,6 +29,21 @@ export const StudySession: React.FC<StudySessionProps> = ({
   const [noTransition, setNoTransition] = useState(false);
   const [reviewedLogs, setReviewedLogs] = useState<{ card: Flashcard; rating: ReviewRating }[]>([]);
   const [zoomImage, setZoomImage] = useState<{ src: string; alt?: string } | null>(null);
+  const [soundEnabled, setSoundEnabled] = useState(() => {
+    try {
+      return getUserPreferences().soundEnabled;
+    } catch {
+      return true;
+    }
+  });
+
+  const toggleSound = () => {
+    setSoundEnabled((prev) => {
+      const next = !prev;
+      saveUserPreferences({ soundEnabled: next });
+      return next;
+    });
+  };
 
   // Queue of cards (can expand as cards are failed/repeated, exactly like Anki)
   const [sessionQueue, setSessionQueue] = useState<Flashcard[]>(cards);
@@ -39,13 +55,14 @@ export const StudySession: React.FC<StudySessionProps> = ({
   const remainingCount = Math.max(0, sessionQueue.length - currentIndex);
 
   const handleFlip = useCallback(() => {
+    playCardFlipSound(soundEnabled);
     setIsFlipped((prev) => !prev);
-  }, []);
+  }, [soundEnabled]);
 
   const handleRate = useCallback(
     (rating: ReviewRating) => {
       if (!currentCard || isTransitioning) return;
-      playSuccessChime();
+      playRatingSound(rating, soundEnabled);
 
       const sm2 = calculateSM2(currentCard, rating);
       const newReviewedLogs = [...reviewedLogs, { card: currentCard, rating }];
@@ -101,7 +118,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
 
       if (e.code === "Space" || e.key === "Enter") {
         e.preventDefault();
-        setIsFlipped((prev) => !prev);
+        handleFlip();
       } else if (e.key === "Escape") {
         e.preventDefault();
         onExit();
@@ -123,7 +140,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isFlipped, handleRate, onExit]);
+  }, [isFlipped, handleRate, handleFlip, onExit]);
 
   if (!currentCard) {
     return null;
@@ -142,7 +159,7 @@ export const StudySession: React.FC<StudySessionProps> = ({
       {/* Top Header & Progress */}
       <div className="max-w-3xl w-full mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 flex-1 min-w-0">
-          <FridaMascot mood="studying" size={44} className="shrink-0" />
+          <FridaMascot mood="studying" size={44} className="shrink-0" interactive />
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-1.5 gap-2">
               <div className="flex items-center gap-2 truncate">
@@ -188,15 +205,30 @@ export const StudySession: React.FC<StudySessionProps> = ({
             </div>
           </div>
         </div>
-        <button
-          onClick={onExit}
-          className={`p-2.5 rounded-2xl bg-white border text-slate-400 hover:text-slate-700 transition-colors shrink-0 shadow-sm cursor-pointer ${
-            isCramMode ? "border-rose-200 hover:border-rose-300" : "border-slate-200"
-          }`}
-          title="Salir de la sesión"
-        >
-          <X className="w-5 h-5" />
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={toggleSound}
+            className={`p-2.5 rounded-2xl bg-white border transition-all shrink-0 shadow-sm cursor-pointer ${
+              soundEnabled
+                ? isCramMode
+                  ? "text-rose-600 border-rose-200 hover:bg-rose-50"
+                  : "text-purple-600 border-purple-200 hover:bg-purple-50"
+                : "text-slate-400 border-slate-200 hover:text-slate-600 hover:bg-slate-50"
+            }`}
+            title={soundEnabled ? "Silenciar efectos de sonido" : "Activar efectos de sonido"}
+          >
+            {soundEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+          </button>
+          <button
+            onClick={onExit}
+            className={`p-2.5 rounded-2xl bg-white border text-slate-400 hover:text-slate-700 transition-colors shrink-0 shadow-sm cursor-pointer ${
+              isCramMode ? "border-rose-200 hover:border-rose-300" : "border-slate-200"
+            }`}
+            title="Salir de la sesión (Esc)"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
       </div>
 
       {/* Main Flashcard Card Container */}

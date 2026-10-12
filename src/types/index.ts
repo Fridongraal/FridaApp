@@ -55,4 +55,8 @@ export interface UserPreferences {
   dailyGoal: number;
   soundEnabled: boolean;
   hasSeenTutorial: boolean;
+  userName?: string;
+  userAvatar?: string;
+  userBio?: string;
+  joinedDate?: number;
 }
