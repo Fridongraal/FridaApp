@@ -24,6 +24,7 @@ import { playAchievementSound } from './services/audio';
 export function App() { 
   const [preferences, setPreferences] = useState(getUserPreferences); 
   const [activeView, setActiveView] = useState<'subjects' | 'global-study' | 'stats' | 'profile' | 'settings'>('subjects'); 
+  const [statsTab, setStatsTab] = useState<'stats' | 'achievements'>('stats');
   const [selectedSubjectId, setSelectedSubjectId] = useState<string | null>(null); 
   const [activeAchievementToast, setActiveAchievementToast] = useState<Achievement | null>(null);
   const [achievementQueue, setAchievementQueue] = useState<Achievement[]>([]);
@@ -380,6 +381,9 @@ export function App() {
         onSelectView={(view) => { 
           setActiveView(view); 
           setSelectedSubjectId(null);
+          if (view === 'stats') {
+            setStatsTab('stats');
+          }
         }} 
         onSelectSubject={(id) => { 
           setActiveView('subjects'); 
@@ -413,10 +417,23 @@ export function App() {
             cards={cards}
             reviewLogs={reviewLogs}
             currentStreak={currentStreak}
-            onTriggerTestAchievement={handleTriggerTestAchievement}
+            onGoToAchievements={() => {
+              setStatsTab('achievements');
+              setActiveView('stats');
+            }}
           />
         ) : activeView === 'stats' ? ( 
-          <StatsView subjects={subjects} cards={cards} reviewLogs={reviewLogs} currentStreak={currentStreak} reviewedTodayCount={reviewedTodayCount} preferences={preferences} onUpdatePreferences={handleUpdatePreferences} /> 
+          <StatsView
+            subjects={subjects}
+            cards={cards}
+            reviewLogs={reviewLogs}
+            currentStreak={currentStreak}
+            reviewedTodayCount={reviewedTodayCount}
+            preferences={preferences}
+            onUpdatePreferences={handleUpdatePreferences}
+            initialTab={statsTab}
+            onTriggerTestAchievement={handleTriggerTestAchievement}
+          /> 
         ) : activeView === 'global-study' ? (
           <TodayReviewView
             subjects={subjects}
@@ -530,7 +547,8 @@ export function App() {
         onDismiss={() => setActiveAchievementToast(null)}
         onViewAchievements={() => {
           setActiveAchievementToast(null);
-          setActiveView('profile');
+          setStatsTab('achievements');
+          setActiveView('stats');
         }}
       />
     </div> 
