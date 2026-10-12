@@ -51,7 +51,7 @@ export interface DailyStats {
   count: number;
 }
 
-export type AppTheme = "original" | "windows-vista" | "frutiger-aero";
+export type AppTheme = "original" | "windows-95" | "frutiger-aero" | "windows-vista";
 
 export interface UserPreferences {
   dailyGoal: number;

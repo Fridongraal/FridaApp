@@ -198,15 +198,15 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               sampleBtnStyle: "bg-purple-600 text-white rounded-xl shadow-xs",
             },
             {
-              id: "windows-vista" as AppTheme,
-              title: "Windows Vista Aero",
-              badge: "Aero Glass",
-              badgeColor: "bg-sky-950 text-cyan-300 border-cyan-400/50",
-              description: "Auténtico Aero Glass: aurora cósmica, fuentes Segoe UI, paneles biselados y botones vítreos.",
-              icon: "🪟",
-              previewBg: "from-[#0c1c2e] via-[#102a45] to-[#07111c]",
-              sampleBtnText: "Iniciar estudio",
-              sampleBtnStyle: "bg-gradient-to-b from-[#5bb4fc] to-[#1472bd] text-white rounded-[4px] border border-[#1c6ba4] shadow-sm",
+              id: "windows-95" as AppTheme,
+              title: "Windows 95 Classic",
+              badge: "Retro 1995",
+              badgeColor: "bg-neutral-800 text-neutral-200 border-neutral-600",
+              description: "Estética 1995: fondo verde azulado teal, ventanas biseladas en 3D, barras azul marino y fuente MS Sans Serif.",
+              icon: "💾",
+              previewBg: "from-[#008080] to-[#006666]",
+              sampleBtnText: "Iniciar",
+              sampleBtnStyle: "bg-[#c0c0c0] text-black border-t-2 border-l-2 border-white border-r-2 border-b-2 border-black font-bold shadow-none rounded-none",
             },
             {
               id: "frutiger-aero" as AppTheme,
@@ -220,7 +220,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               sampleBtnStyle: "bg-gradient-to-b from-[#8bef38] to-[#2e9f02] text-white rounded-full border-2 border-white shadow-md font-bold",
             },
           ].map((themeOption) => {
-            const isSelected = (preferences.theme || "original") === themeOption.id;
+            const isSelected =
+              (preferences.theme || "original") === themeOption.id ||
+              (themeOption.id === "windows-95" && preferences.theme === "windows-vista");
             return (
               <div
                 key={themeOption.id}

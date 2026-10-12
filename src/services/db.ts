@@ -117,6 +117,7 @@ export function getUserPreferences(): UserPreferences {
     const raw = localStorage.getItem(PREFS_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
+      const theme = parsed.theme === "windows-vista" ? "windows-95" : (parsed.theme || "original");
       return {
         dailyGoal: 20,
         soundEnabled: true,
@@ -126,8 +127,8 @@ export function getUserPreferences(): UserPreferences {
         userBio: "Construyendo mi conocimiento tarjeta a tarjeta 🐾",
         joinedDate: Date.now(),
         unlockedAchievementIds: [],
-        theme: "original",
         ...parsed,
+        theme,
       };
     }
   } catch (e) {

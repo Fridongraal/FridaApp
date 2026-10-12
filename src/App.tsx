@@ -377,8 +377,8 @@ export function App() {
     <div
       data-theme={preferences.theme || 'original'}
       className={`flex h-screen overflow-hidden transition-colors duration-300 ${
-        preferences.theme === 'windows-vista'
-          ? 'bg-[#08121f] text-slate-100'
+        preferences.theme === 'windows-95' || preferences.theme === 'windows-vista'
+          ? 'bg-[#008080] text-black'
           : preferences.theme === 'frutiger-aero'
           ? 'bg-[#89cdfc] text-slate-900'
           : 'bg-[#F7F5FA]'

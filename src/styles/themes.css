@@ -1,207 +1,433 @@
 /* ==========================================================================
    FRIDA FLASHCARDS - MULTI-THEME ENGINE
    1. Original (Modern Minimal Purple Glass)
-   2. Windows Vista Aero (Iconic Dark Glass, Segoe UI, Aurora, Vista Gloss)
+   2. Windows 95 Classic (Authentic 1995 3D Bevels, Teal #008080, MS Sans Serif, Navy Titlebars)
    3. Frutiger Aero (Aquatic Sky/Green, Specular Jelly Pills, 3D Glass Orbs)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   THEME 1: WINDOWS VISTA AERO
+   THEME 1: WINDOWS 95 CLASSIC
    -------------------------------------------------------------------------- */
+[data-theme="windows-95"],
 [data-theme="windows-vista"] {
-  --bg-main: #0c1824;
-  --card-bg: rgba(240, 244, 248, 0.96);
-  --border-color: #7fa0c7;
-  --text-primary: #111e2e;
-  --text-secondary: #3b506b;
-  --vista-glass-header: linear-gradient(180deg, rgba(30, 48, 68, 0.88) 0%, rgba(12, 22, 34, 0.94) 100%);
-  --vista-glass-border: rgba(255, 255, 255, 0.35);
+  --win-bg: #008080;
+  --win-gray: #c0c0c0;
+  --win-light: #ffffff;
+  --win-dark: #808080;
+  --win-darker: #000000;
+  --win-navy: #000080;
+  --win-navy-light: #1084d0;
+  --text-primary: #000000;
+  --text-secondary: #222222;
 }
 
+[data-theme="windows-95"],
+[data-theme="windows-95"] body,
 [data-theme="windows-vista"],
 [data-theme="windows-vista"] body {
-  font-family: "Segoe UI", Tahoma, "Trebuchet MS", Arial, sans-serif !important;
-  color: #111e2e;
-  background: 
-    radial-gradient(ellipse at 50% -10%, rgba(46, 117, 182, 0.45) 0%, transparent 60%),
-    radial-gradient(ellipse at 85% 20%, rgba(38, 166, 91, 0.25) 0%, transparent 50%),
-    radial-gradient(ellipse at 15% 70%, rgba(212, 143, 24, 0.2) 0%, transparent 55%),
-    linear-gradient(145deg, #07101a 0%, #102336 50%, #081320 100%) !important;
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Geneva, "Segoe UI", sans-serif !important;
+  font-size: 12px !important;
+  letter-spacing: 0px !important;
+  color: #000000 !important;
+  background-color: #008080 !important;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.18) 1px, transparent 0) !important;
+  background-size: 4px 4px !important;
   background-attachment: fixed !important;
+  -webkit-font-smoothing: subpixel-antialiased;
 }
 
-/* Vista Scrollbars */
+/* Sharp retro 90-degree corners everywhere in Windows 95 */
+[data-theme="windows-95"] *,
+[data-theme="windows-vista"] * {
+  border-radius: 0px !important;
+}
+
+/* Windows 95 3D Scrollbars */
+[data-theme="windows-95"] ::-webkit-scrollbar,
 [data-theme="windows-vista"] ::-webkit-scrollbar {
-  width: 14px;
-  height: 14px;
-  background: #eef3f8;
+  width: 16px;
+  height: 16px;
+  background: #dfdfdf;
+  border: 1px solid #808080;
 }
+[data-theme="windows-95"] ::-webkit-scrollbar-thumb,
 [data-theme="windows-vista"] ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #d2e4f7 0%, #a4c4e7 48%, #85abdc 52%, #b5d3f2 100%);
-  border: 1px solid #6b8fb7;
-  border-radius: 4px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  background: #c0c0c0;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
 }
-[data-theme="windows-vista"] ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #e3f0fd 0%, #bcd9f7 48%, #97bef0 52%, #c9e2f9 100%);
-  border-color: #3b7bb5;
+[data-theme="windows-95"] ::-webkit-scrollbar-thumb:active,
+[data-theme="windows-vista"] ::-webkit-scrollbar-thumb:active {
+  background: #b5b5b5;
+  border-top: 2px solid #000000;
+  border-left: 2px solid #000000;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
 }
 
-/* Vista Sidebar */
+/* Windows 95 Sidebar (Classic Explorer Panel) */
+[data-theme="windows-95"] aside,
 [data-theme="windows-vista"] aside {
-  background: rgba(10, 20, 32, 0.85) !important;
-  backdrop-filter: blur(18px) saturate(140%) !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5) !important;
-  color: #eaf1fa !important;
+  background: #c0c0c0 !important;
+  border-right: 2px solid #808080 !important;
+  border-left: 2px solid #ffffff !important;
+  border-top: 2px solid #ffffff !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: inset -1px 0 0 #000000, 2px 0 4px rgba(0, 0, 0, 0.25) !important;
+  color: #000000 !important;
 }
 
+[data-theme="windows-95"] aside h1,
+[data-theme="windows-95"] aside span.text-slate-800,
+[data-theme="windows-95"] aside .text-slate-800,
 [data-theme="windows-vista"] aside h1,
 [data-theme="windows-vista"] aside span.text-slate-800,
 [data-theme="windows-vista"] aside .text-slate-800 {
-  color: #ffffff !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  color: #000000 !important;
+  font-weight: bold !important;
+  text-shadow: none !important;
 }
 
+[data-theme="windows-95"] aside p,
+[data-theme="windows-95"] aside .text-slate-500,
+[data-theme="windows-95"] aside .text-slate-400,
 [data-theme="windows-vista"] aside p,
 [data-theme="windows-vista"] aside .text-slate-500,
 [data-theme="windows-vista"] aside .text-slate-400 {
-  color: #9cb4cf !important;
+  color: #222222 !important;
 }
 
+[data-theme="windows-95"] aside .border-purple-50,
+[data-theme="windows-95"] aside .border-purple-100,
 [data-theme="windows-vista"] aside .border-purple-50,
 [data-theme="windows-vista"] aside .border-purple-100 {
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: #808080 !important;
 }
 
-/* Vista Sidebar Navigation Buttons */
+/* Windows 95 Sidebar Mini-Dashboard (Sunken Well) */
+[data-theme="windows-95"] aside .bg-slate-50,
+[data-theme="windows-vista"] aside .bg-slate-50 {
+  background: #ffffff !important;
+  border-top: 2px solid #808080 !important;
+  border-left: 2px solid #808080 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  box-shadow: inset 1px 1px 0 #000000 !important;
+}
+
+/* Windows 95 Navigation Buttons */
+[data-theme="windows-95"] aside button,
 [data-theme="windows-vista"] aside button {
-  border-radius: 5px !important;
-  font-family: "Segoe UI", Tahoma, sans-serif !important;
+  background: #c0c0c0 !important;
+  color: #000000 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080 !important;
+  font-family: "MS Sans Serif", Tahoma, sans-serif !important;
+  font-weight: normal !important;
+  text-shadow: none !important;
 }
 
+[data-theme="windows-95"] aside button:hover:not(.bg-purple-100),
+[data-theme="windows-vista"] aside button:hover:not(.bg-purple-100) {
+  background: #d4d4d4 !important;
+  color: #000000 !important;
+}
+
+/* Active navigation item: Classic Navy Blue highlight */
+[data-theme="windows-95"] aside button.bg-purple-100,
+[data-theme="windows-95"] aside button[class*="bg-purple-100"],
+[data-theme="windows-95"] aside button.bg-purple-50,
 [data-theme="windows-vista"] aside button.bg-purple-100,
 [data-theme="windows-vista"] aside button[class*="bg-purple-100"],
 [data-theme="windows-vista"] aside button.bg-purple-50 {
-  background: linear-gradient(180deg, rgba(160, 215, 255, 0.35) 0%, rgba(65, 145, 225, 0.45) 48%, rgba(25, 105, 190, 0.55) 52%, rgba(105, 185, 250, 0.45) 100%) !important;
-  border: 1px solid rgba(130, 190, 255, 0.8) !important;
+  background: #000080 !important;
   color: #ffffff !important;
-  box-shadow: 0 0 8px rgba(60, 160, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  border-top: 2px solid #000000 !important;
+  border-left: 2px solid #000000 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  box-shadow: inset 1px 1px 0 #000000 !important;
+  font-weight: bold !important;
+  text-shadow: none !important;
 }
 
-[data-theme="windows-vista"] aside button:hover:not(.bg-purple-100) {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(180, 220, 255, 0.15) 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+[data-theme="windows-95"] aside button.bg-purple-100 *,
+[data-theme="windows-95"] aside button[class*="bg-purple-100"] *,
+[data-theme="windows-vista"] aside button.bg-purple-100 *,
+[data-theme="windows-vista"] aside button[class*="bg-purple-100"] * {
   color: #ffffff !important;
 }
 
-/* Vista Mini-Dashboard Container */
-[data-theme="windows-vista"] aside .bg-slate-50 {
-  background: rgba(18, 36, 56, 0.6) !important;
-  border: 1px solid rgba(120, 170, 220, 0.3) !important;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Vista Aero Glass Cards & Panels */
+/* Windows 95 Window Panels & Cards */
+[data-theme="windows-95"] .glass-panel,
+[data-theme="windows-95"] .bg-white,
 [data-theme="windows-vista"] .glass-panel,
 [data-theme="windows-vista"] .bg-white {
-  background: linear-gradient(180deg, rgba(248, 251, 255, 0.96) 0%, rgba(235, 242, 250, 0.94) 100%) !important;
-  border: 1px solid #7da2ce !important;
-  border-radius: 8px !important;
-  box-shadow: 
-    0 8px 20px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+  background: #c0c0c0 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: inset 1px 1px 0px #dfdfdf, inset -1px -1px 0px #808080, 2px 2px 0px rgba(0, 0, 0, 0.4) !important;
+  color: #000000 !important;
 }
 
-/* Vista Buttons (Iconic Aero Glass 2-step gradient) */
+/* Windows 95 General Buttons */
+[data-theme="windows-95"] button,
+[data-theme="windows-95"] .glass-button,
 [data-theme="windows-vista"] button,
 [data-theme="windows-vista"] .glass-button {
-  border-radius: 4px !important;
-  font-family: "Segoe UI", Tahoma, sans-serif !important;
+  background: #c0c0c0 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: inset 1px 1px 0px #dfdfdf, inset -1px -1px 0px #808080 !important;
+  color: #000000 !important;
+  font-family: "MS Sans Serif", Tahoma, sans-serif !important;
+  text-shadow: none !important;
 }
 
-[data-theme="windows-vista"] .glass-button,
-[data-theme="windows-vista"] button:not([class*="bg-purple-600"]):not([class*="bg-amber-400"]):not([class*="bg-emerald-600"]):not([class*="bg-rose-500"]):not([class*="bg-slate-900"]):not([class*="bg-slate-800"]):not([class*="p-1"]):not([class*="p-2.5"]):not([class*="text-purple-600"]) {
-  background: linear-gradient(180deg, #f3f7fd 0%, #d8e7f7 48%, #c5dcf5 52%, #e6f1fb 100%) !important;
-  border: 1px solid #7ea3ce !important;
-  color: #1a3454 !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 1px 3px rgba(0, 0, 0, 0.15) !important;
-  text-shadow: 0 1px 0 #ffffff;
-  transition: all 0.15s ease-in-out !important;
+[data-theme="windows-95"] button:hover,
+[data-theme="windows-vista"] button:hover {
+  background: #d4d4d4 !important;
+  color: #000000 !important;
 }
 
-[data-theme="windows-vista"] .glass-button:hover,
-[data-theme="windows-vista"] button:not([class*="bg-purple-600"]):not([class*="bg-amber-400"]):not([class*="bg-emerald-600"]):not([class*="bg-rose-500"]):not([class*="bg-slate-900"]):not([class*="bg-slate-800"]):not([class*="p-1"]):not([class*="p-2.5"]):hover {
-  background: linear-gradient(180deg, #eaf4fd 0%, #b8d9f9 48%, #8fc1f3 52%, #c9e3fc 100%) !important;
-  border-color: #3c7fb1 !important;
-  box-shadow: 0 0 6px rgba(51, 153, 255, 0.65), inset 0 1px 0 #ffffff !important;
-  color: #0c233e !important;
+[data-theme="windows-95"] button:active,
+[data-theme="windows-vista"] button:active {
+  border-top: 2px solid #000000 !important;
+  border-left: 2px solid #000000 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  box-shadow: inset 1px 1px 0px #808080, inset -1px -1px 0px #dfdfdf !important;
+  padding-top: 1px !important;
+  padding-left: 1px !important;
 }
 
-/* Vista Primary Button (Pulsing Aero Blue) */
+/* Windows 95 Primary Push Buttons (Estudiar Materia / Estudiar todo / Guardar) */
+[data-theme="windows-95"] .glass-button-primary,
+[data-theme="windows-95"] button.bg-purple-600,
+[data-theme="windows-95"] button[class*="bg-purple-600"],
+[data-theme="windows-95"] button[class*="from-purple-600"],
 [data-theme="windows-vista"] .glass-button-primary,
 [data-theme="windows-vista"] button.bg-purple-600,
-[data-theme="windows-vista"] button[class*="bg-purple-600"] {
-  background: linear-gradient(180deg, #5bb4fc 0%, #2087d8 48%, #1472bd 52%, #4da5f0 100%) !important;
-  border: 1px solid #1c6ba4 !important;
+[data-theme="windows-vista"] button[class*="bg-purple-600"],
+[data-theme="windows-vista"] button[class*="from-purple-600"] {
+  background: #000080 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: inset 1px 1px 0px #2050a0, inset -1px -1px 0px #000040, 0 0 0 1px #000000 !important;
   color: #ffffff !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
-  box-shadow: 
-    0 0 8px rgba(32, 135, 216, 0.55),
-    inset 0 1px 1px rgba(255, 255, 255, 0.75),
-    0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  font-weight: bold !important;
+  text-shadow: none !important;
 }
 
+[data-theme="windows-95"] .glass-button-primary:hover,
+[data-theme="windows-95"] button.bg-purple-600:hover,
+[data-theme="windows-95"] button[class*="bg-purple-600"]:hover,
 [data-theme="windows-vista"] .glass-button-primary:hover,
 [data-theme="windows-vista"] button.bg-purple-600:hover,
 [data-theme="windows-vista"] button[class*="bg-purple-600"]:hover {
-  background: linear-gradient(180deg, #74c2ff 0%, #3094e4 48%, #1f82cf 52%, #62b5fa 100%) !important;
-  border-color: #125788 !important;
-  box-shadow: 
-    0 0 12px rgba(51, 153, 255, 0.8),
-    inset 0 1px 1px #ffffff !important;
+  background: #1084d0 !important;
+  color: #ffffff !important;
 }
 
-/* Vista Inputs & Form Elements */
+[data-theme="windows-95"] .glass-button-primary:active,
+[data-theme="windows-95"] button.bg-purple-600:active,
+[data-theme="windows-vista"] .glass-button-primary:active,
+[data-theme="windows-vista"] button.bg-purple-600:active {
+  border-top: 2px solid #000000 !important;
+  border-left: 2px solid #000000 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+}
+
+/* Windows 95 Inputs, Textareas, Dropdowns (Sunken Inset Wells) */
+[data-theme="windows-95"] input,
+[data-theme="windows-95"] textarea,
+[data-theme="windows-95"] select,
 [data-theme="windows-vista"] input,
 [data-theme="windows-vista"] textarea,
 [data-theme="windows-vista"] select {
   background: #ffffff !important;
-  border: 1px solid #7da2ce !important;
-  border-radius: 4px !important;
-  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15) !important;
-  color: #0e1e30 !important;
+  color: #000000 !important;
+  border-top: 2px solid #808080 !important;
+  border-left: 2px solid #808080 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  box-shadow: inset 1px 1px 0px #000000 !important;
+  font-family: "MS Sans Serif", Tahoma, sans-serif !important;
 }
 
+[data-theme="windows-95"] input:focus,
+[data-theme="windows-95"] textarea:focus,
 [data-theme="windows-vista"] input:focus,
 [data-theme="windows-vista"] textarea:focus {
-  border-color: #3399ff !important;
-  box-shadow: 0 0 6px rgba(51, 153, 255, 0.75), inset 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
-  outline: none !important;
+  outline: 1px dotted #000000 !important;
+  outline-offset: -2px !important;
 }
 
-/* Vista Glowing Green Animated Progress Bar */
-[data-theme="windows-vista"] .bg-purple-600,
-[data-theme="windows-vista"] [style*="width:"] {
-  border-radius: 2px !important;
+/* Windows 95 Progress Bar: Sunken trough + Solid Navy Blocks */
+[data-theme="windows-95"] .w-full.bg-purple-100\/60,
+[data-theme="windows-95"] .bg-purple-100,
+[data-theme="windows-vista"] .w-full.bg-purple-100\/60,
+[data-theme="windows-vista"] .bg-purple-100 {
+  background: #ffffff !important;
+  border-top: 2px solid #808080 !important;
+  border-left: 2px solid #808080 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  box-shadow: inset 1px 1px 0px #000000 !important;
 }
 
+[data-theme="windows-95"] .h-full.bg-gradient-to-r,
+[data-theme="windows-95"] .bg-gradient-to-r.from-purple-500.to-indigo-500,
 [data-theme="windows-vista"] .h-full.bg-gradient-to-r,
 [data-theme="windows-vista"] .bg-gradient-to-r.from-purple-500.to-indigo-500 {
-  background: linear-gradient(180deg, #9cf59c 0%, #35c735 48%, #1fa81f 52%, #6fe86f 100%) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 8px rgba(53, 199, 53, 0.6) !important;
-  border: 1px solid #1c881c !important;
+  background: #000080 !important;
+  box-shadow: none !important;
+  border-right: 2px solid #ffffff !important;
 }
 
-/* Vista Modals / Dialog Windows */
+/* Windows 95 Dialog Windows & Modals */
+[data-theme="windows-95"] .fixed.inset-0 > div:last-child,
 [data-theme="windows-vista"] .fixed.inset-0 > div:last-child {
-  border: 2px solid rgba(255, 255, 255, 0.4) !important;
-  border-radius: 8px !important;
-  box-shadow: 
-    0 16px 40px rgba(0, 0, 0, 0.65),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  background: #c0c0c0 !important;
+  border-top: 3px solid #ffffff !important;
+  border-left: 3px solid #ffffff !important;
+  border-right: 3px solid #000000 !important;
+  border-bottom: 3px solid #000000 !important;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080, 8px 8px 0px rgba(0, 0, 0, 0.4) !important;
+  color: #000000 !important;
+  padding: 3px !important;
+}
+
+/* Windows 95 Dialog Titlebars (Classic Navy Titlebar) */
+[data-theme="windows-95"] .fixed.inset-0 > div:last-child > div:first-child,
+[data-theme="windows-vista"] .fixed.inset-0 > div:last-child > div:first-child {
+  background: linear-gradient(90deg, #000080 0%, #1084d0 100%) !important;
+  color: #ffffff !important;
+  padding: 4px 8px !important;
+  border-radius: 0px !important;
+  border-bottom: none !important;
+}
+
+[data-theme="windows-95"] .fixed.inset-0 > div:last-child > div:first-child *,
+[data-theme="windows-vista"] .fixed.inset-0 > div:last-child > div:first-child * {
+  color: #ffffff !important;
+}
+
+[data-theme="windows-95"] .fixed.inset-0 > div:last-child > div:first-child button,
+[data-theme="windows-vista"] .fixed.inset-0 > div:last-child > div:first-child button {
+  background: #c0c0c0 !important;
+  border-top: 1px solid #ffffff !important;
+  border-left: 1px solid #ffffff !important;
+  border-right: 1px solid #000000 !important;
+  border-bottom: 1px solid #000000 !important;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080 !important;
+  padding: 1px 4px !important;
+  min-width: 18px !important;
+  height: 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+[data-theme="windows-95"] .fixed.inset-0 > div:last-child > div:first-child button *,
+[data-theme="windows-vista"] .fixed.inset-0 > div:last-child > div:first-child button * {
+  color: #000000 !important;
+}
+
+/* ==========================================================================
+   COMPLETE PURGE OF LAVENDER/PURPLE IN WINDOWS 95 (Bullet 2 requirement)
+   ========================================================================== */
+[data-theme="windows-95"] [class*="text-purple-"],
+[data-theme="windows-95"] [class*="text-indigo-"],
+[data-theme="windows-vista"] [class*="text-purple-"],
+[data-theme="windows-vista"] [class*="text-indigo-"] {
+  color: #000080 !important;
+}
+
+[data-theme="windows-95"] [class*="bg-purple-50"],
+[data-theme="windows-95"] [class*="bg-purple-100"],
+[data-theme="windows-95"] [class*="bg-purple-200"],
+[data-theme="windows-vista"] [class*="bg-purple-50"],
+[data-theme="windows-vista"] [class*="bg-purple-100"],
+[data-theme="windows-vista"] [class*="bg-purple-200"] {
+  background-color: #dfdfdf !important;
+  border: 1px solid #808080 !important;
+  color: #000000 !important;
+}
+
+/* Buttons with bg-purple-600 become navy buttons with white text */
+[data-theme="windows-95"] button.bg-purple-600,
+[data-theme="windows-95"] button[class*="bg-purple-600"],
+[data-theme="windows-95"] button[class*="from-purple-600"],
+[data-theme="windows-vista"] button.bg-purple-600,
+[data-theme="windows-vista"] button[class*="bg-purple-600"],
+[data-theme="windows-vista"] button[class*="from-purple-600"] {
+  background: #000080 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: inset 1px 1px 0px #2050a0, inset -1px -1px 0px #000040, 0 0 0 1px #000000 !important;
+  color: #ffffff !important;
+  font-weight: bold !important;
+}
+
+[data-theme="windows-95"] button.bg-purple-600 *,
+[data-theme="windows-95"] button[class*="bg-purple-600"] *,
+[data-theme="windows-95"] button[class*="from-purple-600"] *,
+[data-theme="windows-vista"] button.bg-purple-600 *,
+[data-theme="windows-vista"] button[class*="bg-purple-600"] *,
+[data-theme="windows-vista"] button[class*="from-purple-600"] * {
+  color: #ffffff !important;
+}
+
+/* Purge purple borders and focus rings */
+[data-theme="windows-95"] [class*="border-purple-"],
+[data-theme="windows-vista"] [class*="border-purple-"] {
+  border-color: #808080 !important;
+}
+
+[data-theme="windows-95"] [class*="ring-purple-"],
+[data-theme="windows-vista"] [class*="ring-purple-"] {
+  --tw-ring-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* SVG icons */
+[data-theme="windows-95"] svg[class*="text-purple-"],
+[data-theme="windows-vista"] svg[class*="text-purple-"] {
+  color: #000080 !important;
+}
+
+/* High Contrast text enforcement (Bullet 3 requirement) */
+[data-theme="windows-95"] h1:not([class*="text-white"]),
+[data-theme="windows-95"] h2:not([class*="text-white"]),
+[data-theme="windows-95"] h3:not([class*="text-white"]),
+[data-theme="windows-95"] h4:not([class*="text-white"]),
+[data-theme="windows-95"] p:not([class*="text-white"]),
+[data-theme="windows-95"] span:not([class*="text-white"]),
+[data-theme="windows-95"] label,
+[data-theme="windows-vista"] h1:not([class*="text-white"]),
+[data-theme="windows-vista"] h2:not([class*="text-white"]),
+[data-theme="windows-vista"] h3:not([class*="text-white"]),
+[data-theme="windows-vista"] h4:not([class*="text-white"]),
+[data-theme="windows-vista"] p:not([class*="text-white"]),
+[data-theme="windows-vista"] span:not([class*="text-white"]),
+[data-theme="windows-vista"] label {
+  color: #000000 !important;
 }
 
 /* --------------------------------------------------------------------------
@@ -414,65 +640,118 @@
    (Faithful to uploaded media assets!)
    ========================================================================== */
 
-/* --- WINDOWS VISTA: Study Session Ratings --- */
+/* --- WINDOWS 95: Study Session Ratings (3D Bevel Push Buttons) --- */
+[data-theme="windows-95"] button[class*="bg-rose-50"],
 [data-theme="windows-vista"] button[class*="bg-rose-50"] {
-  background: linear-gradient(180deg, #fba8a8 0%, #e84c4c 48%, #c92222 52%, #ed6666 100%) !important;
-  border: 1px solid #9b1818 !important;
-  color: #ffffff !important;
-  border-radius: 4px !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+  background: #c0c0c0 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080 !important;
+  color: #8b0000 !important;
+  border-radius: 0px !important;
+  font-family: "MS Sans Serif", Tahoma, sans-serif !important;
+  font-weight: bold !important;
+  text-shadow: none !important;
 }
+[data-theme="windows-95"] button[class*="bg-rose-50"] *,
 [data-theme="windows-vista"] button[class*="bg-rose-50"] * {
-  color: #ffffff !important;
+  color: #8b0000 !important;
 }
 
+[data-theme="windows-95"] button[class*="bg-amber-50"],
 [data-theme="windows-vista"] button[class*="bg-amber-50"] {
-  background: linear-gradient(180deg, #fde293 0%, #f9ab00 48%, #e37400 52%, #fbbc04 100%) !important;
-  border: 1px solid #b06000 !important;
-  color: #ffffff !important;
-  border-radius: 4px !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+  background: #c0c0c0 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080 !important;
+  color: #805300 !important;
+  border-radius: 0px !important;
+  font-family: "MS Sans Serif", Tahoma, sans-serif !important;
+  font-weight: bold !important;
+  text-shadow: none !important;
 }
+[data-theme="windows-95"] button[class*="bg-amber-50"] *,
 [data-theme="windows-vista"] button[class*="bg-amber-50"] * {
-  color: #ffffff !important;
+  color: #805300 !important;
 }
 
+[data-theme="windows-95"] button[class*="bg-emerald-50"],
 [data-theme="windows-vista"] button[class*="bg-emerald-50"] {
-  background: linear-gradient(180deg, #a8f0a8 0%, #34d058 48%, #22863a 52%, #5be57d 100%) !important;
-  border: 1px solid #196c2e !important;
-  color: #ffffff !important;
-  border-radius: 4px !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+  background: #c0c0c0 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080 !important;
+  color: #006400 !important;
+  border-radius: 0px !important;
+  font-family: "MS Sans Serif", Tahoma, sans-serif !important;
+  font-weight: bold !important;
+  text-shadow: none !important;
 }
+[data-theme="windows-95"] button[class*="bg-emerald-50"] *,
 [data-theme="windows-vista"] button[class*="bg-emerald-50"] * {
-  color: #ffffff !important;
+  color: #006400 !important;
 }
 
+[data-theme="windows-95"] button[class*="bg-purple-50"],
+[data-theme="windows-95"] button[class*="bg-indigo-50"],
 [data-theme="windows-vista"] button[class*="bg-purple-50"],
 [data-theme="windows-vista"] button[class*="bg-indigo-50"] {
-  background: linear-gradient(180deg, #5bb4fc 0%, #2087d8 48%, #1472bd 52%, #4da5f0 100%) !important;
-  border: 1px solid #1c6ba4 !important;
-  color: #ffffff !important;
-  border-radius: 4px !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+  background: #c0c0c0 !important;
+  border-top: 2px solid #ffffff !important;
+  border-left: 2px solid #ffffff !important;
+  border-right: 2px solid #000000 !important;
+  border-bottom: 2px solid #000000 !important;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080 !important;
+  color: #000080 !important;
+  border-radius: 0px !important;
+  font-family: "MS Sans Serif", Tahoma, sans-serif !important;
+  font-weight: bold !important;
+  text-shadow: none !important;
 }
+[data-theme="windows-95"] button[class*="bg-purple-50"] *,
+[data-theme="windows-95"] button[class*="bg-indigo-50"] *,
 [data-theme="windows-vista"] button[class*="bg-purple-50"] *,
 [data-theme="windows-vista"] button[class*="bg-indigo-50"] * {
-  color: #ffffff !important;
+  color: #000080 !important;
 }
 
-/* Vista Flashcard Face */
+/* Windows 95 Rating Buttons Active/Pressed State */
+[data-theme="windows-95"] button[class*="bg-rose-50"]:active,
+[data-theme="windows-95"] button[class*="bg-amber-50"]:active,
+[data-theme="windows-95"] button[class*="bg-emerald-50"]:active,
+[data-theme="windows-95"] button[class*="bg-purple-50"]:active,
+[data-theme="windows-95"] button[class*="bg-indigo-50"]:active,
+[data-theme="windows-vista"] button[class*="bg-rose-50"]:active,
+[data-theme="windows-vista"] button[class*="bg-amber-50"]:active,
+[data-theme="windows-vista"] button[class*="bg-emerald-50"]:active,
+[data-theme="windows-vista"] button[class*="bg-purple-50"]:active,
+[data-theme="windows-vista"] button[class*="bg-indigo-50"]:active {
+  border-top: 2px solid #000000 !important;
+  border-left: 2px solid #000000 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #dfdfdf !important;
+  padding-top: 1px !important;
+  padding-left: 1px !important;
+}
+
+/* Windows 95 Flashcard Face: Sunken White Index Card */
+[data-theme="windows-95"] .card-face,
 [data-theme="windows-vista"] .card-face {
   background: #ffffff !important;
-  border: 2px solid #7ea3ce !important;
-  border-radius: 8px !important;
-  box-shadow: 
-    0 16px 36px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 #ffffff !important;
+  border-top: 2px solid #808080 !important;
+  border-left: 2px solid #808080 !important;
+  border-right: 2px solid #ffffff !important;
+  border-bottom: 2px solid #ffffff !important;
+  border-radius: 0px !important;
+  box-shadow: inset 1px 1px 0px #000000, 4px 4px 0px rgba(0, 0, 0, 0.3) !important;
+  color: #000000 !important;
 }
 
 /* --- FRUTIGER AERO: Study Session Ratings (Exact match to uploaded media!) --- */
