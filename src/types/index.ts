@@ -51,6 +51,8 @@ export interface DailyStats {
   count: number;
 }
 
+export type AppTheme = "original" | "windows-vista" | "frutiger-aero";
+
 export interface UserPreferences {
   dailyGoal: number;
   soundEnabled: boolean;
@@ -60,4 +62,5 @@ export interface UserPreferences {
   userBio?: string;
   joinedDate?: number;
   unlockedAchievementIds?: string[];
+  theme?: AppTheme;
 }

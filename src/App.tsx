@@ -59,7 +59,10 @@ export function App() {
   const reviewLogs = useLiveQuery(() => db.reviewLogs.toArray(), []) || []; 
   
   // Theme synchronization with HTML document element 
-  // No longer needed as we removed dark mode, but leaving empty or removing completely
+  useEffect(() => {
+    const activeTheme = preferences.theme || 'original';
+    document.documentElement.setAttribute('data-theme', activeTheme);
+  }, [preferences.theme]);
   
   // Seed on startup 
   useEffect(() => { 
@@ -371,7 +374,16 @@ export function App() {
   const unitsInSelectedSubject = selectedSubjectId ? units.filter((u) => u.subjectId === selectedSubjectId) : []; 
   
   return ( 
-    <div className={`flex h-screen overflow-hidden bg-[#F7F5FA]`}> 
+    <div
+      data-theme={preferences.theme || 'original'}
+      className={`flex h-screen overflow-hidden transition-colors duration-300 ${
+        preferences.theme === 'windows-vista'
+          ? 'bg-[#08121f] text-slate-100'
+          : preferences.theme === 'frutiger-aero'
+          ? 'bg-[#89cdfc] text-slate-900'
+          : 'bg-[#F7F5FA]'
+      }`}
+    > 
       {/* Permanent Sidebar */} 
       <Sidebar 
         subjects={subjects} 

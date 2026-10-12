@@ -10,8 +10,9 @@ import {
   Upload,
   CheckCircle2,
   AlertCircle,
+  Palette,
 } from "lucide-react";
-import type { UserPreferences } from "../types";
+import type { UserPreferences, AppTheme } from "../types";
 import { FridaMascot } from "./FridaMascot";
 import { exportFullBackup, importFullBackup } from "../services/importExport";
 import {
@@ -158,6 +159,136 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <p className="text-xs opacity-75 max-w-lg leading-relaxed text-slate-600">
             Te acompaño en cada sesión para que recordar todo lo que estudias sea fácil, sin estrés y con la menor fricción posible.
           </p>
+        </div>
+      </div>
+
+      {/* Visual Theme Selector Section */}
+      <div className="bg-white rounded-3xl p-6 sm:p-8 space-y-5 shadow-sm border border-purple-100">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-purple-100 text-purple-600">
+              <Palette className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-base text-slate-800 flex items-center gap-2">
+                <span>Estilo Visual de la Interfaz</span>
+                <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
+                  En tiempo real
+                </span>
+              </h3>
+              <p className="text-xs opacity-70 text-slate-500">
+                Elige la estética y personalidad de Frida que mejor se adapte a tu gusto
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Theme Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+          {[
+            {
+              id: "original" as AppTheme,
+              title: "Frida Moderno",
+              badge: "Original",
+              badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
+              description: "Diseño minimalista con tonos lavanda, bordes suaves y tarjetas limpias.",
+              icon: "💜",
+              previewBg: "from-purple-100/90 via-indigo-50 to-purple-50",
+              sampleBtnText: "Repasar hoy",
+              sampleBtnStyle: "bg-purple-600 text-white rounded-xl shadow-xs",
+            },
+            {
+              id: "windows-vista" as AppTheme,
+              title: "Windows Vista Aero",
+              badge: "Aero Glass",
+              badgeColor: "bg-sky-950 text-cyan-300 border-cyan-400/50",
+              description: "Auténtico Aero Glass: aurora cósmica, fuentes Segoe UI, paneles biselados y botones vítreos.",
+              icon: "🪟",
+              previewBg: "from-[#0c1c2e] via-[#102a45] to-[#07111c]",
+              sampleBtnText: "Iniciar estudio",
+              sampleBtnStyle: "bg-gradient-to-b from-[#5bb4fc] to-[#1472bd] text-white rounded-[4px] border border-[#1c6ba4] shadow-sm",
+            },
+            {
+              id: "frutiger-aero" as AppTheme,
+              title: "Frutiger Aero",
+              badge: "Aquatic / Jelly",
+              badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-300",
+              description: "Estética 2000s: cielo azul tropical, verde lima, burbujas de agua y botones gomosos con reflejo especular.",
+              icon: "🫧",
+              previewBg: "from-[#70baff] via-[#9be5ff] to-[#79ebc0]",
+              sampleBtnText: "Comenzar",
+              sampleBtnStyle: "bg-gradient-to-b from-[#8bef38] to-[#2e9f02] text-white rounded-full border-2 border-white shadow-md font-bold",
+            },
+          ].map((themeOption) => {
+            const isSelected = (preferences.theme || "original") === themeOption.id;
+            return (
+              <div
+                key={themeOption.id}
+                onClick={() => {
+                  onUpdatePreferences({ theme: themeOption.id });
+                  if (preferences.soundEnabled) {
+                    playCardFlipSound(true);
+                  }
+                }}
+                className={`group relative p-5 rounded-2xl cursor-pointer transition-all duration-200 border-2 flex flex-col justify-between overflow-hidden ${
+                  isSelected
+                    ? "border-purple-600 bg-purple-50/30 ring-2 ring-purple-300 shadow-md scale-101"
+                    : "border-slate-200 hover:border-purple-300 bg-white hover:bg-slate-50/60"
+                }`}
+              >
+                {/* Mini Preview Box */}
+                <div
+                  className={`w-full h-24 rounded-xl bg-gradient-to-br ${themeOption.previewBg} p-3 flex flex-col justify-between mb-3 relative overflow-hidden border border-white/60 shadow-inner`}
+                >
+                  <div className="flex items-center justify-between z-10">
+                    <span className="text-xl">{themeOption.icon}</span>
+                    <span
+                      className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${themeOption.badgeColor}`}
+                    >
+                      {themeOption.badge}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-center z-10">
+                    <div
+                      className={`px-3 py-1 text-[11px] font-bold ${themeOption.sampleBtnStyle} pointer-events-none`}
+                    >
+                      {themeOption.sampleBtnText}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Theme Title & Description */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <h4 className="font-extrabold text-sm text-slate-800">
+                      {themeOption.title}
+                    </h4>
+                    {isSelected && (
+                      <CheckCircle2 className="w-4 h-4 text-purple-600 fill-purple-100" />
+                    )}
+                  </div>
+                  <p className="text-[11px] text-slate-500 leading-snug">
+                    {themeOption.description}
+                  </p>
+                </div>
+
+                {/* Active Indicator Button */}
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[10px] font-extrabold uppercase text-slate-400">
+                    {isSelected ? "Activo ahora" : "Haz clic para activar"}
+                  </span>
+                  <div
+                    className={`w-3.5 h-3.5 rounded-full border-2 transition-all ${
+                      isSelected
+                        ? "border-purple-600 bg-purple-600 ring-2 ring-purple-200"
+                        : "border-slate-300 group-hover:border-purple-400"
+                    }`}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 

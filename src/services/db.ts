@@ -126,6 +126,7 @@ export function getUserPreferences(): UserPreferences {
         userBio: "Construyendo mi conocimiento tarjeta a tarjeta 🐾",
         joinedDate: Date.now(),
         unlockedAchievementIds: [],
+        theme: "original",
         ...parsed,
       };
     }
@@ -141,6 +142,7 @@ export function getUserPreferences(): UserPreferences {
     userBio: "Construyendo mi conocimiento tarjeta a tarjeta 🐾",
     joinedDate: Date.now(),
     unlockedAchievementIds: [],
+    theme: "original",
   };
 }
 export function saveUserPreferences(

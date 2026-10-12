@@ -1,0 +1,551 @@
+/* ==========================================================================
+   FRIDA FLASHCARDS - MULTI-THEME ENGINE
+   1. Original (Modern Minimal Purple Glass)
+   2. Windows Vista Aero (Iconic Dark Glass, Segoe UI, Aurora, Vista Gloss)
+   3. Frutiger Aero (Aquatic Sky/Green, Specular Jelly Pills, 3D Glass Orbs)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   THEME 1: WINDOWS VISTA AERO
+   -------------------------------------------------------------------------- */
+[data-theme="windows-vista"] {
+  --bg-main: #0c1824;
+  --card-bg: rgba(240, 244, 248, 0.96);
+  --border-color: #7fa0c7;
+  --text-primary: #111e2e;
+  --text-secondary: #3b506b;
+  --vista-glass-header: linear-gradient(180deg, rgba(30, 48, 68, 0.88) 0%, rgba(12, 22, 34, 0.94) 100%);
+  --vista-glass-border: rgba(255, 255, 255, 0.35);
+}
+
+[data-theme="windows-vista"],
+[data-theme="windows-vista"] body {
+  font-family: "Segoe UI", Tahoma, "Trebuchet MS", Arial, sans-serif !important;
+  color: #111e2e;
+  background: 
+    radial-gradient(ellipse at 50% -10%, rgba(46, 117, 182, 0.45) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 20%, rgba(38, 166, 91, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 15% 70%, rgba(212, 143, 24, 0.2) 0%, transparent 55%),
+    linear-gradient(145deg, #07101a 0%, #102336 50%, #081320 100%) !important;
+  background-attachment: fixed !important;
+}
+
+/* Vista Scrollbars */
+[data-theme="windows-vista"] ::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+  background: #eef3f8;
+}
+[data-theme="windows-vista"] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d2e4f7 0%, #a4c4e7 48%, #85abdc 52%, #b5d3f2 100%);
+  border: 1px solid #6b8fb7;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+[data-theme="windows-vista"] ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #e3f0fd 0%, #bcd9f7 48%, #97bef0 52%, #c9e2f9 100%);
+  border-color: #3b7bb5;
+}
+
+/* Vista Sidebar */
+[data-theme="windows-vista"] aside {
+  background: rgba(10, 20, 32, 0.85) !important;
+  backdrop-filter: blur(18px) saturate(140%) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5) !important;
+  color: #eaf1fa !important;
+}
+
+[data-theme="windows-vista"] aside h1,
+[data-theme="windows-vista"] aside span.text-slate-800,
+[data-theme="windows-vista"] aside .text-slate-800 {
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="windows-vista"] aside p,
+[data-theme="windows-vista"] aside .text-slate-500,
+[data-theme="windows-vista"] aside .text-slate-400 {
+  color: #9cb4cf !important;
+}
+
+[data-theme="windows-vista"] aside .border-purple-50,
+[data-theme="windows-vista"] aside .border-purple-100 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Vista Sidebar Navigation Buttons */
+[data-theme="windows-vista"] aside button {
+  border-radius: 5px !important;
+  font-family: "Segoe UI", Tahoma, sans-serif !important;
+}
+
+[data-theme="windows-vista"] aside button.bg-purple-100,
+[data-theme="windows-vista"] aside button[class*="bg-purple-100"],
+[data-theme="windows-vista"] aside button.bg-purple-50 {
+  background: linear-gradient(180deg, rgba(160, 215, 255, 0.35) 0%, rgba(65, 145, 225, 0.45) 48%, rgba(25, 105, 190, 0.55) 52%, rgba(105, 185, 250, 0.45) 100%) !important;
+  border: 1px solid rgba(130, 190, 255, 0.8) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 8px rgba(60, 160, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="windows-vista"] aside button:hover:not(.bg-purple-100) {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(180, 220, 255, 0.15) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+/* Vista Mini-Dashboard Container */
+[data-theme="windows-vista"] aside .bg-slate-50 {
+  background: rgba(18, 36, 56, 0.6) !important;
+  border: 1px solid rgba(120, 170, 220, 0.3) !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Vista Aero Glass Cards & Panels */
+[data-theme="windows-vista"] .glass-panel,
+[data-theme="windows-vista"] .bg-white {
+  background: linear-gradient(180deg, rgba(248, 251, 255, 0.96) 0%, rgba(235, 242, 250, 0.94) 100%) !important;
+  border: 1px solid #7da2ce !important;
+  border-radius: 8px !important;
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Vista Buttons (Iconic Aero Glass 2-step gradient) */
+[data-theme="windows-vista"] button,
+[data-theme="windows-vista"] .glass-button {
+  border-radius: 4px !important;
+  font-family: "Segoe UI", Tahoma, sans-serif !important;
+}
+
+[data-theme="windows-vista"] .glass-button,
+[data-theme="windows-vista"] button:not([class*="bg-purple-600"]):not([class*="bg-amber-400"]):not([class*="bg-emerald-600"]):not([class*="bg-rose-500"]):not([class*="bg-slate-900"]):not([class*="bg-slate-800"]):not([class*="p-1"]):not([class*="p-2.5"]):not([class*="text-purple-600"]) {
+  background: linear-gradient(180deg, #f3f7fd 0%, #d8e7f7 48%, #c5dcf5 52%, #e6f1fb 100%) !important;
+  border: 1px solid #7ea3ce !important;
+  color: #1a3454 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 1px 3px rgba(0, 0, 0, 0.15) !important;
+  text-shadow: 0 1px 0 #ffffff;
+  transition: all 0.15s ease-in-out !important;
+}
+
+[data-theme="windows-vista"] .glass-button:hover,
+[data-theme="windows-vista"] button:not([class*="bg-purple-600"]):not([class*="bg-amber-400"]):not([class*="bg-emerald-600"]):not([class*="bg-rose-500"]):not([class*="bg-slate-900"]):not([class*="bg-slate-800"]):not([class*="p-1"]):not([class*="p-2.5"]):hover {
+  background: linear-gradient(180deg, #eaf4fd 0%, #b8d9f9 48%, #8fc1f3 52%, #c9e3fc 100%) !important;
+  border-color: #3c7fb1 !important;
+  box-shadow: 0 0 6px rgba(51, 153, 255, 0.65), inset 0 1px 0 #ffffff !important;
+  color: #0c233e !important;
+}
+
+/* Vista Primary Button (Pulsing Aero Blue) */
+[data-theme="windows-vista"] .glass-button-primary,
+[data-theme="windows-vista"] button.bg-purple-600,
+[data-theme="windows-vista"] button[class*="bg-purple-600"] {
+  background: linear-gradient(180deg, #5bb4fc 0%, #2087d8 48%, #1472bd 52%, #4da5f0 100%) !important;
+  border: 1px solid #1c6ba4 !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+  box-shadow: 
+    0 0 8px rgba(32, 135, 216, 0.55),
+    inset 0 1px 1px rgba(255, 255, 255, 0.75),
+    0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="windows-vista"] .glass-button-primary:hover,
+[data-theme="windows-vista"] button.bg-purple-600:hover,
+[data-theme="windows-vista"] button[class*="bg-purple-600"]:hover {
+  background: linear-gradient(180deg, #74c2ff 0%, #3094e4 48%, #1f82cf 52%, #62b5fa 100%) !important;
+  border-color: #125788 !important;
+  box-shadow: 
+    0 0 12px rgba(51, 153, 255, 0.8),
+    inset 0 1px 1px #ffffff !important;
+}
+
+/* Vista Inputs & Form Elements */
+[data-theme="windows-vista"] input,
+[data-theme="windows-vista"] textarea,
+[data-theme="windows-vista"] select {
+  background: #ffffff !important;
+  border: 1px solid #7da2ce !important;
+  border-radius: 4px !important;
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.15) !important;
+  color: #0e1e30 !important;
+}
+
+[data-theme="windows-vista"] input:focus,
+[data-theme="windows-vista"] textarea:focus {
+  border-color: #3399ff !important;
+  box-shadow: 0 0 6px rgba(51, 153, 255, 0.75), inset 1px 1px 2px rgba(0, 0, 0, 0.1) !important;
+  outline: none !important;
+}
+
+/* Vista Glowing Green Animated Progress Bar */
+[data-theme="windows-vista"] .bg-purple-600,
+[data-theme="windows-vista"] [style*="width:"] {
+  border-radius: 2px !important;
+}
+
+[data-theme="windows-vista"] .h-full.bg-gradient-to-r,
+[data-theme="windows-vista"] .bg-gradient-to-r.from-purple-500.to-indigo-500 {
+  background: linear-gradient(180deg, #9cf59c 0%, #35c735 48%, #1fa81f 52%, #6fe86f 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 8px rgba(53, 199, 53, 0.6) !important;
+  border: 1px solid #1c881c !important;
+}
+
+/* Vista Modals / Dialog Windows */
+[data-theme="windows-vista"] .fixed.inset-0 > div:last-child {
+  border: 2px solid rgba(255, 255, 255, 0.4) !important;
+  border-radius: 8px !important;
+  box-shadow: 
+    0 16px 40px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+/* --------------------------------------------------------------------------
+   THEME 2: FRUTIGER AERO
+   (Aquatic sky, lush lime nature, specular reflections, 3D jelly pills)
+   -------------------------------------------------------------------------- */
+[data-theme="frutiger-aero"] {
+  --bg-main: #93d2fc;
+  --card-bg: rgba(255, 255, 255, 0.78);
+  --border-color: rgba(255, 255, 255, 0.95);
+  --text-primary: #0a3152;
+  --text-secondary: #27628f;
+}
+
+[data-theme="frutiger-aero"],
+[data-theme="frutiger-aero"] body {
+  font-family: "Segoe UI", "Ubuntu", -apple-system, sans-serif !important;
+  color: #0a3152;
+  background: 
+    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.7) 0%, transparent 40%),
+    radial-gradient(circle at 80% 25%, rgba(135, 235, 80, 0.35) 0%, transparent 45%),
+    radial-gradient(circle at 45% 85%, rgba(60, 190, 240, 0.4) 0%, transparent 50%),
+    linear-gradient(135deg, #70baff 0%, #9be5ff 28%, #e2fbb0 72%, #79ebc0 100%) !important;
+  background-attachment: fixed !important;
+}
+
+/* Frutiger Aero Floating Water Droplets Background Effect */
+[data-theme="frutiger-aero"] body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.15) 3px, transparent 6px),
+    radial-gradient(circle at 85% 60%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 5px, transparent 10px),
+    radial-gradient(circle at 40% 75%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.1) 4px, transparent 8px),
+    radial-gradient(circle at 70% 15%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.2) 6px, transparent 12px);
+  opacity: 0.85;
+}
+
+/* Frutiger Aero Scrollbars */
+[data-theme="frutiger-aero"] ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+[data-theme="frutiger-aero"] ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+}
+[data-theme="frutiger-aero"] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #74d2ff 0%, #29a0e6 50%, #0d7ec4 51%, #57c2fc 100%);
+  border: 1.5px solid #ffffff;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(13, 126, 196, 0.35);
+}
+
+/* Frutiger Aero Sidebar */
+[data-theme="frutiger-aero"] aside {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  border-right: 2px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 6px 0 28px rgba(16, 96, 168, 0.12) !important;
+}
+
+[data-theme="frutiger-aero"] aside h1,
+[data-theme="frutiger-aero"] aside span.text-slate-800,
+[data-theme="frutiger-aero"] aside .text-slate-800 {
+  color: #0b375e !important;
+}
+
+[data-theme="frutiger-aero"] aside p,
+[data-theme="frutiger-aero"] aside .text-slate-500 {
+  color: #2b6a9e !important;
+}
+
+/* Frutiger Aero Navigation Pill Buttons */
+[data-theme="frutiger-aero"] aside button {
+  border-radius: 999px !important;
+  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+[data-theme="frutiger-aero"] aside button.bg-purple-100,
+[data-theme="frutiger-aero"] aside button[class*="bg-purple-100"],
+[data-theme="frutiger-aero"] aside button.bg-purple-50 {
+  background: linear-gradient(180deg, #4eb6f7 0%, #1e87e5 48%, #1464bf 52%, #42a4f5 100%) !important;
+  border: 2px solid #ffffff !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 6px 16px rgba(20, 100, 191, 0.35),
+    inset 0 2px 2px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 30, 70, 0.6);
+  transform: scale(1.02);
+}
+
+[data-theme="frutiger-aero"] aside button:hover:not(.bg-purple-100) {
+  background: rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 4px 12px rgba(20, 100, 191, 0.15) !important;
+}
+
+/* Frutiger Aero Cards (Glass Jelly Container) */
+[data-theme="frutiger-aero"] .glass-panel,
+[data-theme="frutiger-aero"] .bg-white {
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 2px solid rgba(255, 255, 255, 0.95) !important;
+  border-radius: 26px !important;
+  box-shadow: 
+    0 16px 36px rgba(18, 90, 150, 0.14),
+    inset 0 2px 2px rgba(255, 255, 255, 0.95),
+    inset 0 -2px 4px rgba(20, 80, 140, 0.05) !important;
+}
+
+/* Frutiger Aero Buttons - Iconic Jelly Pills (Matching media image!) */
+[data-theme="frutiger-aero"] button,
+[data-theme="frutiger-aero"] .glass-button {
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Standard Frutiger Aero Button (Light Ice Cyan Pill) */
+[data-theme="frutiger-aero"] .glass-button,
+[data-theme="frutiger-aero"] button:not([class*="bg-purple-600"]):not([class*="bg-amber-400"]):not([class*="bg-emerald-600"]):not([class*="bg-rose-500"]):not([class*="bg-slate-900"]):not([class*="bg-slate-800"]):not([class*="p-1"]):not([class*="p-2.5"]):not([class*="text-purple-600"]) {
+  background: linear-gradient(180deg, #ffffff 0%, #e3f4fd 48%, #c5e9fb 52%, #eaf6fe 100%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  color: #0b4577 !important;
+  box-shadow: 
+    0 4px 12px rgba(18, 90, 150, 0.15),
+    inset 0 1px 1px #ffffff,
+    inset 0 -1px 2px rgba(18, 90, 150, 0.1) !important;
+}
+
+[data-theme="frutiger-aero"] .glass-button:hover,
+[data-theme="frutiger-aero"] button:not([class*="bg-purple-600"]):not([class*="bg-amber-400"]):not([class*="bg-emerald-600"]):not([class*="bg-rose-500"]):not([class*="bg-slate-900"]):not([class*="bg-slate-800"]):not([class*="p-1"]):not([class*="p-2.5"]):hover {
+  background: linear-gradient(180deg, #ffffff 0%, #cdecfc 48%, #aee0fa 52%, #dcf1fc 100%) !important;
+  box-shadow: 
+    0 6px 18px rgba(18, 90, 150, 0.25),
+    inset 0 1px 1px #ffffff !important;
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Primary Action Button (Vibrant Jelly Green "Accept" style pill from uploaded media!) */
+[data-theme="frutiger-aero"] .glass-button-primary,
+[data-theme="frutiger-aero"] button.bg-purple-600,
+[data-theme="frutiger-aero"] button[class*="bg-purple-600"] {
+  background: linear-gradient(180deg, #8bef38 0%, #46cf0d 48%, #2e9f02 52%, #69df1f 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.9) !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 8px 20px rgba(46, 159, 2, 0.4),
+    inset 0 2px 2px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(15, 60, 2, 0.7) !important;
+}
+
+[data-theme="frutiger-aero"] .glass-button-primary:hover,
+[data-theme="frutiger-aero"] button.bg-purple-600:hover,
+[data-theme="frutiger-aero"] button[class*="bg-purple-600"]:hover {
+  background: linear-gradient(180deg, #9df454 0%, #54de1b 48%, #36b005 52%, #7bee2f 100%) !important;
+  box-shadow: 
+    0 10px 26px rgba(46, 159, 2, 0.55),
+    inset 0 2px 2px #ffffff !important;
+  transform: translateY(-2px) scale(1.03);
+}
+
+/* Frutiger Aero Pill Inputs */
+[data-theme="frutiger-aero"] input,
+[data-theme="frutiger-aero"] textarea,
+[data-theme="frutiger-aero"] select {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 2px solid rgba(255, 255, 255, 0.9) !important;
+  border-radius: 18px !important;
+  box-shadow: 
+    0 4px 12px rgba(18, 90, 150, 0.08),
+    inset 0 1px 3px rgba(18, 90, 150, 0.12) !important;
+  color: #0b375e !important;
+}
+
+[data-theme="frutiger-aero"] input:focus,
+[data-theme="frutiger-aero"] textarea:focus {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.5), inset 0 1px 3px rgba(18, 90, 150, 0.1) !important;
+  outline: none !important;
+}
+
+/* Frutiger Aero Liquid Cyan Glass Progress Bar */
+[data-theme="frutiger-aero"] .h-full.bg-gradient-to-r,
+[data-theme="frutiger-aero"] .bg-gradient-to-r.from-purple-500.to-indigo-500 {
+  background: linear-gradient(180deg, #64d8ff 0%, #15a4f7 48%, #0884d8 52%, #38c2ff 100%) !important;
+  box-shadow: 
+    0 4px 12px rgba(21, 164, 247, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-radius: 999px !important;
+}
+
+/* Frutiger Aero Modals */
+[data-theme="frutiger-aero"] .fixed.inset-0 > div:last-child {
+  border: 3px solid rgba(255, 255, 255, 0.95) !important;
+  border-radius: 32px !important;
+  box-shadow: 
+    0 24px 60px rgba(15, 80, 140, 0.25),
+    inset 0 2px 4px rgba(255, 255, 255, 0.9) !important;
+}
+
+/* ==========================================================================
+   DEEP COMPONENT STYLING: STUDY SESSION & ANKI RATINGS
+   (Faithful to uploaded media assets!)
+   ========================================================================== */
+
+/* --- WINDOWS VISTA: Study Session Ratings --- */
+[data-theme="windows-vista"] button[class*="bg-rose-50"] {
+  background: linear-gradient(180deg, #fba8a8 0%, #e84c4c 48%, #c92222 52%, #ed6666 100%) !important;
+  border: 1px solid #9b1818 !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+[data-theme="windows-vista"] button[class*="bg-rose-50"] * {
+  color: #ffffff !important;
+}
+
+[data-theme="windows-vista"] button[class*="bg-amber-50"] {
+  background: linear-gradient(180deg, #fde293 0%, #f9ab00 48%, #e37400 52%, #fbbc04 100%) !important;
+  border: 1px solid #b06000 !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+}
+[data-theme="windows-vista"] button[class*="bg-amber-50"] * {
+  color: #ffffff !important;
+}
+
+[data-theme="windows-vista"] button[class*="bg-emerald-50"] {
+  background: linear-gradient(180deg, #a8f0a8 0%, #34d058 48%, #22863a 52%, #5be57d 100%) !important;
+  border: 1px solid #196c2e !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+}
+[data-theme="windows-vista"] button[class*="bg-emerald-50"] * {
+  color: #ffffff !important;
+}
+
+[data-theme="windows-vista"] button[class*="bg-purple-50"],
+[data-theme="windows-vista"] button[class*="bg-indigo-50"] {
+  background: linear-gradient(180deg, #5bb4fc 0%, #2087d8 48%, #1472bd 52%, #4da5f0 100%) !important;
+  border: 1px solid #1c6ba4 !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+}
+[data-theme="windows-vista"] button[class*="bg-purple-50"] *,
+[data-theme="windows-vista"] button[class*="bg-indigo-50"] * {
+  color: #ffffff !important;
+}
+
+/* Vista Flashcard Face */
+[data-theme="windows-vista"] .card-face {
+  background: #ffffff !important;
+  border: 2px solid #7ea3ce !important;
+  border-radius: 8px !important;
+  box-shadow: 
+    0 16px 36px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 #ffffff !important;
+}
+
+/* --- FRUTIGER AERO: Study Session Ratings (Exact match to uploaded media!) --- */
+[data-theme="frutiger-aero"] button[class*="bg-rose-50"] {
+  background: linear-gradient(180deg, #ff7272 0%, #e62828 48%, #c61212 52%, #f04848 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.95) !important;
+  color: #ffffff !important;
+  border-radius: 999px !important;
+  text-shadow: 0 1px 2px rgba(70, 0, 0, 0.7) !important;
+  box-shadow: 
+    0 6px 18px rgba(230, 40, 40, 0.45),
+    inset 0 2px 2px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.3) !important;
+}
+[data-theme="frutiger-aero"] button[class*="bg-rose-50"] * {
+  color: #ffffff !important;
+}
+
+[data-theme="frutiger-aero"] button[class*="bg-amber-50"] {
+  background: linear-gradient(180deg, #ffc938 0%, #ff9500 48%, #e07000 52%, #ffa726 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.95) !important;
+  color: #ffffff !important;
+  border-radius: 999px !important;
+  text-shadow: 0 1px 2px rgba(70, 30, 0, 0.7) !important;
+  box-shadow: 
+    0 6px 18px rgba(255, 149, 0, 0.45),
+    inset 0 2px 2px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.3) !important;
+}
+[data-theme="frutiger-aero"] button[class*="bg-amber-50"] * {
+  color: #ffffff !important;
+}
+
+[data-theme="frutiger-aero"] button[class*="bg-emerald-50"] {
+  background: linear-gradient(180deg, #8bef38 0%, #46cf0d 48%, #2e9f02 52%, #69df1f 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.95) !important;
+  color: #ffffff !important;
+  border-radius: 999px !important;
+  text-shadow: 0 1px 2px rgba(15, 60, 2, 0.7) !important;
+  box-shadow: 
+    0 6px 18px rgba(46, 159, 2, 0.45),
+    inset 0 2px 2px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.3) !important;
+}
+[data-theme="frutiger-aero"] button[class*="bg-emerald-50"] * {
+  color: #ffffff !important;
+}
+
+[data-theme="frutiger-aero"] button[class*="bg-purple-50"],
+[data-theme="frutiger-aero"] button[class*="bg-indigo-50"] {
+  background: linear-gradient(180deg, #4eb6f7 0%, #1e87e5 48%, #1464bf 52%, #42a4f5 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.95) !important;
+  color: #ffffff !important;
+  border-radius: 999px !important;
+  text-shadow: 0 1px 2px rgba(0, 30, 70, 0.7) !important;
+  box-shadow: 
+    0 6px 18px rgba(20, 100, 191, 0.45),
+    inset 0 2px 2px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.3) !important;
+}
+[data-theme="frutiger-aero"] button[class*="bg-purple-50"] *,
+[data-theme="frutiger-aero"] button[class*="bg-indigo-50"] * {
+  color: #ffffff !important;
+}
+
+/* Frutiger Aero Flashcard Face */
+[data-theme="frutiger-aero"] .card-face {
+  background: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(24px) !important;
+  border: 2.5px solid rgba(255, 255, 255, 0.98) !important;
+  border-radius: 30px !important;
+  box-shadow: 
+    0 24px 50px rgba(18, 90, 150, 0.22),
+    inset 0 2px 4px rgba(255, 255, 255, 0.95) !important;
+}
+
