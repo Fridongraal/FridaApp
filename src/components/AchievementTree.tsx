@@ -105,14 +105,9 @@ export const AchievementTree: React.FC<AchievementTreeProps> = ({
             🏆
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h3 className="font-black text-lg text-amber-400 tracking-wide uppercase">
-                Árbol de Logros
-              </h3>
-              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40">
-                Estilo Minecraft
-              </span>
-            </div>
+            <h3 className="font-black text-lg text-amber-400 tracking-wide uppercase">
+              Árbol de Logros
+            </h3>
             <p className="text-xs text-slate-400 mt-0.5">
               Desbloquea niveles secuenciales para avanzar en cada rama de conocimiento
             </p>

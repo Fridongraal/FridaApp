@@ -415,14 +415,9 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
             🏆
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h3 className="font-black text-lg text-amber-400 tracking-wide uppercase">
-                Árbol de Logros
-              </h3>
-              <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40 uppercase">
-                Estilo Minecraft
-              </span>
-            </div>
+            <h3 className="font-black text-lg text-amber-400 tracking-wide uppercase">
+              Árbol de Logros
+            </h3>
             <p className="text-xs text-slate-300 mt-1 max-w-md">
               Has desbloqueado{" "}
               <span className="text-amber-300 font-bold">

@@ -93,7 +93,7 @@ export const StatsView: React.FC<StatsViewProps> = ({
           <p className="text-sm opacity-70 mt-1 text-slate-600">
             {activeTab === "stats"
               ? "Analiza cómo evoluciona tu retención y mantén el hábito diario de estudio."
-              : "Desbloquea logros secuenciales estilo Minecraft a medida que repasas con Frida."}
+              : "Desbloquea logros secuenciales a medida que repasas con Frida."}
           </p>
         </div>
         <FridaMascot
