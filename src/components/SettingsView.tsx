@@ -428,6 +428,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   { id: "keyboard-thock" as ClickSoundStyle, label: "⌨️ Teclado Thock", desc: "Mecánico profundo y relajante" },
                   { id: "soft-click" as ClickSoundStyle, label: "🖱️ Clic Táctil", desc: "Suave y moderno" },
                   { id: "retro-switch" as ClickSoundStyle, label: "💾 Retro 90s", desc: "Interruptor clásico vintage" },
+                  { id: "bubble-pop" as ClickSoundStyle, label: "🫧 Burbuja Aero", desc: "Gota de agua y pop acuático Frutiger Aero" },
                 ].map((styleOption) => {
                   const isSelected = (preferences.clickSoundStyle || "keyboard-thock") === styleOption.id;
                   return (

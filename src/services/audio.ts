@@ -416,5 +416,22 @@ export function playButtonClickSound(
     gain2.connect(ctx.destination);
     osc2.start(now + 0.008);
     osc2.stop(now + 0.028);
+  } else if (style === "bubble-pop") {
+    // Burbuja / Gota de agua acuática estilo Frutiger Aero
+    const bubbleOsc = ctx.createOscillator();
+    const bubbleGain = ctx.createGain();
+    bubbleOsc.type = "sine";
+    const startFreq = 440 * pitchFactor;
+    const endFreq = 1280 * pitchFactor;
+    bubbleOsc.frequency.setValueAtTime(startFreq, now);
+    bubbleOsc.frequency.exponentialRampToValueAtTime(endFreq, now + 0.032);
+
+    bubbleGain.gain.setValueAtTime(0.065, now);
+    bubbleGain.gain.exponentialRampToValueAtTime(0.001, now + 0.038);
+
+    bubbleOsc.connect(bubbleGain);
+    bubbleGain.connect(ctx.destination);
+    bubbleOsc.start(now);
+    bubbleOsc.stop(now + 0.038);
   }
 }
