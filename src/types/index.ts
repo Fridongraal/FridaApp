@@ -51,7 +51,7 @@ export interface DailyStats {
   count: number;
 }
 
-export type AppTheme = "original" | "windows-95" | "frutiger-aero" | "windows-vista";
+export type AppTheme = "original" | "windows-95";
 
 export type ClickSoundStyle = "keyboard-thock" | "soft-click" | "retro-switch" | "bubble-pop";
 

@@ -417,7 +417,7 @@ export function playButtonClickSound(
     osc2.start(now + 0.008);
     osc2.stop(now + 0.028);
   } else if (style === "bubble-pop") {
-    // Burbuja / Gota de agua acuática estilo Frutiger Aero
+    // Burbuja / Gota de agua acuática suave
     const bubbleOsc = ctx.createOscillator();
     const bubbleGain = ctx.createGain();
     bubbleOsc.type = "sine";

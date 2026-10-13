@@ -5,6 +5,7 @@ import type {
   Flashcard,
   ReviewLog,
   UserPreferences,
+  AppTheme,
 } from "../types";
 export class FridaDatabase extends Dexie {
   subjects!: Table<Subject, string>;
@@ -117,7 +118,10 @@ export function getUserPreferences(): UserPreferences {
     const raw = localStorage.getItem(PREFS_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      const theme = parsed.theme === "windows-vista" ? "windows-95" : (parsed.theme || "original");
+      const theme: AppTheme =
+        parsed.theme === "windows-95" || parsed.theme === "windows-vista"
+          ? "windows-95"
+          : "original";
       return {
         dailyGoal: 20,
         soundEnabled: true,

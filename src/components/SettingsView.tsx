@@ -186,7 +186,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
         </div>
 
         {/* Theme Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
           {[
             {
               id: "original" as AppTheme,
@@ -210,21 +210,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               sampleBtnText: "Iniciar",
               sampleBtnStyle: "bg-[#c0c0c0] text-black border-t-2 border-l-2 border-white border-r-2 border-b-2 border-black font-bold shadow-none rounded-none",
             },
-            {
-              id: "frutiger-aero" as AppTheme,
-              title: "Frutiger Aero",
-              badge: "Aquatic / Jelly",
-              badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-300",
-              description: "Estética 2000s: cielo azul tropical, verde lima, burbujas de agua y botones gomosos con reflejo especular.",
-              icon: "🫧",
-              previewBg: "from-[#70baff] via-[#9be5ff] to-[#79ebc0]",
-              sampleBtnText: "Comenzar",
-              sampleBtnStyle: "bg-gradient-to-b from-[#8bef38] to-[#2e9f02] text-white rounded-full border-2 border-white shadow-md font-bold",
-            },
           ].map((themeOption) => {
-            const isSelected =
-              (preferences.theme || "original") === themeOption.id ||
-              (themeOption.id === "windows-95" && preferences.theme === "windows-vista");
+            const isSelected = (preferences.theme || "original") === themeOption.id;
             return (
               <div
                 key={themeOption.id}
@@ -428,7 +415,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                   { id: "keyboard-thock" as ClickSoundStyle, label: "⌨️ Teclado Thock", desc: "Mecánico profundo y relajante" },
                   { id: "soft-click" as ClickSoundStyle, label: "🖱️ Clic Táctil", desc: "Suave y moderno" },
                   { id: "retro-switch" as ClickSoundStyle, label: "💾 Retro 90s", desc: "Interruptor clásico vintage" },
-                  { id: "bubble-pop" as ClickSoundStyle, label: "🫧 Burbuja Aero", desc: "Gota de agua y pop acuático Frutiger Aero" },
+                  { id: "bubble-pop" as ClickSoundStyle, label: "🫧 Burbuja", desc: "Gota de agua y pop acuático suave" },
                 ].map((styleOption) => {
                   const isSelected = (preferences.clickSoundStyle || "keyboard-thock") === styleOption.id;
                   return (
