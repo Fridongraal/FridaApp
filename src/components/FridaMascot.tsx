@@ -65,8 +65,8 @@ export const FridaMascot: React.FC<FridaMascotProps> = ({
             y2="100"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="var(--frida-head-1, #E9D8FD)" />
-            <stop offset="1" stopColor="var(--frida-head-2, #D6BCFA)" />
+            <stop stopColor="var(--frida-head-1, #E6E6FA)" />
+            <stop offset="1" stopColor="var(--frida-head-2, #DCD0FF)" />
           </linearGradient>
           <linearGradient
             id="fridaSnout"
@@ -76,8 +76,8 @@ export const FridaMascot: React.FC<FridaMascotProps> = ({
             y2="90"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="var(--frida-snout-1, #F3E8FF)" />
-            <stop offset="1" stopColor="var(--frida-snout-2, #E9D8FD)" />
+            <stop stopColor="var(--frida-snout-1, #FBF9FE)" />
+            <stop offset="1" stopColor="var(--frida-snout-2, #E6E6FA)" />
           </linearGradient>
           <linearGradient
             id="fridaEarDark"
@@ -87,8 +87,8 @@ export const FridaMascot: React.FC<FridaMascotProps> = ({
             y2="50"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="var(--frida-ear-2, #9F7AEA)" />
-            <stop offset="1" stopColor="var(--frida-ear-2, #805AD5)" />
+            <stop stopColor="var(--frida-ear-2, #856ED6)" />
+            <stop offset="1" stopColor="var(--frida-ear-2, #735BC4)" />
           </linearGradient>
           <linearGradient
             id="fridaEarLight"
@@ -98,8 +98,8 @@ export const FridaMascot: React.FC<FridaMascotProps> = ({
             y2="50"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="var(--frida-ear-1, #9F7AEA)" />
-            <stop offset="1" stopColor="var(--frida-ear-2, #805AD5)" />
+            <stop stopColor="var(--frida-ear-1, #9B84E2)" />
+            <stop offset="1" stopColor="var(--frida-ear-2, #856ED6)" />
           </linearGradient>
           <linearGradient
             id="fridaCollar"
@@ -121,7 +121,7 @@ export const FridaMascot: React.FC<FridaMascotProps> = ({
         />
         <path
           d="M 30 45 L 26 26 Q 25 18 31 18 L 36 20 Q 39 21 37 27 L 35 45 Z"
-          fill="var(--frida-head-1, #E9D8FD)"
+          fill="var(--frida-head-1, #E6E6FA)"
           opacity="0.6"
         />
 
@@ -132,7 +132,7 @@ export const FridaMascot: React.FC<FridaMascotProps> = ({
         />
         <path
           d="M 90 45 L 94 26 Q 95 18 89 18 L 84 20 Q 81 21 83 27 L 85 45 Z"
-          fill="var(--frida-head-1, #E9D8FD)"
+          fill="var(--frida-head-1, #E6E6FA)"
           opacity="0.6"
         />
 
@@ -152,7 +152,7 @@ export const FridaMascot: React.FC<FridaMascotProps> = ({
           cy="40"
           rx="6"
           ry="10"
-          fill="var(--frida-snout-1, #F3E8FF)"
+          fill="var(--frida-snout-1, #FBF9FE)"
           opacity="0.8"
           transform="rotate(-15 42 40)"
         />
@@ -161,7 +161,7 @@ export const FridaMascot: React.FC<FridaMascotProps> = ({
           cy="40"
           rx="6"
           ry="10"
-          fill="var(--frida-snout-1, #F3E8FF)"
+          fill="var(--frida-snout-1, #FBF9FE)"
           opacity="0.8"
           transform="rotate(15 78 40)"
         />
@@ -203,7 +203,7 @@ export const FridaMascot: React.FC<FridaMascotProps> = ({
             {/* Zzz */}
             <path
               d="M 85 25 L 95 25 L 85 35 L 95 35"
-              stroke="#805AD5"
+              stroke="#735BC4"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -220,7 +220,7 @@ export const FridaMascot: React.FC<FridaMascotProps> = ({
               width="22"
               height="16"
               rx="4"
-              stroke="#805AD5"
+              stroke="#735BC4"
               strokeWidth="3"
               fill="rgba(255, 255, 255, 0.5)"
             />
@@ -230,7 +230,7 @@ export const FridaMascot: React.FC<FridaMascotProps> = ({
               width="22"
               height="16"
               rx="4"
-              stroke="#805AD5"
+              stroke="#735BC4"
               strokeWidth="3"
               fill="rgba(255, 255, 255, 0.5)"
             />
@@ -239,7 +239,7 @@ export const FridaMascot: React.FC<FridaMascotProps> = ({
               y1="50"
               x2="66"
               y2="50"
-              stroke="#805AD5"
+              stroke="#735BC4"
               strokeWidth="3"
             />
 

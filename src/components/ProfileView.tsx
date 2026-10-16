@@ -404,7 +404,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           className="absolute inset-0 opacity-10 pointer-events-none"
           style={{
             backgroundImage:
-              "radial-gradient(#a855f7 1px, transparent 1px), radial-gradient(#6366f1 1px, transparent 1px)",
+              "radial-gradient(#856ED6 1px, transparent 1px), radial-gradient(#7768CE 1px, transparent 1px)",
             backgroundSize: "24px 24px",
             backgroundPosition: "0 0, 12px 12px",
           }}

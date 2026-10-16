@@ -399,7 +399,7 @@ export function App() {
       className={`flex h-screen overflow-hidden transition-colors duration-300 ${
         preferences.theme === 'windows-95'
           ? 'bg-[#008080] text-black'
-          : 'bg-[#F7F5FA]'
+          : 'bg-[#FAF9FD]'
       }`}
     > 
       {/* Permanent Sidebar */} 
